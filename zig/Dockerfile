@@ -2,11 +2,13 @@
 # escape=\
 FROM 100hellos/000-base:local
 
-RUN curl -o zig.tar.xz https://ziglang.org/builds/zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa.tar.xz && \
-    mv zig.tar.xz /tmp/zig.tar.xz && \
+# Download Zig stable release, extract it, and move it into /usr/local/zig (requires sudo).
+ARG ZIG_VERSION=0.12.0
+RUN curl -L -o /tmp/zig.tar.xz https://ziglang.org/download/${ZIG_VERSION}/zig-linux-x86_64-${ZIG_VERSION}.tar.xz && \
     cd /tmp && \
     tar -xvf zig.tar.xz && \
-    mv zig-linux-x86_64-0.14.0-dev.2063+5ce17ecfa /usr/local/zig
+    sudo mv zig-linux-x86_64-${ZIG_VERSION} /usr/local/zig && \
+    sudo ln -s /usr/local/zig/zig /usr/local/bin/zig
 
 ENV PATH=/usr/local/zig:$PATH
 
