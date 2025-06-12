@@ -4,7 +4,8 @@ FROM 100hellos/050-c:local
 
 RUN sudo \
   apk add --no-cache \
-    cmake g++
+    cmake g++ \
+    readline-dev ncurses-dev
 
 COPY --chown=human:human ./artifacts /artifacts
 RUN cd /artifacts && make install
