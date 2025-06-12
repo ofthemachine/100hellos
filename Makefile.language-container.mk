@@ -3,11 +3,17 @@
 #
 # Instead of using --relative-to or other options for realpath, we use sed to remove the parent directory
 # as it's more portable across different versions of realpath.
+
+# Explicitly set MAKE to avoid issues with Cursor's make command output parsing
+# This is needed because Cursor's output of "$ make -f - print-make <<< 'print-make: ; @echo "MAKE path: $(MAKE)"'"
+# can be unreliable
+MAKE := make
+
 ABSOLUTE_PARENT_DIR := $(shell realpath ${CURDIR}/..)
 ABSOLUTE_PARENT_PARENT_DIR := $(shell realpath ${ABSOLUTE_PARENT_DIR}/..)
 DIR_NAME :=$(shell echo ${CURDIR} | sed "s|${ABSOLUTE_PARENT_DIR}||g" | sed "s|^/||g")
 PARENT_DIR :=$(shell echo ${ABSOLUTE_PARENT_DIR} | sed "s|${ABSOLUTE_PARENT_PARENT_DIR}||g" | sed "s|^/||g")
-TAG_PATH_ROOT := 100hellos
+TAG_PATH_ROOT ?= $(shell basename $${PWD})
 PUBLISHED_CONTAINERS = $(shell find ${ABSOLUTE_PARENT_DIR} -maxdepth 2 -type f -name "Dockerfile" -exec dirname "{}" \; | sort | grep -v '[0-9]\{3\}-.*')
 PUBLISHED_SUBDIRS = $(notdir ${PUBLISHED_CONTAINERS})
 PROJECT_RELATIVE_DIR :=$(shell echo ${CURDIR} | sed "s|${COMPOSITE_DOCKERFILE_DIR}||g" | sed "s|^/||g")
@@ -33,6 +39,10 @@ ifdef IS_MOUNT
 	DOCKER_RUN_ARGS := ${DOCKER_RUN_ARGS} -v "${CURDIR}/files":/hello-world
 endif
 
+# build_image.sh expects: build_image.sh <language> [build args]
+# We therefore pass the language directory (${DIR_NAME}) first, followed by any
+# additional Docker build options. (TAG_PATH_ROOT is not used by the helper
+# script, so we no longer pass it here.)
 DOCKER_BUILD = ${CURDIR}/../.utils/build_image.sh ${DIR_NAME} ${DOCKER_BUILD_ARGS}
 DOCKER_RUN = @docker run ${DOCKER_RUN_ARGS} ${TAG_PATH_ROOT}/${DIR_NAME}:local
 DOCKER_RUN_INTERACTIVE = @docker run ${DOCKER_RUN_ARGS} -it --entrypoint="" ${TAG_PATH_ROOT}/${DIR_NAME}:local zsh
@@ -92,6 +102,6 @@ composite-dockerfile:
 		>> $${COMPOSITE_DOCKERFILE_DIR}/$${COMPOSITE_DOCKERFILE}
 	@cat Dockerfile |\
 		sed "s/FROM \([^ ]*\)$$/FROM \1 AS o${TAG_PATH_ROOT}_${DIR_NAME}/" |\
-		sed "s/FROM \(.*\)\/\(.*\):local \(.*\)$$/FROM o\1_\2 \3/"\ |\
+		sed "s/FROM ${TAG_PATH_ROOT//\//\\\/}\/\(.*\):local\(.*\)$$/FROM o${TAG_PATH_ROOT}_\1\2/" |\
 		sed "s/COPY\(.*\)\.\/\(.*\) \(.*\)$$/COPY \1\.\/${ESCAPED_PROJECT_RELATIVE_DIR}\/\2 \3/" \
 		>> $${COMPOSITE_DOCKERFILE_DIR}/$${COMPOSITE_DOCKERFILE}
