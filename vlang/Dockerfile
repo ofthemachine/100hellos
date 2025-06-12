@@ -7,6 +7,9 @@ RUN sudo \
     build-base
 
 RUN sudo \
-  apk add vlang --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing
+  apk add --no-cache \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main \
+    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
+    vlang
 
 COPY --chown=human:human ./files /hello-world
