@@ -1,0 +1,27 @@
+---
+title: Building Specific Targets from Dockerfile.composite
+description: How to build a single language image from the composite Dockerfile, as is done in CI.
+tags:
+    - type:recipe
+    - domain:build
+    - tech:docker
+    - process:ci
+---
+The `Dockerfile.composite` file contains all language definitions in a single, multi-stage Dockerfile. This allows for building any individual language image without relying on its dependencies being present locally, which is essential for CI.
+
+To build a specific language target, use the `docker build` command with the `--target` flag.
+
+1.  **Identify the target name:** The target name follows the pattern `o<TAG_PATH_ROOT>_<language_dir>`. By default, `TAG_PATH_ROOT` is `100hellos`.
+    -   For the `lolcode` language, the target is `o100hellos_lolcode`.
+    -   For the `vlang` language, the target is `o100hellos_vlang`.
+
+2.  **Run the build command:**
+    \`\`\`bash
+    # Replace <target_name> with the name from the previous step.
+    docker build --target <target_name> -f Dockerfile.composite .
+    \`\`\`
+
+    **Example for `lolcode`:**
+    \`\`\`bash
+    docker build --target o100hellos_lolcode -f Dockerfile.composite .
+    \`\`\`

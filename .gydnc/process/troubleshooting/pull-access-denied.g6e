@@ -1,0 +1,35 @@
+---
+title: Troubleshooting 'Pull Access Denied' Build Failures
+description: Explains the cause and fix for the common 'pull access denied' error when building from Dockerfile.composite.
+tags:
+    - type:process
+    - domain:build
+    - scope:troubleshooting
+    - tech:docker
+    - tech:make
+---
+When a build fails with the following error, it means a local base image required by the `Dockerfile.composite` was not found:
+
+\`\`\`text
+ERROR: pull access denied, repository does not exist or may require authorization
+...
+failed to solve: 100hellos/050-c:local: failed to resolve source metadata
+\`\`\`
+
+This happens because the Docker daemon, unable to find the image (e.g., `100hellos/050-c:local`) locally, tries to pull it from Docker Hub, where it doesn't exist.
+
+### Root Cause
+
+The `Dockerfile.composite` generation process in `Makefile.language-container.mk` was flawed. It failed to correctly rewrite `FROM 100hellos/some-base:local` to the aliased multi-stage name (e.g., `FROM o100hellos_some-base`).
+
+### The Fix
+
+The solution involved two parts:
+
+1.  **Correcting the image aliasing in the Makefile:** The `composite-dockerfile` target in `Makefile.language-container.mk` was updated to first add the `AS` alias to the initial `FROM` line of a language's Dockerfile, and then globally replace all `*:local` references.
+
+2.  **Using a helper script:** To make the substitution robust, a helper script was created at `.utils/fix_composite_dockerfile.sh`. This script is called by the Makefile and performs the final, correct substitution on the generated `Dockerfile.composite`, ensuring it is self-contained.
+
+### How to Avoid This
+
+If you encounter this error locally, it likely means the base images haven't been built. Run `make build` to build all necessary local images before attempting a composite build. The CI process relies on the corrected script to handle this automatically.
