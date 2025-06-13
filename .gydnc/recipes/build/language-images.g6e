@@ -1,0 +1,38 @@
+---
+title: Building Language Images
+description: How to use the Makefile to build language and base Docker images.
+tags:
+    - type:recipe
+    - domain:build
+    - tech:make
+    - tech:docker
+---
+This repository uses a `Makefile` to build Docker images for each language. The most common build commands are:
+
+- **Build all language and base images:**
+  \`\`\`bash
+  make build
+  # Or simply:
+  make
+  \`\`\`
+
+- **Build a specific language image:**
+  \`\`\`bash
+  # Replace [lang] with the directory name of the language (e.g., lolcode)
+  make [lang]
+  \`\`\`
+
+- **Build only the base images:**
+  \`\`\`bash
+  make base
+  \`\`\`
+
+- **Clean all built images:**
+  \`\`\`bash
+  make clean
+  \`\`\`
+
+All builds use a TAG_PATH_ROOT, which defaults to `100hellos`. You can override this with the `P` or `PREFIX` variable:
+\`\`\`bash
+make P=my-prefix build
+\`\`\`
