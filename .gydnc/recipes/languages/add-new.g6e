@@ -1,0 +1,139 @@
+---
+title: How to Add a New Language to 100hellos
+description: A comprehensive guide to adding new languages, covering simple, compiled, and complex build-from-source scenarios with security best practices.
+tags:
+    - project:100hellos
+    - scope:languages
+    - security:best-practice
+    - type:recipe
+---
+# How to Add a New Language to 100hellos
+
+This guide provides a comprehensive, step-by-step process for adding a new programming language to the `100hellos` repository. This guidance supersedes previous versions and clarifies the central role of the `entrypoint.sh` script.
+
+## Core Requirements
+
+Before you begin, ensure you adhere to these core project standards.
+
+### 1. The "Hello World!" String
+
+The output of your program **MUST** be exactly `Hello World!`.
+
+- **Correct:** `Hello World!`
+- **Incorrect:** `Hello, World!`, `hello world!`, or any other variation.
+
+This strictness is essential for the automated testing and validation processes.
+
+### 2. The Language `README.md`
+
+Every new language folder **MUST** include a `README.md` file. This file serves as public-facing documentation on Docker Hub and should be both informative and engaging.
+
+**Content Guidelines:**
+- **Fun and Informative:** Go beyond a simple description. Include interesting historical facts, unique features of the language, or what makes it special.
+- **Public Audience:** Write for a general audience. Assume they may not be experts in the language.
+- **Inspiration:** You can review existing `README.md` files in other language folders, but strive to create a high-quality, engaging document.
+
+The content of these READMEs is aggregated by the `.github/bin/generate-overview-readme.sh` script, making them a visible part of the project's overall documentation.
+
+---
+
+## The Core Execution Mechanism: `entrypoint.sh`
+
+The `000-base` image, which is the foundation for all language containers, uses a universal `entrypoint.sh` script. This script is the key to how all "Hello World!" applications are run. It does not use the `Dockerfile` `CMD` instruction.
+
+The script's logic is as follows:
+1.  It changes into the `/hello-world` directory.
+2.  It first looks for an executable `hello-world.sh`. If found, it runs it.
+3.  If not, it looks for the first file matching `hello-world.*`, makes it executable, and runs it directly.
+
+Your goal when adding a language is to provide a file that one of these two conditions can execute.
+
+---
+
+## 1. Bootstrap the New Language
+
+This step remains the same. Use the make command to create the language directory.
+```bash
+make new HELLO=[lang]
+```
+
+## 2. Configure the Build and Run Process
+
+This is the most critical step and is simpler than previously understood. There are two primary patterns.
+
+### Pattern 1: Interpreted Languages (Shebang)
+
+For interpreted languages like Python, Ruby, or Janet, the process is straightforward.
+
+1.  **`[lang]/Dockerfile`**: Install the language runtime (e.g., `apk add python3`). **Do not add a `CMD`**.
+2.  **`[lang]/files/hello-world.[ext]`**: Write your "Hello World!" code and, most importantly, **start the file with a shebang** that points to the interpreter. The `entrypoint.sh` script will use this shebang to execute your file.
+
+**Example (`python`):**
+
+*python/files/hello-world.py:*
+```python
+#!/usr/bin/env python3
+
+print("Hello World!")
+```
+
+*python/Dockerfile:*
+```dockerfile
+# syntax=docker/dockerfile:1
+# escape=\
+FROM 100hellos/000-base:local
+
+RUN sudo apk add --no-cache python3
+
+# NO CMD HERE!
+COPY --chown=human:human ./files /hello-world
+```
+
+### Pattern 2: Compiled Languages (`hello-world.sh`)
+
+For compiled languages like Rust, Go, or C++, you must provide a `hello-world.sh` script that the entrypoint can execute.
+
+1.  **`[lang]/Dockerfile`**: Install the language compiler (e.g., `apk add rust`). **Do not add a `CMD`**.
+2.  **`[lang]/files/hello-world.sh`**: This script is responsible for compiling your source code and then running the resulting binary.
+3.  **`[lang]/files/hello-world.[ext]`**: Your standard "Hello World!" source code, without a shebang.
+
+**Example (`rust`):**
+
+*rust/files/hello-world.sh:*
+```bash
+#!/bin/sh
+# Compile the rust source file
+rustc /hello-world/hello-world.rs -o /tmp/hello
+# Execute the compiled binary
+/tmp/hello
+```
+
+*rust/files/hello-world.rs:*
+```rust
+fn main() {
+    println!("Hello World!");
+}
+```
+
+*rust/Dockerfile:*
+```dockerfile
+# syntax=docker/dockerfile:1
+# escape=\
+FROM 100hellos/000-base:local
+
+RUN sudo apk add --no-cache rust
+
+# NO CMD HERE! The entrypoint will find and run hello-world.sh
+COPY --chown=human:human ./files /hello-world
+```
+
+## 3. Complex Builds and Security
+
+-   **Complex Builds:** The `artifacts` pattern for building languages from source remains a valid and powerful technique for caching. The `Dockerfile` should still perform the build, but it should not have a `CMD`. The goal of the complex build is to get the language runtime/compiler into the `PATH` so that the shebang or `hello-world.sh` script can use it.
+-   **Security:** The security best practices (pinning versions, verifying downloads with checksums, using `COPY --chown`) are still critical and should be followed.
+
+## 4. Test and Commit
+
+The testing and commit process remains the same.
+-   Run `make [lang] R=1` to test.
+-   Commit with a creative message as per `recipes/git/100hellos-commit-style`.
