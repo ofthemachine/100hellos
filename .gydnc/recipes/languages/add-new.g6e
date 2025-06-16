@@ -24,42 +24,16 @@ The output of your program **MUST** be exactly `Hello World!`.
 
 This strictness is essential for the automated testing and validation processes.
 
-### 2. The Language `README.md`
-
-Every new language folder **MUST** include a `README.md` file. This file serves as public-facing documentation on Docker Hub and should be both informative and engaging.
-
-**Content Guidelines:**
-- **Fun and Informative:** Go beyond a simple description. Include interesting historical facts, unique features of the language, or what makes it special.
-- **Public Audience:** Write for a general audience. Assume they may not be experts in the language.
-- **Inspiration:** You can review existing `README.md` files in other language folders, but strive to create a high-quality, engaging document.
-
-The content of these READMEs is aggregated by the `.github/bin/generate-overview-readme.sh` script, making them a visible part of the project's overall documentation.
-
----
-
-## The Core Execution Mechanism: `entrypoint.sh`
-
-The `000-base` image, which is the foundation for all language containers, uses a universal `entrypoint.sh` script. This script is the key to how all "Hello World!" applications are run. It does not use the `Dockerfile` `CMD` instruction.
-
-The script's logic is as follows:
-1.  It changes into the `/hello-world` directory.
-2.  It first looks for an executable `hello-world.sh`. If found, it runs it.
-3.  If not, it looks for the first file matching `hello-world.*`, makes it executable, and runs it directly.
-
-Your goal when adding a language is to provide a file that one of these two conditions can execute.
-
 ---
 
 ## 1. Bootstrap the New Language
 
 This step remains the same. Use the make command to create the language directory.
-```bash
-make new HELLO=[lang]
-```
+`make new HELLO=[lang]`
 
 ## 2. Configure the Build and Run Process
 
-This is the most critical step and is simpler than previously understood. There are two primary patterns.
+This is the most critical step. Your goal is to provide an executable file that the base container's `entrypoint.sh` can run. The entrypoint first looks for `hello-world.sh`. If it doesn't find it, it looks for `hello-world.*` and makes it executable. There are two primary patterns to accomplish this.
 
 ### Pattern 1: Interpreted Languages (Shebang)
 
@@ -132,8 +106,18 @@ COPY --chown=human:human ./files /hello-world
 -   **Complex Builds:** The `artifacts` pattern for building languages from source remains a valid and powerful technique for caching. The `Dockerfile` should still perform the build, but it should not have a `CMD`. The goal of the complex build is to get the language runtime/compiler into the `PATH` so that the shebang or `hello-world.sh` script can use it.
 -   **Security:** The security best practices (pinning versions, verifying downloads with checksums, using `COPY --chown`) are still critical and should be followed.
 
-## 4. Test and Commit
+## 4. Test
 
-The testing and commit process remains the same.
+The testing process remains the same.
 -   Run `make [lang] R=1` to test.
+
+## 5. Finalize and Clean Up
+
+Before committing, ensure your contribution is complete and clean.
+
+-   **Create the `README.md` file:** Every language folder **MUST** include a `README.md`. This file is displayed on Docker Hub. Make it fun and informative! Go beyond a simple description and include interesting facts or unique features of the language.
+-   **Remove Unused Template Files:** The `make new` command creates template files and directories to help you get started. **You MUST remove any that you do not use.** The most common example is the `artifacts/` directory, which should be deleted if your build process does not use it.
+
+## 6. Commit
+
 -   Commit with a creative message as per `recipes/git/100hellos-commit-style`.
