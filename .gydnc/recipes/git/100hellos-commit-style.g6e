@@ -1,0 +1,44 @@
+---
+title: 100hellos Commit Style Guide
+description: Guidance on crafting commit messages in the style of the 100hellos repository.
+tags:
+    - type:recipe
+    - scope:git
+    - project:100hellos
+---
+# 100hellos Commit Style Guide
+
+This repository follows a specific style for commit messages, which differs from standard conventional commits. The goal is to have creative and descriptive messages, especially when adding new languages.
+
+## Adding a New Language
+
+When adding a new language, the commit message should be a single, creative line that captures the spirit of the language. The format is generally:
+
+`<Language Name> <creative verb> <"Hello!" variation>`
+
+**Examples:**
+
+*   `Janet says Hello!`
+*   `Zombie moans Hellllllo!`
+*   `Fantom wailes Hello!`
+*   `Ballerina pirouettes Hello!`
+*   `befunge says <>:#,_@#:"Hello World!"+64`
+
+Be creative! The message should be fun and reflect the personality of the language.
+
+## Fixes, Chores, and Other Changes
+
+For other types of commits, such as bug fixes, refactoring, or updates to the build process, use a more standard imperative format.
+
+*   Start with a capital letter.
+*   Use the imperative mood (e.g., "Fix", "Add", "Refactor").
+*   Keep the subject line concise.
+
+**Examples:**
+
+*   `Fix the vlang build.`
+*   `Keep my .cursor directory from breaking builds`
+*   `Some Makefile fixes and cleanups`
+*   `Pin external action SHAs for org approval`
+
+This approach keeps the history clean and easy to read, while allowing for creativity where it matters most.
