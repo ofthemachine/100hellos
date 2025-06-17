@@ -9,7 +9,8 @@ tags:
 ---
 # How to Add a New Language to 100hellos
 
-This guide provides a comprehensive, step-by-step process for adding a new programming language to the `100hellos` repository. This guidance supersedes previous versions and clarifies the central role of the `entrypoint.sh` script.
+This guide provides a comprehensive, step-by-step process for adding a new programming language to the `100hellos` repository.
+This guidance supersedes previous versions and clarifies the central role of the `entrypoint.sh` script.
 
 ## Core Requirements
 
@@ -38,6 +39,8 @@ This is the most critical step. Your goal is to provide an executable file that 
 ### A Note on Base Images
 
 Whenever possible, use a language-specific base image (e.g., `100hellos/300-node:local` for Node.js-based languages) instead of the generic `100hellos/000-base:local`. This will provide a more stable and predictable environment.
+
+The base images already include common utilities. **Do NOT install them again.** This includes `git`, `curl`, `wget`, `zsh`, `sudo`, and more. When in doubt, inspect the `.base/Dockerfile`.
 
 ### Pattern 1: Interpreted Languages (Shebang)
 
@@ -121,8 +124,16 @@ The testing process remains the same.
 Before committing, ensure your contribution is complete and clean.
 
 -   **Create the `README.md` file:** Every language folder **MUST** include a `README.md`. This file is displayed on Docker Hub. Make it fun and informative! Go beyond a simple description and include interesting facts or unique features of the language.
--   **Remove Unused Template Files:** The `make new` command creates template files and directories to help you get started. **You MUST remove any that you do not use.** The most common example is the `artifacts/` directory, which should be deleted if your build process does not use it.
+-   **Remove Unused Template Files:** The `make new` command creates several placeholder files and directories. **You MUST remove any that you do not use.** The most common examples are:
+    -   The `artifacts/` directory.
+    -   The placeholder `files/hello-world.sh` script.
+    -   The placeholder `files/hello-world.lang` file.
 
-## 6. Commit
+## 6. Common Pitfalls
+
+-   **Silent Validation Failure**: If `make [lang] R=1` runs without error but does not print "Hello World!", it's almost always because the empty, placeholder `files/hello-world.sh` was left behind. The entrypoint finds it, runs it, and exits successfully with no output. **Delete it.**
+-   **`too many arguments` Error**: This happens when the `hello-world.*` glob in the entrypoint matches multiple files. This is caused by leaving the placeholder `files/hello-world.lang` file in the directory alongside your real script. **Delete it.**
+
+## 7. Commit
 
 -   Commit with a creative message as per `recipes/git/100hellos-commit-style`.
