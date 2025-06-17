@@ -1,0 +1,49 @@
+---
+title: Check for glibc/musl Library Compatibility
+description: How to diagnose and solve library incompatibilities when using pre-compiled binaries in musl-based Docker images.
+tags:
+    - type:should
+    - domain:build
+    - tech:docker
+    - tech:musl
+    - tech:glibc
+---
+# Build Environments: Check for glibc/musl Compatibility
+
+When adding a new language or tool to a Docker build, especially in Alpine-based environments (which use `musl`), you **should** verify the library dependencies of any pre-compiled binaries you download.
+
+## The Problem: "not found" can be misleading
+
+A common failure mode is a `file not found` or `command not found` error, even when the file is present in the `$PATH`. This often masks the real issue: the binary was compiled for `glibc` (like on Ubuntu/Debian) and cannot run on a `musl`-based system (like Alpine). The dynamic linker fails to find the required `glibc` shared libraries, leading to a misleading error message.
+
+## How to Diagnose
+
+1.  **Install tools**: Add `binutils` (which provides `ldd`) and `gcompat` (for basic glibc compatibility) to your `Dockerfile`.
+    ```dockerfile
+    RUN sudo apk add --no-cache binutils gcompat
+    ```
+
+2.  **Check dependencies**: Use `ldd` to inspect the binary's shared library dependencies.
+    ```bash
+    ldd /path/to/your/binary
+    ```
+
+3.  **Analyze Output**: Look for "not found" lines or "Error relocating" messages in the `ldd` output. This confirms a library incompatibility.
+
+## Example Scenario (`deno`)
+
+When adding `deno`, the build failed with `deno: not found`.
+
+The diagnostic `ldd /usr/local/bin/deno` produced:
+```
+Error relocating /usr/local/bin/deno: __isnanf: symbol not found
+Error relocating /usr/local/bin/deno: __isinf: symbol not found
+...
+```
+This output definitively proves a `glibc` dependency, making the binary incompatible with the `musl`-based container even with `gcompat`.
+
+## Solutions
+
+-   **Find a `musl`-compatible build**: Check if the language/tool provides a pre-compiled binary for Alpine/`musl`.
+-   **Build from source**: If no compatible binary exists, you may need to compile the tool from source within your Dockerfile.
+-   **Switch base image**: If the tool is critical and has no `musl` support, consider using a `glibc`-based image (e.g., `debian` or `ubuntu`).
