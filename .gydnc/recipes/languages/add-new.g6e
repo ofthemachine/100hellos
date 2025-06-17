@@ -128,6 +128,7 @@ Before committing, ensure your contribution is complete and clean.
     -   The `artifacts/` directory.
     -   The placeholder `files/hello-world.sh` script.
     -   The placeholder `files/hello-world.lang` file.
+    -   The `README.scaffolding` file.
 
 ## 6. Common Pitfalls
 
