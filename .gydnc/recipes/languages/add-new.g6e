@@ -35,6 +35,10 @@ This step remains the same. Use the make command to create the language director
 
 This is the most critical step. Your goal is to provide an executable file that the base container's `entrypoint.sh` can run. The entrypoint first looks for `hello-world.sh`. If it doesn't find it, it looks for `hello-world.*` and makes it executable. There are two primary patterns to accomplish this.
 
+### A Note on Base Images
+
+Whenever possible, use a language-specific base image (e.g., `100hellos/300-node:local` for Node.js-based languages) instead of the generic `100hellos/000-base:local`. This will provide a more stable and predictable environment.
+
 ### Pattern 1: Interpreted Languages (Shebang)
 
 For interpreted languages like Python, Ruby, or Janet, the process is straightforward.
@@ -68,7 +72,7 @@ COPY --chown=human:human ./files /hello-world
 For compiled languages like Rust, Go, or C++, you must provide a `hello-world.sh` script that the entrypoint can execute.
 
 1.  **`[lang]/Dockerfile`**: Install the language compiler (e.g., `apk add rust`). **Do not add a `CMD`**.
-2.  **`[lang]/files/hello-world.sh`**: This script is responsible for compiling your source code and then running the resulting binary.
+2.  **`[lang]/files/hello-world.sh`**: This script is responsible for compiling your source code and then running the resulting binary. **Remember to use absolute paths for compilers and executables.**
 3.  **`[lang]/files/hello-world.[ext]`**: Your standard "Hello World!" source code, without a shebang.
 
 **Example (`rust`):**
@@ -77,6 +81,7 @@ For compiled languages like Rust, Go, or C++, you must provide a `hello-world.sh
 ```bash
 #!/bin/sh
 # Compile the rust source file
+# Note the absolute path to the compiler may be needed if PATH is inconsistent
 rustc /hello-world/hello-world.rs -o /tmp/hello
 # Execute the compiled binary
 /tmp/hello
