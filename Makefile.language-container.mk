@@ -44,10 +44,10 @@ endif
 # additional Docker build options. (TAG_PATH_ROOT is not used by the helper
 # script, so we no longer pass it here.)
 DOCKER_BUILD = ${CURDIR}/../.utils/build_image.sh ${DIR_NAME} ${DOCKER_BUILD_ARGS}
-DOCKER_RUN = @docker run ${DOCKER_RUN_ARGS} ${TAG_PATH_ROOT}/${DIR_NAME}:local
+DOCKER_RUN = docker run ${DOCKER_RUN_ARGS} ${TAG_PATH_ROOT}/${DIR_NAME}:local
 DOCKER_RUN_INTERACTIVE = @docker run ${DOCKER_RUN_ARGS} -it --entrypoint="" ${TAG_PATH_ROOT}/${DIR_NAME}:local zsh
 DOCKER_CLEAN = @docker rmi --force ${TAG_PATH_ROOT}/${DIR_NAME}:local || true
-DOCKER_TEST = @docker run --rm ${TAG_PATH_ROOT}/${DIR_NAME}:local
+DOCKER_TEST = docker run --rm ${TAG_PATH_ROOT}/${DIR_NAME}:local
 
 # Long story short, this allows:
 # make [lang] RUN=1 and

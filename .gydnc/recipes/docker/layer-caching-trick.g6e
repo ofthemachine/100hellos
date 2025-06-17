@@ -1,0 +1,47 @@
+---
+title: 'Dockerfile Development: Faster Iteration with Layer Caching'
+description: A guide on using Docker's layer caching during development by splitting RUN commands, and then compacting them for production.
+tags:
+    - type:recipe
+    - scope:docker
+    - topic:performance
+---
+# Dockerfile Development: Faster Iteration with Layer Caching
+
+When developing or debugging a Dockerfile, especially one with long-running commands like compiling from source, you can significantly speed up your workflow by leveraging Docker's layer caching.
+
+## The Problem: Slow Rebuilds
+
+Combining all your setup commands into a single `RUN` statement using `&&` is a best practice for production images to minimize layers. However, during development, it's inefficient. If any command in the chain fails, you have to restart the entire `RUN` instruction from the beginning, losing all caching from previous successful commands in that chain.
+
+**Example (inefficient for development):**
+```dockerfile
+RUN command1 && \
+    command2 && \ # Fails here
+    command3
+```
+If `command2` fails, you fix it and re-run. The build starts over from `command1`.
+
+## The Solution: Use Separate RUNs for Development
+
+By splitting commands into separate `RUN` instructions, you can cache the successful steps.
+
+**Example (efficient for development):**
+```dockerfile
+RUN command1
+RUN command2 # Fails here
+RUN command3
+```
+If `command2` fails, you fix it and re-run. The build uses the cached layer for `command1` and only re-executes from `command2`. This saves a significant amount of time.
+
+## Final Step: Compact for Production
+
+Once you have confirmed that all the steps in your Dockerfile are correct and working, you should consolidate the separate `RUN` commands back into a single `RUN` statement. This is a crucial optimization step to reduce the number of layers and the final size of your Docker image.
+
+**Final `Dockerfile`:**
+```dockerfile
+RUN command1 && \
+    command2 && \
+    command3
+```
+This ensures your final image is clean and optimized.
