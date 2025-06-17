@@ -1,0 +1,65 @@
+---
+title: Check Base Container Package Inventory
+description: Guidance on checking what packages are already available in the base container before adding redundant installations
+tags:
+    - domain:build
+    - tech:docker
+    - type:should
+    - scope:optimization
+---
+# Base Container Package Inventory
+
+## Problem
+When adding new languages to 100hellos, it's easy to accidentally install packages that are already available in the base container, leading to redundant installations and slower build times.
+
+## Solution
+Always check what packages are already available in the base container before adding new ones to language-specific Dockerfiles.
+
+### How to Check Base Container Contents
+
+1. **Check the base Dockerfile**: Look at `.base/Dockerfile` to see what packages are already installed:
+   ```bash
+   cat .base/Dockerfile
+   ```
+
+2. **Common packages already in base**:
+   - `git` - Version control
+   - `curl`, `wget` - Download tools
+   - `make` - Build tool
+   - `sudo` - Privilege escalation
+   - `zsh` - Shell
+   - `vim` - Text editor
+   - `jq` - JSON processor
+   - `ca-certificates` - SSL certificates
+   - `openssh-client` - SSH client
+
+3. **Test what's available**: If uncertain, test with a temporary container:
+   ```bash
+   docker run --rm --entrypoint=/bin/sh 100hellos/000-base:local -c "which git make curl"
+   ```
+
+### Best Practices
+
+- **Before writing a Dockerfile**: Check `.base/Dockerfile` first
+- **Only add what's needed**: Don't install packages that are already available
+- **Comment justification**: If you need a different version, explain why in comments
+- **Leverage base images**: Use language-specific base images (like `100hellos/300-node:local`) when available rather than the generic base
+
+### Example Anti-Pattern
+
+```dockerfile
+# BAD: Installing packages already in base
+RUN sudo apk add --no-cache \
+    git \           # Already in base!
+    make \          # Already in base!
+    curl \          # Already in base!
+    some-new-tool
+```
+
+### Example Good Pattern
+
+```dockerfile
+# GOOD: Only install what's actually needed
+RUN sudo apk add --no-cache \
+    some-new-tool   # Only the new dependency
+```

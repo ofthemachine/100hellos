@@ -1,0 +1,80 @@
+---
+title: Verify Tool Version Compatibility
+description: How to properly research and handle version compatibility issues when adding languages that require specific tool versions
+tags:
+    - domain:build
+    - tech:alpine
+    - type:should
+    - scope:troubleshooting
+---
+# Language Tool Version Compatibility
+
+## Problem
+Sometimes the version of a build tool (like LLVM, GCC, Node.js) available in standard Alpine repositories is not compatible with the language you're trying to add, even if it seems like a reasonable version.
+
+## Solution
+Always check the specific version requirements of the language before choosing your installation strategy.
+
+### How to Identify Version Compatibility Issues
+
+1. **Check language documentation**: Look for explicit version requirements in the language's build documentation
+2. **Look for error messages**: Build failures often indicate unsupported versions:
+   ```
+   ERROR: Invalid LLVM version 16.0.6: must be 11, 12, 13, 14, 17, 18, 19 or 20
+   ```
+3. **Test with current Alpine version**: Try building with standard packages first
+
+### When Edge Repositories Are Justified
+
+Edge repositories should be used when:
+
+- **Specific version incompatibility**: Standard Alpine version is explicitly unsupported
+- **Missing packages**: Package doesn't exist in standard repositories
+- **Critical bug fixes**: Standard version has known issues that affect your use case
+
+Edge repositories should NOT be used when:
+
+- **"Latest is always better"**: Just wanting the newest version without justification
+- **Assumption**: Assuming edge is needed without testing standard first
+- **Convenience**: Avoiding research into actual requirements
+
+### Investigation Process
+
+1. **Try standard packages first**:
+   ```dockerfile
+   RUN sudo apk add --no-cache llvm-dev clang
+   ```
+
+2. **If it fails, check what version you got**:
+   ```bash
+   docker run --rm alpine:3.18 sh -c "apk add llvm-dev && llvm-config --version"
+   ```
+
+3. **Research language requirements**: Check official docs, GitHub issues, build scripts
+
+4. **Document your decision**: Add comments explaining why edge is needed:
+   ```dockerfile
+   # Add edge repositories to get supported LLVM version (16 is not supported by Odin)
+   ```
+
+### Example: Odin + LLVM
+
+```dockerfile
+# Alpine 3.18 ships with LLVM 16.0.6, but Odin requires 11,12,13,14,17,18,19,20
+# Version 16 is explicitly excluded, so we need edge repositories
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" | sudo tee -a /etc/apk/repositories
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" | sudo tee -a /etc/apk/repositories
+```
+
+### Verification Commands
+
+```bash
+# Check what's available in standard repos
+docker run --rm alpine:3.18 sh -c "apk search llvm"
+
+# Check what's available in edge
+docker run --rm alpine:edge sh -c "apk search llvm"
+
+# Test specific version
+docker run --rm alpine:3.18 sh -c "apk add llvm-dev && llvm-config --version"
+```
