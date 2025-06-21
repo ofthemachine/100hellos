@@ -1,0 +1,53 @@
+---
+title: GYDNC Update Best Practices
+description: Critical procedures for updating gydnc entities without losing existing content
+tags:
+    - type:must
+    - scope:meta
+    - domain:gydnc
+---
+# Meta Guidance: Proper GYDNC Update Procedures
+
+## Critical Rule: Never Overwrite, Always Enhance
+
+### The Problem
+Using `gydnc update` replaces the entire body content, potentially losing critical existing guidance.
+
+### Correct Update Workflow
+1. **ALWAYS retrieve existing content first**: `gydnc get [alias]`
+2. **Extract the existing body content** from the JSON response
+3. **Enhance the existing content** rather than replacing it
+4. **Use the enhanced content** with `gydnc update`
+
+### Example Correct Process
+```bash
+# Step 1: Get existing content
+gydnc get recipes/languages/addition-checklist
+
+# Step 2: Extract body content and enhance it
+# Add new sections/information to existing content
+# DO NOT replace entire content
+
+# Step 3: Use enhanced content with update
+cat enhanced-content.md | gydnc update recipes/languages/addition-checklist
+```
+
+### Example Incorrect Process (What NOT to do)
+```bash
+# This OVERWRITES existing content - NEVER do this
+echo "New guidance only" | gydnc update existing-alias
+```
+
+### Key Principles
+1. **Preserve existing critical guidance**
+2. **Add new information as additional sections**
+3. **Enhance rather than replace**
+4. **Always verify content after updates**
+
+### Recovery from Mistakes
+If you accidentally overwrite critical guidance:
+1. Acknowledge the error immediately
+2. Retrieve what content remains
+3. Restore the original comprehensive content
+4. Add the new guidance properly
+5. Update meta guidance to prevent future occurrences

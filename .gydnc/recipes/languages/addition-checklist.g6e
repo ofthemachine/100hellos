@@ -3,9 +3,9 @@ title: 100hellos Language Addition Complete Checklist
 description: Comprehensive workflow and best practices for adding new languages to 100hellos, including git commit practices and common pitfalls
 tags:
     - project:100hellos
-    - type:recipe
-    - scope:languages
     - quality:workflow
+    - scope:languages
+    - type:recipe
 ---
 # 100hellos Language Addition Checklist
 
@@ -30,17 +30,27 @@ tags:
   - The `make new` command decrements the "X_to_go" counter in root README.md
   - This file MUST be committed along with language files
 - Use **single quotes** for commit messages to avoid shell quoting issues
-  - ✅ `git commit -m 'Language says Hello!'`  
+  - ✅ `git commit -m 'Language says Hello!'`
   - ❌ `git commit -m "Language says Hello!"` (can cause hanging)
 - Follow 100hellos creative commit style: `[Language] [creative verb] Hello!`
 
-### 4. Backup/Rollback Considerations
+### 4. README Counter Management (CRITICAL)
+- **NEVER manually modify the counter** in root README.md
+- The `make new HELLO=[lang]` command automatically decrements the counter
+- Manual counter changes create double-decrement errors
+- **Only manually adjust counter if**:
+  - Rolling back a failed language implementation
+  - Removing a language that was successfully added but later needs removal
+- **Correct process**: `make new` → implement → test → commit (leave counter as-is)
+- **Incorrect process**: `make new` → manually decrement → creates double-decrement
+
+### 5. Backup/Rollback Considerations
 - If backing out a language implementation that doesn't work:
   - Revert the language directory
   - **ALSO revert the root README.md** to restore the counter
   - Both changes happened during `make new` and both need reverting
 
-### 5. Testing and Validation
+### 6. Testing and Validation
 - Verify exact "Hello World!" output (no variations)
 - Ensure authentic language execution (not shell script simulation)
 - Test build process works in clean environment
@@ -49,7 +59,8 @@ tags:
 ## Common Pitfalls
 
 1. **Forgetting root README.md in commits** - Always check `git status` for modified README.md
-2. **Double-quote commit issues** - Always use single quotes for commit messages  
-3. **Leaving template files** - Clean up unused scaffolding files before commit
-4. **Incomplete rollbacks** - Remember root README.md when backing out languages
-5. **Fake implementations** - Must use real language interpreters/compilers
+2. **Manually modifying counter** - Let `make new` handle counter automatically
+3. **Double-quote commit issues** - Always use single quotes for commit messages
+4. **Leaving template files** - Clean up unused scaffolding files before commit
+5. **Incomplete rollbacks** - Remember root README.md when backing out languages
+6. **Fake implementations** - Must use real language interpreters/compilers
