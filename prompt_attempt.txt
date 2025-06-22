@@ -1,0 +1,7 @@
+Can add another programming language to add to this project?
+You must choose the language, You must choose a langauge that does not already exist. Prioritize MUSL-compatible languages over glibc. Make sure to follow the gydnc rule! Do not attempt:
+- clojurescript
+- swift
+- haxe
+- roc
+- grain

@@ -67,17 +67,47 @@ rustc /hello-world/hello-world.rs -o /tmp/hello
 /tmp/hello
 ```
 
-### 3. Use Appropriate Base Images
-- Use language-specific base images when possible (e.g., `100hellos/300-node:local`)
-- **DO NOT** reinstall common utilities already in base images (`git`, `curl`, `wget`, `zsh`, `sudo`)
+### 3. Check Base Images Before Adding Dependencies
 
-### 4. Test Implementation
+**CRITICAL**: Before adding any packages, check what's already available in the base image to avoid redundant installations.
+
+#### Check Base Image Contents
+```bash
+# Check what packages/tools are already available
+docker run --rm --entrypoint="" 100hellos/000-base:local zsh -c "which wget tar make git curl"
+
+# Check specific base image contents
+cat .base/Dockerfile
+```
+
+#### Common Tools Already in Base Images
+The following are typically already available and should **NOT** be reinstalled:
+- `wget`, `curl` - for downloading
+- `tar`, `unzip` - for extracting archives
+- `git` - version control
+- `make` - build tool
+- `zsh`, `sudo` - shell and privilege escalation
+
+#### Example: Good vs Bad Dockerfile Practices
+```dockerfile
+# ❌ BAD: Redundant packages already in base
+RUN sudo apk add --no-cache wget tar build-base go
+
+# ✅ GOOD: Only install what's actually needed
+RUN sudo apk add --no-cache go
+```
+
+### 4. Use Appropriate Base Images
+- Use language-specific base images when possible (e.g., `100hellos/300-node:local`)
+- **DO NOT** reinstall common utilities already in base images
+
+### 5. Test Implementation
 ```bash
 make [lang] R=1
 ```
 Verify exact "Hello World!" output.
 
-### 5. Documentation Requirements
+### 6. Documentation Requirements
 
 #### Create README.md
 Every language **MUST** include a README.md following these guidelines:
@@ -107,7 +137,7 @@ docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
 
 All examples must work in the container environment before committing.
 
-### 6. Clean Up Template Files
+### 7. Clean Up Template Files
 Remove all unused template files created by `make new`:
 - `artifacts/` directory (if unused)
 - Placeholder `files/hello-world.sh` script (if unused)
@@ -139,6 +169,8 @@ Examples:
 4. **Manual counter modification**: Let `make new` handle counter automatically
 5. **Untested documentation**: Examples that don't work in container environment
 6. **Double-quote commit issues**: Use single quotes to avoid shell problems
+7. **Redundant package installation**: Adding packages already in base images
+8. **Missing dependency research**: Not checking if a language requires specific toolchains
 
 ## Rollback Procedure
 
@@ -158,11 +190,12 @@ If you need to back out a failed language implementation:
 
 1. **Verify** language doesn't exist (`must/methodical-language-verification`)
 2. **Bootstrap** with `make new HELLO=[lang]`
-3. **Implement** Dockerfile and source code
-4. **Test** with `make [lang] R=1`
-5. **Document** with comprehensive README.md
-6. **Test documentation** examples in container
-7. **Clean up** unused template files
-8. **Commit** with creative message including root README.md
+3. **Check base images** for existing packages before adding dependencies
+4. **Implement** Dockerfile and source code (only adding necessary packages)
+5. **Test** with `make [lang] R=1`
+6. **Document** with comprehensive README.md
+7. **Test documentation** examples in container
+8. **Clean up** unused template files
+9. **Commit** with creative message including root README.md
 
 This consolidated guide replaces the need for multiple separate language addition documents and provides the complete, authoritative process.
