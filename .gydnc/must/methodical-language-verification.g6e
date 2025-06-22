@@ -1,0 +1,78 @@
+---
+title: Methodical Language Verification for 100hellos
+description: Mandatory verification process to prevent duplicate language additions using proper enumeration functions
+tags:
+    - project:100hellos
+    - scope:languages
+    - type:must
+    - quality:verification
+---
+# Methodical Language Verification Process
+
+Before adding any new language, follow this **mandatory verification process** to avoid duplicates:
+
+## Step 1: Get Complete Directory Listing (The Correct Way)
+```bash
+# Use the proper function that respects .no-publish filtering
+source .utils/functions.sh
+published_languages | sort
+```
+
+This function:
+- Finds all directories in the project root
+- Automatically excludes directories listed in `.no-publish` (like `.git`, `.utils`, `000-base`, etc.)
+- Gives you the clean list of actual language directories
+
+## Step 2: Systematic Cross-Reference Check
+With your chosen language in mind, systematically check the listing for:
+
+1. **Exact name matches**: Search for the exact language name
+2. **Common alternative names**: Many languages have multiple names
+   - V language → `vlang/` directory
+   - C → `050-c/` directory (note: this is in .no-publish, it's a base image)
+   - JavaScript → `javascript/` directory
+   - TypeScript → `typescript/` directory
+3. **Abbreviated names**: Look for shortened versions
+4. **Common misspellings or variants**
+
+## Step 3: Double-Check with Grep
+After visual inspection, verify with search:
+```bash
+# Search for your language name (case-insensitive) in the published languages
+source .utils/functions.sh
+published_languages | grep -i "yourLanguageName"
+
+# Also check for partial matches
+published_languages | grep -i "partialName"
+```
+
+## Step 4: Cross-Reference Against Forbidden Languages
+Check your language against any explicitly forbidden languages:
+- clojurescript ❌
+- swift ❌
+- haxe ❌
+- roc ❌
+- grain ❌
+
+## Common Language Name Mappings
+Be aware of these common alternative directory names:
+- **V Language** → `vlang/`
+- **C++** → `cpp/`
+- **C#** → `csharp/`
+- **F#** → `fsharp/`
+- **D** → `d-lang/`
+- **R** → `r-project/`
+
+Note: `050-c/`, `100-java11/`, `200-dotnet/`, `300-node/` are base images (filtered out by `.no-publish`)
+
+## Verification Failure Recovery
+If you discover a duplicate AFTER running `make new`:
+1. **Immediately stop** - don't implement anything
+2. **Revert both changes**:
+   ```bash
+   git checkout HEAD -- README.md    # Restore counter
+   rm -rf yourlanguage/              # Remove scaffold
+   ```
+3. **Choose a different language**
+
+**CRITICAL**: This verification step is **non-negotiable**. Taking 2-3 minutes for systematic verification prevents wasted implementation time and maintains project quality.
