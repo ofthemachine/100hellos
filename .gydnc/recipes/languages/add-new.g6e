@@ -124,6 +124,9 @@ The testing process remains the same.
 Before committing, ensure your contribution is complete and clean.
 
 -   **Create the `README.md` file:** Every language folder **MUST** include a `README.md`. This file is displayed on Docker Hub **after** the overview template. **IMPORTANT**: Follow the guidance in `should/languages/readme-content-guidelines` to avoid redundant Docker usage instructions. Focus on language-specific information only.
+
+-   **Test ALL documentation examples**: **CRITICAL** - Follow the guidance in `should/languages/test-documentation-examples` to verify every example in your README works in the actual container environment. This prevents broken examples from reaching users.
+
 -   **Remove Unused Template Files:** The `make new` command creates several placeholder files and directories. **You MUST remove any that you do not use.** The most common examples are:
     -   The `artifacts/` directory.
     -   The placeholder `files/hello-world.sh` script.
@@ -134,6 +137,7 @@ Before committing, ensure your contribution is complete and clean.
 
 -   **Silent Validation Failure**: If `make [lang] R=1` runs without error but does not print "Hello World!", it's almost always because the empty, placeholder `files/hello-world.sh` was left behind. The entrypoint finds it, runs it, and exits successfully with no output. **Delete it.**
 -   **`too many arguments` Error**: This happens when the `hello-world.*` glob in the entrypoint matches multiple files. This is caused by leaving the placeholder `files/hello-world.lang` file in the directory alongside your real script. **Delete it.**
+-   **Untested documentation examples**: Including examples in README that don't work in the container environment. Always test examples as per `should/languages/test-documentation-examples`.
 
 ## 7. Commit
 

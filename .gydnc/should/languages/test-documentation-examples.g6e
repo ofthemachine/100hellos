@@ -1,0 +1,96 @@
+---
+title: Test All Documentation Examples in Container Environment
+description: Critical requirement to test all language examples in README files within the actual container environment to ensure accuracy
+tags:
+    - project:100hellos
+    - scope:documentation
+    - type:should
+    - domain:languages
+    - quality:testing
+---
+# Test All Documentation Examples in Container Environment
+
+## The Problem
+
+Documentation examples in language README.md files can become outdated or incorrect. Untested examples mislead users and damage credibility. This is especially critical for languages where:
+- Different implementations have varying syntax support
+- Command-line options differ between versions
+- Container environment may have specific limitations
+
+## The Requirement
+
+**ALL examples in language documentation MUST be tested in the actual container environment before committing.**
+
+## How to Test Documentation Examples
+
+### 1. Use the Actual Container Environment
+
+Always test examples using the built container, not your local environment:
+
+```bash
+# Build and test the language first
+make [lang] R=1
+
+# Test examples interactively
+docker run --rm --entrypoint="" -it 100hellos/[lang]:local zsh
+
+# Or test specific commands non-interactively
+docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
+```
+
+### 2. Test Every Example Command
+
+For each example in your README:
+- Copy the exact command/code from your documentation
+- Run it in the container environment
+- Verify it produces the expected output
+- Fix both the example AND the documentation if they don't match
+
+### 3. Implementation-Specific Considerations
+
+Different language implementations may have:
+- **Different command flags**: (e.g., `-c` vs `-e` in BQN)
+- **Limited symbol support**: (e.g., CBQN vs other BQN implementations)
+- **Version differences**: (e.g., Python 2 vs 3 syntax)
+- **Container-specific limitations**: (e.g., missing libraries)
+
+### 4. Example Testing Workflow
+
+```bash
+# 1. Build and basic test
+make [lang] R=1
+
+# 2. Test each example from README
+docker run --rm --entrypoint="" 100hellos/[lang]:local [example-command-1]
+docker run --rm --entrypoint="" 100hellos/[lang]:local [example-command-2]
+# ... continue for all examples
+
+# 3. If any fail, fix the example AND the documentation
+# 4. Re-test to confirm
+```
+
+## Anti-Patterns to Avoid
+
+❌ **Assuming local environment equals container environment**
+❌ **Copying examples from online sources without testing**
+❌ **Using examples from different language implementations**
+❌ **Testing examples only in development, not final container**
+
+## Why This Matters
+
+- **User experience**: Users trust that documented examples work
+- **Language adoption**: Broken examples frustrate newcomers
+- **Project credibility**: Working examples demonstrate quality
+- **Debugging efficiency**: Tested examples reduce support burden
+
+## Integration with Language Addition
+
+This testing should be part of the standard language addition workflow:
+1. Implement language
+2. Test basic functionality (`make [lang] R=1`)
+3. Write README with examples
+4. **Test all examples in container** ← Critical step
+5. Fix any issues found
+6. Commit
+
+Remember: If an example doesn't work in the container, it doesn't work for users.
