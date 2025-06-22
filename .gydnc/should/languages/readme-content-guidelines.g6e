@@ -1,0 +1,70 @@
+---
+title: Language README.md Content Guidelines for 100hellos
+description: Guidelines for writing language README.md files that avoid redundancy with the overview template used on DockerHub
+tags:
+    - project:100hellos
+    - scope:documentation
+    - type:should
+    - domain:languages
+---
+# Language README.md Content Guidelines for 100hellos
+
+## The Problem
+
+Language README.md files in 100hellos are published to DockerHub, but they are **NOT** standalone documents. The `.github/bin/overview-template.md` is automatically prepended to each language's README.md when published to DockerHub.
+
+## The Overview Template Already Provides
+
+The overview template (`overview-template.md`) automatically includes:
+- **Title**: "Hello World! From [lang]"
+- **GitHub link**: Direct link to the language's source files
+- **"Trying it" section**: Correct Docker run commands for the language
+- **"Modifying it" section**: Instructions for interactive development
+
+## Language README.md Should ONLY Include
+
+✅ **Language-specific information**:
+- Description of the language and its unique features
+- Interesting facts about the language
+- Explanation of the "Hello World!" code if it's non-obvious
+- Language history, creator, or notable characteristics
+- Suggestions for further exploration (but NOT Docker commands)
+
+❌ **What to AVOID in language README.md**:
+- Docker run commands (already in overview template)
+- Container usage instructions (already covered)
+- Generic "try it out" sections with Docker commands
+- Redundant information about building/running containers
+
+## Example Structure
+
+**Good language README structure**:
+```markdown
+# [Language Name] - [Tagline]
+
+[Language description and what makes it special]
+
+## What makes [Language] special?
+
+- Unique feature 1
+- Unique feature 2
+- Performance characteristics
+
+## The "Hello World!" explanation
+
+[If the Hello World code is non-obvious, explain it]
+
+## Fun [Language] facts
+
+- Historical information
+- Interesting trivia
+- Notable uses or users
+
+## Explore [Language] further
+
+[Suggestions for learning more - but NO Docker commands]
+```
+
+## Key Principle
+
+Remember: The overview template handles all the "how to run" information. The language README should focus purely on "what makes this language interesting and worth exploring."
