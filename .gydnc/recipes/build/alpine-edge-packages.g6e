@@ -2,50 +2,42 @@
 title: How to Install Packages from Alpine Edge
 description: A recipe for how to correctly install packages from the Alpine Linux 'edge' repository by adding both the 'main' and 'community' sources.
 tags:
-    - type:recipe
     - domain:build
-    - tech:docker
     - tech:alpine
+    - tech:docker
+    - type:recipe
 ---
 # How to Install Packages from Alpine Edge
 
-When a required package is not available in the stable Alpine repository of the base image, you may need to pull from the `edge` repository. However, this can cause dependency conflicts if not done carefully.
+When a required package is not available in the stable Alpine repository of the base image, you may need to pull from the `edge` repository.
 
-## The Problem: Missing Dependencies from `edge`
+## The Current Pattern (Updated)
 
-Adding just the `edge/community` repository might cause the installation to fail with errors like:
-```
-ERROR: unable to select packages:
-  so:libicui18n.so.76 (no such package):
-    required by: some-package-from-edge
-```
-This happens because the package from `edge/community` depends on newer versions of core libraries that are in `edge/main`, which is not enabled by default.
-
-## The Solution: Add Both `main` and `community` Edge Repos
-
-To resolve this, you must add **both** the `main` and `community` repositories for `edge` to your `Dockerfile` before installing your package.
-
-This ensures that `apk` can find all the necessary dependencies.
-
-### Example: Installing Deno
-
-Here is the correct `Dockerfile` configuration to install `deno` from `edge`:
+Based on the established patterns in the codebase (see `deno/Dockerfile` and `odin/Dockerfile`), the correct approach is:
 
 ```dockerfile
-# syntax=docker/dockerfile:1
-# escape=\
-FROM 100hellos/000-base:local
-
 # Add both edge repositories to ensure dependency resolution
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" | sudo tee -a /etc/apk/repositories
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" | sudo tee -a /etc/apk/repositories
 
-# Update and install the package
+# Update package lists (required after adding new repositories)
 RUN sudo apk update
-RUN sudo apk add --no-cache deno
 
-# Copy the application files
-COPY --chown=human:human ./files /hello-world
+# Install your package
+RUN sudo apk add --no-cache your-package-name
 ```
 
-By including both repositories, you create a compatible environment for packages from the `edge` channel. I also added an `apk update` step, which is a good practice after modifying repositories.
+## Why Both Repositories?
+
+Adding just the `edge/community` repository might cause installation to fail with dependency errors. Packages from `edge/community` often depend on newer versions of core libraries that are in `edge/main`.
+
+## Examples in the Codebase
+
+- **Deno**: Uses this pattern to install deno from edge
+- **Odin**: Uses this pattern to get newer LLVM versions
+- **Gleam**: Should use this pattern to install gleam from edge
+
+The key elements are:
+1. Add both edge/main and edge/community repositories
+2. Run `apk update` after adding repositories
+3. Install the package with `--no-cache`
