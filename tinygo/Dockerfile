@@ -2,8 +2,8 @@
 # escape=\
 FROM 100hellos/000-base:local
 
-# Install build dependencies and Go
-RUN sudo apk add --no-cache wget tar build-base go
+# Install Go - TinyGo requires the Go toolchain for compilation
+RUN sudo apk add --no-cache go
 
 # Install TinyGo from official release - using the latest stable version
 ARG TINYGO_VERSION=0.38.0
