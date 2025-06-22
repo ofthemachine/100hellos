@@ -1,144 +1,168 @@
 ---
-title: How to Add a New Language to 100hellos
-description: A comprehensive guide to adding new languages, covering simple, compiled, and complex build-from-source scenarios with security best practices.
+title: Complete Guide to Adding Languages to 100hellos
+description: Consolidated, definitive guide for adding new programming languages to 100hellos, merging all requirements, processes, and best practices
 tags:
     - project:100hellos
     - scope:languages
     - security:best-practice
     - type:recipe
 ---
-# How to Add a New Language to 100hellos
+# Complete Guide to Adding Languages to 100hellos
 
-This guide provides a comprehensive, step-by-step process for adding a new programming language to the `100hellos` repository.
-This guidance supersedes previous versions and clarifies the central role of the `entrypoint.sh` script.
+This is the definitive guide for adding new programming languages to the 100hellos project, consolidating all requirements, processes, and best practices.
+
+## Pre-Addition: Mandatory Verification
+
+**CRITICAL**: Before implementing any language, you MUST verify it doesn't already exist using the methodical verification process outlined in `must/methodical-language-verification`.
 
 ## Core Requirements
 
-Before you begin, ensure you adhere to these core project standards.
-
 ### 1. The "Hello World!" String
+The output of your program **MUST** be exactly `Hello World!` (not `Hello, World!` or any other variation).
 
-The output of your program **MUST** be exactly `Hello World!`.
+### 2. Authentic Implementation
+Must use real language interpreters/compilers - no fake or shell script simulations.
 
-- **Correct:** `Hello World!`
-- **Incorrect:** `Hello, World!`, `hello world!`, or any other variation.
+### 3. MUSL Compatibility
+Prioritize MUSL-compatible languages for Alpine Linux base compatibility.
 
-This strictness is essential for the automated testing and validation processes.
+## Implementation Process
 
----
+### 1. Bootstrap the Language
+```bash
+make new HELLO=[lang]
+```
+This command:
+- Creates the language directory structure
+- Automatically decrements the counter in root README.md
+- **CRITICAL**: Never manually modify the counter - let `make new` handle it
 
-## 1. Bootstrap the New Language
+### 2. Configure Build and Run Process
 
-This step remains the same. Use the make command to create the language directory.
-`make new HELLO=[lang]`
+Your goal is to provide an executable that the base container's `entrypoint.sh` can run.
 
-## 2. Configure the Build and Run Process
+#### Pattern A: Interpreted Languages (Shebang)
+For languages like Python, Ruby, Janet:
 
-This is the most critical step. Your goal is to provide an executable file that the base container's `entrypoint.sh` can run. The entrypoint first looks for `hello-world.sh`. If it doesn't find it, it looks for `hello-world.*` and makes it executable. There are two primary patterns to accomplish this.
+1. **`[lang]/Dockerfile`**: Install language runtime, **no CMD**
+2. **`[lang]/files/hello-world.[ext]`**: Code with proper shebang
 
-### A Note on Base Images
-
-Whenever possible, use a language-specific base image (e.g., `100hellos/300-node:local` for Node.js-based languages) instead of the generic `100hellos/000-base:local`. This will provide a more stable and predictable environment.
-
-The base images already include common utilities. **Do NOT install them again.** This includes `git`, `curl`, `wget`, `zsh`, `sudo`, and more. When in doubt, inspect the `.base/Dockerfile`.
-
-### Pattern 1: Interpreted Languages (Shebang)
-
-For interpreted languages like Python, Ruby, or Janet, the process is straightforward.
-
-1.  **`[lang]/Dockerfile`**: Install the language runtime (e.g., `apk add python3`). **Do not add a `CMD`**.
-2.  **`[lang]/files/hello-world.[ext]`**: Write your "Hello World!" code and, most importantly, **start the file with a shebang** that points to the interpreter. The `entrypoint.sh` script will use this shebang to execute your file.
-
-**Example (`python`):**
-
-*python/files/hello-world.py:*
+Example:
 ```python
 #!/usr/bin/env python3
-
 print("Hello World!")
 ```
 
-*python/Dockerfile:*
-```dockerfile
-# syntax=docker/dockerfile:1
-# escape=\
-FROM 100hellos/000-base:local
+#### Pattern B: Compiled Languages (hello-world.sh)
+For languages like Rust, Go, C++:
 
-RUN sudo apk add --no-cache python3
+1. **`[lang]/Dockerfile`**: Install compiler, **no CMD**
+2. **`[lang]/files/hello-world.sh`**: Script that compiles and runs
+3. **`[lang]/files/hello-world.[ext]`**: Source code without shebang
 
-# NO CMD HERE!
-COPY --chown=human:human ./files /hello-world
-```
-
-### Pattern 2: Compiled Languages (`hello-world.sh`)
-
-For compiled languages like Rust, Go, or C++, you must provide a `hello-world.sh` script that the entrypoint can execute.
-
-1.  **`[lang]/Dockerfile`**: Install the language compiler (e.g., `apk add rust`). **Do not add a `CMD`**.
-2.  **`[lang]/files/hello-world.sh`**: This script is responsible for compiling your source code and then running the resulting binary. **Remember to use absolute paths for compilers and executables.**
-3.  **`[lang]/files/hello-world.[ext]`**: Your standard "Hello World!" source code, without a shebang.
-
-**Example (`rust`):**
-
-*rust/files/hello-world.sh:*
+Example hello-world.sh:
 ```bash
 #!/bin/sh
-# Compile the rust source file
-# Note the absolute path to the compiler may be needed if PATH is inconsistent
 rustc /hello-world/hello-world.rs -o /tmp/hello
-# Execute the compiled binary
 /tmp/hello
 ```
 
-*rust/files/hello-world.rs:*
-```rust
-fn main() {
-    println!("Hello World!");
-}
+### 3. Use Appropriate Base Images
+- Use language-specific base images when possible (e.g., `100hellos/300-node:local`)
+- **DO NOT** reinstall common utilities already in base images (`git`, `curl`, `wget`, `zsh`, `sudo`)
+
+### 4. Test Implementation
+```bash
+make [lang] R=1
+```
+Verify exact "Hello World!" output.
+
+### 5. Documentation Requirements
+
+#### Create README.md
+Every language **MUST** include a README.md following these guidelines:
+
+**Focus on language-specific content only**:
+- Language description and unique features
+- Interesting facts about the language
+- Explanation of non-obvious "Hello World!" code
+- Language history or notable characteristics
+- Suggestions for further exploration
+
+**Avoid redundant content**:
+- Docker run commands (handled by overview template)
+- Generic container usage instructions
+- Redundant build/run information
+
+#### Test All Documentation Examples
+**CRITICAL**: Test every example in your README within the actual container environment:
+
+```bash
+# Test examples interactively
+docker run --rm --entrypoint="" -it 100hellos/[lang]:local zsh
+
+# Or test specific commands
+docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
 ```
 
-*rust/Dockerfile:*
-```dockerfile
-# syntax=docker/dockerfile:1
-# escape=\
-FROM 100hellos/000-base:local
+All examples must work in the container environment before committing.
 
-RUN sudo apk add --no-cache rust
+### 6. Clean Up Template Files
+Remove all unused template files created by `make new`:
+- `artifacts/` directory (if unused)
+- Placeholder `files/hello-world.sh` script (if unused)
+- Placeholder `files/hello-world.lang` file
+- `README.scaffolding` file
 
-# NO CMD HERE! The entrypoint will find and run hello-world.sh
-COPY --chown=human:human ./files /hello-world
-```
+## Git Commit Process
 
-## 3. Complex Builds and Security
+### 1. Always Include Root README.md
+**CRITICAL**: The `make new` command modifies root README.md (decrements counter). This file MUST be committed along with your language files.
 
--   **Complex Builds:** The `artifacts` pattern for building languages from source remains a valid and powerful technique for caching. The `Dockerfile` should still perform the build, but it should not have a `CMD`. The goal of the complex build is to get the language runtime/compiler into the `PATH` so that the shebang or `hello-world.sh` script can use it.
--   **Security:** The security best practices (pinning versions, verifying downloads with checksums, using `COPY --chown`) are still critical and should be followed.
+### 2. Use Single Quotes for Commit Messages
+- ✅ `git commit -m 'Language says Hello!'`
+- ❌ `git commit -m "Language says Hello!"` (can cause shell hanging)
 
-## 4. Test
+### 3. Follow Creative Commit Style
+Format: `[Language] [creative verb] Hello!`
 
-The testing process remains the same.
--   Run `make [lang] R=1` to test.
+Examples:
+- `Janet says Hello!`
+- `Zombie moans Hellllllo!`
+- `Ballerina pirouettes Hello!`
 
-## 5. Finalize and Clean Up
+## Common Pitfalls
 
-Before committing, ensure your contribution is complete and clean.
+1. **Silent Validation Failure**: Empty placeholder `hello-world.sh` left behind
+2. **"too many arguments" Error**: Multiple `hello-world.*` files match the glob
+3. **Forgetting root README.md**: Always commit the decremented counter
+4. **Manual counter modification**: Let `make new` handle counter automatically
+5. **Untested documentation**: Examples that don't work in container environment
+6. **Double-quote commit issues**: Use single quotes to avoid shell problems
 
--   **Create the `README.md` file:** Every language folder **MUST** include a `README.md`. This file is displayed on Docker Hub **after** the overview template. **IMPORTANT**: Follow the guidance in `should/languages/readme-content-guidelines` to avoid redundant Docker usage instructions. Focus on language-specific information only.
+## Rollback Procedure
 
--   **Test ALL documentation examples**: **CRITICAL** - Follow the guidance in `should/languages/test-documentation-examples` to verify every example in your README works in the actual container environment. This prevents broken examples from reaching users.
+If you need to back out a failed language implementation:
+1. Revert the language directory: `rm -rf [lang]/`
+2. **Also revert root README.md**: `git checkout HEAD -- README.md`
+3. Both changes happened during `make new` and both need reverting
 
--   **Remove Unused Template Files:** The `make new` command creates several placeholder files and directories. **You MUST remove any that you do not use.** The most common examples are:
-    -   The `artifacts/` directory.
-    -   The placeholder `files/hello-world.sh` script.
-    -   The placeholder `files/hello-world.lang` file.
-    -   The `README.scaffolding` file.
+## Security and Complex Builds
 
-## 6. Common Pitfalls
+- **Version Pinning**: Always pin specific versions
+- **Checksum Verification**: Verify downloads with checksums
+- **Proper Ownership**: Use `COPY --chown=human:human`
+- **Artifacts Pattern**: Valid for caching complex builds, but no CMD in Dockerfile
 
--   **Silent Validation Failure**: If `make [lang] R=1` runs without error but does not print "Hello World!", it's almost always because the empty, placeholder `files/hello-world.sh` was left behind. The entrypoint finds it, runs it, and exits successfully with no output. **Delete it.**
--   **`too many arguments` Error**: This happens when the `hello-world.*` glob in the entrypoint matches multiple files. This is caused by leaving the placeholder `files/hello-world.lang` file in the directory alongside your real script. **Delete it.**
--   **Untested documentation examples**: Including examples in README that don't work in the container environment. Always test examples as per `should/languages/test-documentation-examples`.
+## Complete Workflow Summary
 
-## 7. Commit
+1. **Verify** language doesn't exist (`must/methodical-language-verification`)
+2. **Bootstrap** with `make new HELLO=[lang]`
+3. **Implement** Dockerfile and source code
+4. **Test** with `make [lang] R=1`
+5. **Document** with comprehensive README.md
+6. **Test documentation** examples in container
+7. **Clean up** unused template files
+8. **Commit** with creative message including root README.md
 
--   Commit with a creative message as per `recipes/git/100hellos-commit-style`.
+This consolidated guide replaces the need for multiple separate language addition documents and provides the complete, authoritative process.
