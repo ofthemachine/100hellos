@@ -67,9 +67,9 @@ rustc /hello-world/hello-world.rs -o /tmp/hello
 /tmp/hello
 ```
 
-### 3. Check Base Images Before Adding Dependencies
+### 3. MANDATORY: Verify Existing Packages Before Adding Dependencies
 
-**CRITICAL**: Before adding any packages, check what's already available in the base image to avoid redundant installations.
+**CRITICAL**: Before writing any `RUN apk add...` command, you **MUST** first check which packages are already available in the base image to avoid redundant and unnecessary installations. This is not an optional step.
 
 #### Check Base Image Contents
 ```bash
@@ -137,8 +137,11 @@ docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
 
 All examples must work in the container environment before committing.
 
-### 7. Clean Up Template Files
-Remove all unused template files created by `make new`:
+### 7. Clean Up Template Files and Content
+- Remove all unused template files created by `make new`.
+- **CRITICAL**: From the remaining template files (like `hello-world.sh`), remove all boilerplate comments and instructions, leaving only the essential code.
+
+Example files to remove:
 - `artifacts/` directory (if unused)
 - Placeholder `files/hello-world.sh` script (if unused)
 - Placeholder `files/hello-world.lang` file
@@ -190,12 +193,12 @@ If you need to back out a failed language implementation:
 
 1. **Verify** language doesn't exist (`must/methodical-language-verification`)
 2. **Bootstrap** with `make new HELLO=[lang]`
-3. **Check base images** for existing packages before adding dependencies
+3. **Verify existing packages** in the base image *before* adding dependencies
 4. **Implement** Dockerfile and source code (only adding necessary packages)
 5. **Test** with `make [lang] R=1`
 6. **Document** with comprehensive README.md
 7. **Test documentation** examples in container
-8. **Clean up** unused template files
+8. **Clean up** unused template files and their boilerplate content
 9. **Commit** with creative message including root README.md
 
 This consolidated guide replaces the need for multiple separate language addition documents and provides the complete, authoritative process.
