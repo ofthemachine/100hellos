@@ -22,7 +22,7 @@ This demonstrates "Hello World" in 100 languages (one day...) and their correspo
 
 ⚠️Running the shell commands below should only be done for trusted sources.
 ```bash
-git clone git@github.com:frison/100hellos.git
+git clone git@github.com:ofthemachine/100hellos.git
 cd 100hellos
 # cat for the cool factor
 cat perl/files/hello-world.pl
