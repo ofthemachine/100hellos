@@ -1,0 +1,21 @@
+*       SNOBOL4 Hello World - Demonstrating Language Features
+        GREETING = "Hello"
+        TARGET = "World"
+        PUNCTUATION = "!"
+
+*       Use pattern matching to build message
+        MESSAGE = GREETING " " TARGET PUNCTUATION
+
+*       Demonstrate pattern replacement
+        MESSAGE "World" = "wonderful World"
+        MESSAGE "wonderful " = ""
+
+*       Show conditional pattern matching with success/failure
+        MESSAGE "Hello" = "Hello" :S(FOUND) F(NOTFOUND)
+
+FOUND   OUTPUT = MESSAGE
+        :(END)
+
+NOTFOUND OUTPUT = "Pattern not found"
+
+END
