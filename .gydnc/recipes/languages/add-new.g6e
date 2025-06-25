@@ -21,10 +21,27 @@ This is the definitive guide for adding new programming languages to the 100hell
 The output of your program **MUST** be exactly `Hello World!` (not `Hello, World!` or any other variation).
 
 ### 2. Authentic Implementation
-Must use real language interpreters/compilers - no fake or shell script simulations.
+**ABSOLUTE REQUIREMENT**: Must use real language interpreters/compilers - no fake or shell script simulations.
+
+**❌ FORBIDDEN APPROACHES:**
+- Creating shell scripts that just echo "Hello World!"
+- Using fake interpreters or simulators that don't actually execute the language
+- Fallback scripts that bypass the actual language entirely
+- Any implementation that doesn't genuinely run code in the target language
+
+**✅ REQUIRED APPROACHES:**
+- Install and use the actual language interpreter/compiler
+- Execute genuine code written in the target language
+- Even if the language requires complex setup, it must be authentic
+
+**If a language cannot be authentically implemented on Alpine Linux due to fundamental incompatibilities (e.g., requires specific glibc versions not available in musl), the language should be rejected rather than simulated.**
 
 ### 3. MUSL Compatibility
-Prioritize MUSL-compatible languages for Alpine Linux base compatibility.
+Prioritize MUSL-compatible languages for Alpine Linux base compatibility. When evaluating languages:
+
+1. **First Priority**: Languages with native musl support or available in Alpine packages
+2. **Second Priority**: Languages that can be built from source with musl compatibility
+3. **Reject**: Languages that fundamentally require glibc and cannot be made to work with musl
 
 ## Implementation Process
 
@@ -57,7 +74,7 @@ print("Hello World!")
 For languages like Rust, Go, C++:
 
 1. **`[lang]/Dockerfile`**: Install compiler, **no CMD**
-2. **`[lang]/files/hello-world.sh`**: Script that compiles and runs
+2. **`[lang]/files/hello-world.sh`**: Script that compiles and runs **the actual language code**
 3. **`[lang]/files/hello-world.[ext]`**: Source code without shebang
 
 Example hello-world.sh:
@@ -67,7 +84,31 @@ rustc /hello-world/hello-world.rs -o /tmp/hello
 /tmp/hello
 ```
 
-### 3. MANDATORY: Verify Existing Packages Before Adding Dependencies
+**CRITICAL**: The `hello-world.sh` script must compile and execute actual source code in the target language, not simulate the output.
+
+### 3. Handling Compatibility Challenges
+
+When encountering musl/glibc or other compatibility issues:
+
+#### ✅ ACCEPTABLE SOLUTIONS:
+- Build the language from source with musl-compatible flags
+- Use alternative implementations designed for musl (e.g., TinyGo instead of standard Go)
+- Install 32-bit compatibility layers if they work with musl
+- Use edge or testing repositories if they contain musl-compatible packages
+- Cross-compile binaries specifically for musl
+
+#### ❌ UNACCEPTABLE SOLUTIONS:
+- Creating shell script "fallbacks" that don't use the language
+- Simulating language output without running actual language code
+- Using any approach that doesn't genuinely execute the target language
+
+#### When to Reject a Language:
+- Pre-built binaries only work with glibc and source code cannot be compiled for musl
+- Language runtime fundamentally requires glibc-specific features
+- No viable path exists to run authentic language code on Alpine Linux
+- Implementation would require compromising the authentic execution requirement
+
+### 4. MANDATORY: Verify Existing Packages Before Adding Dependencies
 
 **CRITICAL**: Before writing any `RUN apk add...` command, you **MUST** first check which packages are already available in the base image to avoid redundant and unnecessary installations. This is not an optional step.
 
@@ -97,17 +138,17 @@ RUN sudo apk add --no-cache wget tar build-base go
 RUN sudo apk add --no-cache go
 ```
 
-### 4. Use Appropriate Base Images
+### 5. Use Appropriate Base Images
 - Use language-specific base images when possible (e.g., `100hellos/300-node:local`)
 - **DO NOT** reinstall common utilities already in base images
 
-### 5. Test Implementation
+### 6. Test Implementation
 ```bash
 make [lang] R=1
 ```
 Verify exact "Hello World!" output.
 
-### 6. Documentation Requirements
+### 7. Documentation Requirements
 
 #### Create README.md
 Every language **MUST** include a README.md following these guidelines:
@@ -137,7 +178,7 @@ docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
 
 All examples must work in the container environment before committing.
 
-### 7. Clean Up Template Files and Content
+### 8. Clean Up Template Files and Content
 - Remove all unused template files created by `make new`.
 - **CRITICAL**: From the remaining template files (like `hello-world.sh`), remove all boilerplate comments and instructions, leaving only the essential code.
 
@@ -174,6 +215,8 @@ Examples:
 6. **Double-quote commit issues**: Use single quotes to avoid shell problems
 7. **Redundant package installation**: Adding packages already in base images
 8. **Missing dependency research**: Not checking if a language requires specific toolchains
+9. **Shell script simulation**: Creating fake implementations instead of authentic language execution
+10. **Compatibility shortcuts**: Using fallback approaches instead of solving musl/glibc issues properly
 
 ## Rollback Procedure
 
@@ -195,10 +238,11 @@ If you need to back out a failed language implementation:
 2. **Bootstrap** with `make new HELLO=[lang]`
 3. **Verify existing packages** in the base image *before* adding dependencies
 4. **Implement** Dockerfile and source code (only adding necessary packages)
-5. **Test** with `make [lang] R=1`
-6. **Document** with comprehensive README.md
-7. **Test documentation** examples in container
-8. **Clean up** unused template files and their boilerplate content
-9. **Commit** with creative message including root README.md
+5. **Ensure authentic implementation** - the language must genuinely execute, not be simulated
+6. **Test** with `make [lang] R=1`
+7. **Document** with comprehensive README.md
+8. **Test documentation** examples in container
+9. **Clean up** unused template files and their boilerplate content
+10. **Commit** with creative message including root README.md
 
 This consolidated guide replaces the need for multiple separate language addition documents and provides the complete, authoritative process.
