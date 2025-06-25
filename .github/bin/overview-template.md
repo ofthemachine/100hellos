@@ -1,6 +1,6 @@
 # Hello World! From ${lang}.
 
-Check it out on Github! **[100hellos/${lang}](https://github.com/frison/100hellos/tree/main/${lang}/files)**
+Check it out on Github! **[100hellos/${lang}](https://github.com/ofthemachine/100hellos/tree/main/${lang}/files)**
 
 ## Trying it
 
@@ -8,7 +8,7 @@ Check it out on Github! **[100hellos/${lang}](https://github.com/frison/100hello
 
 ## Modifying it
 
-[Check out the README.md](https://github.com/frison/100hellos/tree/main/README.md), or [fork it](https://github.com/frison/100hellos/fork) and make it your own!
+[Check out the README.md](https://github.com/ofthemachine/100hellos/tree/main/README.md), or [fork it](https://github.com/ofthemachine/100hellos/fork) and make it your own!
 
 **or**
 
