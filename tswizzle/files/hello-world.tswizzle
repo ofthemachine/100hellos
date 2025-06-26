@@ -1,0 +1,14 @@
+COUNTER ALL YOUR QUICK REMARKS ~> This is a Taylor Swift themed Hello World program
+COUNTER ALL YOUR QUICK REMARKS ~> Using as many TSwizzle keywords as possible!
+
+COUNTER ALL YOUR QUICK REMARKS ~> Initialize our greeting variable
+greeting = "Hello World!"
+
+COUNTER ALL YOUR QUICK REMARKS ~> Check if we should display the greeting
+should_greet = 1
+
+COUNTER ALL YOUR QUICK REMARKS ~> Conditional logic using Taylor Swift lyrics
+IF YOU'VE GOT A should_greet == 1 I'M JEALOUS OF AND I'LL SHOW YOU EVERY VERSION OF greeting TONIGHT
+
+COUNTER ALL YOUR QUICK REMARKS ~> End of our Swift program
+GOODBYE GOODBYE GOODBYE
