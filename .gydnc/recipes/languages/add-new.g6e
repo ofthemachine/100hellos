@@ -142,13 +142,27 @@ RUN sudo apk add --no-cache go
 - Use language-specific base images when possible (e.g., `100hellos/300-node:local`)
 - **DO NOT** reinstall common utilities already in base images
 
-### 6. Test Implementation
+### 6. CRITICAL DOCKERFILE COPY PATTERN
+
+**MANDATORY**: When copying files in Dockerfiles, you **MUST** use the `./files` pattern to ensure compatibility with the `make composite-dockerfile` target:
+
+```dockerfile
+# ✅ CORRECT: Use ./files (note the dot-slash)
+COPY --chown=human:human ./files /hello-world
+
+# ❌ WRONG: Using just files/ breaks composite generation
+COPY --chown=human:human files/ /hello-world
+```
+
+**Why this matters**: The `make composite-dockerfile` target uses sed to transform COPY paths, and it's designed to work with the `./files` pattern. Using just `files/` will break the composite Dockerfile generation.
+
+### 7. Test Implementation
 ```bash
 make [lang] R=1
 ```
 Verify exact "Hello World!" output.
 
-### 7. Documentation Requirements
+### 8. Documentation Requirements
 
 #### Create README.md
 Every language **MUST** include a README.md following these guidelines:
@@ -178,7 +192,7 @@ docker run --rm --entrypoint="" 100hellos/[lang]:local [command]
 
 All examples must work in the container environment before committing.
 
-### 8. Clean Up Template Files and Content
+### 9. Clean Up Template Files and Content
 - Remove all unused template files created by `make new`.
 - **CRITICAL**: From the remaining template files (like `hello-world.sh`), remove all boilerplate comments and instructions, leaving only the essential code.
 
@@ -202,8 +216,28 @@ Format: `[Language] [creative verb] Hello!`
 
 Examples:
 - `Janet says Hello!`
-- `Zombie moans Hellllllo!`
+- `Zombie moans Helllllo!`
 - `Ballerina pirouettes Hello!`
+
+## Rollback Procedure
+
+**If you need to back out a failed language implementation, you MUST revert BOTH changes made by `make new`:**
+
+1. **Delete the language directory**: `rm -rf [lang]/`
+2. **CRITICAL: Also restore README.md counter**: `git checkout HEAD -- README.md`
+
+**Why both steps are needed**: The `make new` command makes two changes:
+- Creates the language directory
+- Decrements the language counter in root README.md
+
+Both changes must be reverted to maintain correct language counts and project state.
+
+**Complete rollback example**:
+```bash
+# For a failed "lobster" implementation
+rm -rf lobster/
+git checkout HEAD -- README.md
+```
 
 ## Common Pitfalls
 
@@ -217,19 +251,14 @@ Examples:
 8. **Missing dependency research**: Not checking if a language requires specific toolchains
 9. **Shell script simulation**: Creating fake implementations instead of authentic language execution
 10. **Compatibility shortcuts**: Using fallback approaches instead of solving musl/glibc issues properly
-
-## Rollback Procedure
-
-If you need to back out a failed language implementation:
-1. Revert the language directory: `rm -rf [lang]/`
-2. **Also revert root README.md**: `git checkout HEAD -- README.md`
-3. Both changes happened during `make new` and both need reverting
+11. **WRONG COPY PATTERN**: Using `files/` instead of `./files` breaks composite Dockerfile generation
+12. **INCOMPLETE ROLLBACK**: Forgetting to restore README.md counter when backing out a failed implementation
 
 ## Security and Complex Builds
 
 - **Version Pinning**: Always pin specific versions
 - **Checksum Verification**: Verify downloads with checksums
-- **Proper Ownership**: Use `COPY --chown=human:human`
+- **Proper Ownership**: Use `COPY --chown=human:human ./files` (note the `./files` pattern)
 - **Artifacts Pattern**: Valid for caching complex builds, but no CMD in Dockerfile
 
 ## Complete Workflow Summary
@@ -238,11 +267,13 @@ If you need to back out a failed language implementation:
 2. **Bootstrap** with `make new HELLO=[lang]`
 3. **Verify existing packages** in the base image *before* adding dependencies
 4. **Implement** Dockerfile and source code (only adding necessary packages)
-5. **Ensure authentic implementation** - the language must genuinely execute, not be simulated
-6. **Test** with `make [lang] R=1`
-7. **Document** with comprehensive README.md
-8. **Test documentation** examples in container
-9. **Clean up** unused template files and their boilerplate content
-10. **Commit** with creative message including root README.md
+5. **Use correct COPY pattern**: `COPY --chown=human:human ./files /hello-world`
+6. **Ensure authentic implementation** - the language must genuinely execute, not be simulated
+7. **Test** with `make [lang] R=1`
+8. **Document** with comprehensive README.md
+9. **Test documentation** examples in container
+10. **Clean up** unused template files and their boilerplate content
+11. **Commit** with creative message including root README.md
+12. **If rollback needed**: Remove directory AND restore README.md counter
 
 This consolidated guide replaces the need for multiple separate language addition documents and provides the complete, authoritative process.
