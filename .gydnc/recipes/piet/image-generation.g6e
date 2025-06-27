@@ -1,0 +1,188 @@
+---
+title: Piet Programming Language Image Generation Guide
+description: Comprehensive guide for creating Piet visual programming language images based on analysis of working programs and understanding of execution model
+tags:
+    - type:recipe
+    - domain:programming
+    - scope:piet
+    - topic:image-generation
+    - quality:comprehensive
+---
+# Piet Programming Language Image Generation Guide
+
+## Core Understanding
+
+Piet is a visual programming language where programs are images composed of colored pixels. The language execution follows these fundamental principles:
+
+### Block-Based Execution Model
+- **Color Blocks**: Connected regions of same-colored pixels form execution units
+- **Block Size = Stack Value**: The number of pixels in a block determines the integer value pushed to the stack
+- **Color Transitions = Operations**: Moving between blocks of different colors triggers specific operations based on hue and lightness changes
+
+### Execution Flow
+- Execution starts at upper-left corner (0,0)
+- Direction Pointer (DP) initially points right
+- Codel Chooser (CC) initially points left
+- Program follows edges of color blocks according to DP and CC directions
+- Black pixels block execution, white pixels allow "sliding" through
+
+## Working Program Analysis
+
+Based on successful programs in our test suite:
+
+### Pattern 1: Direct ASCII Mapping (frankzago_hello.png)
+```
+Strategy: Create color blocks sized exactly to ASCII values
+- Block of 72 pixels → Push 72 → Output 'H'
+- Block of 101 pixels → Push 101 → Output 'e'
+- Block of 108 pixels → Push 108 → Output 'l'
+- And so on...
+```
+
+### Pattern 2: Arithmetic Construction (hi.png)
+```
+Strategy: Build ASCII values through arithmetic
+- Block of 9 pixels → Push 9
+- Block of 8 pixels → Push 8
+- Multiply operation → 9×8=72
+- Output 'H' (72)
+```
+
+### Pattern 3: Stack Reuse (progopedia_hello_basic.png)
+```
+Strategy: Linear sequence with efficient transitions
+- Each character gets its own block
+- Consistent output operations between blocks
+```
+
+## Color Operation Matrix
+
+According to Piet specification, operations are determined by hue and lightness changes:
+
+| Hue Change | Lightness Change | Operation |
+|------------|------------------|-----------|
+| 0 | 1 | push |
+| 0 | 2 | pop |
+| 1 | 0 | add |
+| 1 | 1 | subtract |
+| 1 | 2 | multiply |
+| 2 | 0 | divide |
+| 2 | 1 | mod |
+| 2 | 2 | not |
+| 3 | 0 | greater |
+| 3 | 1 | pointer |
+| 3 | 2 | switch |
+| 4 | 0 | duplicate |
+| 4 | 1 | roll |
+| 4 | 2 | in(number) |
+| 5 | 0 | in(char) |
+| 5 | 1 | out(number) |
+| 5 | 2 | out(char) |
+
+## Standard Piet Colors
+
+```python
+COLORS = {
+    'light_red': (255, 192, 192),    'light_yellow': (255, 255, 192),
+    'light_green': (192, 255, 192),  'light_cyan': (192, 255, 255),
+    'light_blue': (192, 192, 255),   'light_magenta': (255, 192, 255),
+    'red': (255, 0, 0),              'yellow': (255, 255, 0),
+    'green': (0, 255, 0),            'cyan': (0, 255, 255),
+    'blue': (0, 0, 255),             'magenta': (255, 0, 255),
+    'dark_red': (192, 0, 0),         'dark_yellow': (192, 192, 0),
+    'dark_green': (0, 192, 0),       'dark_cyan': (0, 192, 192),
+    'dark_blue': (0, 0, 192),        'dark_magenta': (192, 0, 192),
+    'white': (255, 255, 255),        'black': (0, 0, 0)
+}
+```
+
+## Critical Implementation Notes
+
+### Codel Size Relationship
+- **Logical Program**: Designed in codel units (conceptual grid)
+- **Physical Image**: Each codel becomes N×N pixels
+- **hi.png**: 10×10 logical codels, each = 16×16 pixels (160×160 image)
+- **frankzago_hello.png**: 30×29 logical codels, each = 1×1 pixel (30×29 image)
+
+### Block Connectivity Rules
+- Only orthogonally adjacent pixels (not diagonal) form connected blocks
+- Block size = total pixel count in connected region
+- Execution cannot pass through black pixels
+- White pixels allow unrestricted sliding
+
+### Artistic Program Strategy
+For programs with artistic elements:
+1. **Place functional program at (0,0)** where execution starts
+2. **Use black barriers** to prevent execution from escaping to artistic areas
+3. **Add artistic elements** in unreachable regions beyond barriers
+4. **Test execution flow** to ensure proper containment
+
+## Generation Strategies
+
+### Strategy 1: Direct Block Mapping
+```python
+# Create blocks sized to ASCII values
+def create_char_block(ascii_val, color, position):
+    # Create connected region of exactly ascii_val pixels
+    return create_connected_block(color, ascii_val, position)
+```
+
+### Strategy 2: Arithmetic Construction
+```python
+# Build values through operations
+def create_calculated_char(target_ascii):
+    factors = factorize(target_ascii)
+    blocks = []
+    for factor in factors:
+        blocks.append(create_block(color, factor))
+    blocks.append(create_operation_block('multiply'))
+    return blocks
+```
+
+### Strategy 3: Stack Optimization
+```python
+# Reuse stack values efficiently
+def optimize_character_sequence(text):
+    # Analyze character relationships
+    # Minimize operations through duplication, addition, etc.
+    return optimized_blocks
+```
+
+## Testing and Validation
+
+### Essential Tests
+1. **Basic Execution**: `./piet image.png codel_size`
+2. **Debug Trace**: `./piet image.png codel_size --debug`
+3. **Output Verification**: Compare actual vs expected output
+4. **Timeout Safety**: Ensure programs terminate (not infinite loops)
+
+### Common Failure Modes
+- **Infinite Loops**: Execution gets trapped in cycles
+- **Wrong Block Sizes**: Pixel count doesn't match intended value
+- **Broken Connectivity**: Blocks fragment unexpectedly
+- **Incorrect Transitions**: Wrong color changes trigger wrong operations
+
+## Tools and Environment
+
+### Required Tools
+- **Python PIL/Pillow**: For image creation and manipulation
+- **Piet Interpreter**: `./piet` (frank-zago golang implementation)
+- **Image Viewers**: For visual verification
+
+### Workflow
+1. Design logical program structure
+2. Map to physical pixel layout
+3. Generate image with PIL
+4. Test with interpreter
+5. Debug and iterate
+6. Add artistic elements safely
+
+## 100 Hello World Vision
+
+For the 100th language celebration:
+- **Core Requirement**: Each image outputs "Hello World!"
+- **Artistic Goal**: 99 unique artistic themes while maintaining functionality
+- **Technical Approach**: Functional program at origin + artistic elements in safe zones
+- **Safety Pattern**: Black barriers prevent execution escape
+
+This creates "visual polyglot poetry" - functional art where each piece represents a different programming language theme while executing the same Piet program.
