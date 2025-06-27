@@ -17,6 +17,7 @@
 100-java11
 200-dotnet
 300-node
+experimental-next-languages
 
 # A repository's name must:
 #  - be unique within the account
