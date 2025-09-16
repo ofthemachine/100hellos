@@ -3,7 +3,7 @@
 FROM 100hellos/000-base:local
 
 # Install Nix package manager - single user install for MUSL compatibility
-RUN sudo apk add --no-cache xz
+RUN sudo apk add --no-cache xz coreutils
 
 # Install Nix using the single-user installation which is MUSL compatible
 RUN curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
