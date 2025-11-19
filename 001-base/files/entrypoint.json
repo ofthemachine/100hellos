@@ -1,0 +1,19 @@
+{
+  "version": "1",
+  "paths": {
+    "code": "/code",
+    "fragments": "/code-fragments",
+    "howTo": "/how-to.md",
+    "agentHelp": "/agent-help.md"
+  },
+  "fragments": {
+    "marker": "MAIN"
+  },
+  "execution": {
+    "patterns": [
+      "hello-world.sh",
+      "hello-world.*"
+    ]
+  }
+}
+
