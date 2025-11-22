@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Lua container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.lua
+  match: Hello World
+
+guide: /guide.md
+
+execution:
+  path: lua5.4 /hello-world/hello-world.lua
+  makeExecutable: false

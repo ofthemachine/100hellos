@@ -1,36 +1,39 @@
 # syntax=docker/dockerfile:1
-# Multi-stage build for Go entrypoint tool
-
-# Build stage
-FROM golang:1.21-alpine AS builder
-
-WORKDIR /build
-
-# Copy go mod files
-COPY go.mod go.sum* ./
-RUN go mod download
-
-# Copy source code
-COPY cmd/ ./cmd/
-COPY internal/ ./internal/
-
-# Build static binary
-# CGO_ENABLED=0: Disables CGO for a static binary (no C library dependencies)
-#                Necessary for Alpine Linux (musl libc) to avoid glibc compatibility issues
-# GOOS=linux:    Sets target OS to Linux (required since container runs on Linux)
-RUN CGO_ENABLED=0 GOOS=linux go build -o entrypoint ./cmd/entrypoint
-
-# Final stage
 FROM 100hellos/base:latest
 
-# Copy the binary from builder
-COPY --from=builder --chown=human:human /build/entrypoint /entrypoint
-RUN chmod +x /entrypoint
+# Version argument - can be overridden at build time
+ARG FRAGLET_VERSION=v0.2.0
 
-# Copy default configuration file
-COPY --chown=human:human ./files/entrypoint.json /entrypoint.json
+# Copy checksums file for supply chain verification (must be before RUN that uses it)
+COPY --chown=human:human ./checksums.txt /checksums.txt
 
-# Ensure code-fragments directory exists
-RUN sudo mkdir -p /code-fragments && sudo chown human:human /code-fragments
+# Download fraglet-entrypoint from GitHub release
+# Detect architecture and download appropriate binary with SHA256 verification
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        BINARY="fraglet-entrypoint-linux-amd64"; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        BINARY="fraglet-entrypoint-linux-arm64"; \
+    else \
+        echo "Unsupported architecture: $ARCH" && exit 1; \
+    fi && \
+    BASE_URL="https://github.com/ofthemachine/fraglet/releases/download/${FRAGLET_VERSION}" && \
+    curl -L -o /tmp/fraglet-entrypoint "${BASE_URL}/${BINARY}" && \
+    EXPECTED_SHA=$(grep "${BINARY}" /checksums.txt | awk '{print $1}') && \
+    ACTUAL_SHA=$(sha256sum /tmp/fraglet-entrypoint | awk '{print $1}') && \
+    if [ "$EXPECTED_SHA" != "$ACTUAL_SHA" ]; then \
+        echo "SHA256 checksum verification failed!" && \
+        echo "Expected: $EXPECTED_SHA" && \
+        echo "Actual: $ACTUAL_SHA" && \
+        exit 1; \
+    fi && \
+    sudo mv /tmp/fraglet-entrypoint /fraglet-entrypoint && \
+    sudo chmod +x /fraglet-entrypoint && \
+    sudo chown human:human /fraglet-entrypoint && \
+    sudo mv /checksums.txt /fraglet-entrypoint.checksums.txt && \
+    sudo chown human:human /fraglet-entrypoint.checksums.txt
 
-ENTRYPOINT [ "/entrypoint" ]
+# Includes default fraglet.yml (can be overridden by containers)
+COPY --chown=human:human ./files /h
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]

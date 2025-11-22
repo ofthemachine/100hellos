@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Lisp container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.el
+  match: Hello World
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true

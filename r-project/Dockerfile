@@ -6,4 +6,5 @@ RUN sudo \
   apk add --no-cache \
     R R-dev
 
-COPY --chown=human:human ./files /
+COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /

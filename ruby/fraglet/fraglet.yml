@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Ruby container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.rb
+  match: Hello World
+
+guide: /guide.md
+
+execution:
+  path: ruby /hello-world/hello-world.rb
+  makeExecutable: false

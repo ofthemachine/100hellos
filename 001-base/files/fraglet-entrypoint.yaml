@@ -1,0 +1,29 @@
+# fraglet-entrypoint configuration
+# Default configuration for 001-base containers
+# Individual containers should override this with their own config
+
+# Temporary location where the fraglet code is written before injection
+fragletTempPath: /FRAGLET
+
+# Injection configuration
+injection:
+  # Full path to the target file where fraglet code will be injected
+  codePath: /code/hello-world.sh
+
+  # Injection marker: the fraglet code replaces the entire line containing this string
+  match: Hello World
+
+# Path to agent-help markdown file
+agentHelp: /agent-help.md
+
+# Path to how-to markdown file
+howTo: /how-to.md
+
+# Execution configuration
+execution:
+  # Command/path to execute
+  path: /code/hello-world.sh
+
+  # Whether to make the execution path executable
+  makeExecutable: true
+

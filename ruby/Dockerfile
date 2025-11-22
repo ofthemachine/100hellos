@@ -7,4 +7,5 @@ RUN \
   apk add --no-cache \
     ruby-dev
 
-COPY --chown=human:human ./files /
+COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /

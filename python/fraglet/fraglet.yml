@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Python container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.py
+  match: Hello World
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.py
+  makeExecutable: true
+
