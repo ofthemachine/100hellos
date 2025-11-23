@@ -24,7 +24,7 @@ jobs:
     steps:
       -
         name: 🛒 Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
 
       -
         name: 📝 Dockerfile.composite
@@ -34,7 +34,7 @@ jobs:
 
       -
         name: ⬆️ Dockerfile.composite
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: composite-dockerfile
           path: Dockerfile.composite
@@ -54,11 +54,11 @@ jobs:
     steps:
       -
         name: 🛒 Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
 
       -
         name: ⬇️ Dockerfile.composite
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: composite-dockerfile
 
@@ -88,11 +88,11 @@ jobs:
     steps:
       -
         name: 🛒 Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
 
       -
         name: ⬇️ Dockerfile.composite
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
         with:
           name: composite-dockerfile
 
