@@ -10,6 +10,7 @@ COPY --chown=human:human ./checksums.txt /checksums.txt
 # Download fraglet-entrypoint from GitHub release
 # Detect architecture and download appropriate binary with SHA256 verification
 RUN ARCH=$(uname -m) && \
+    echo "Cachebuster: 002" && \
     if [ "$ARCH" = "x86_64" ]; then \
         BINARY="fraglet-entrypoint-linux-amd64"; \
     elif [ "$ARCH" = "aarch64" ]; then \
