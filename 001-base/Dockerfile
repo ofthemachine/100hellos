@@ -2,7 +2,7 @@
 FROM 100hellos/base:latest
 
 # Version argument - can be overridden at build time
-ARG FRAGLET_VERSION=v0.2.0
+ARG FRAGLET_VERSION=v0.3.0
 
 # Copy checksums file for supply chain verification (must be before RUN that uses it)
 COPY --chown=human:human ./checksums.txt /checksums.txt
