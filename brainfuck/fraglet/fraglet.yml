@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Brainfuck container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.bf
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+
