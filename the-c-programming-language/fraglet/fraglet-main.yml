@@ -1,0 +1,15 @@
+# fraglet-entrypoint configuration for C container (main function replacement)
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.c
+  match_start: BEGIN_FRAGLET
+  match_end:  END_FRAGLET
+
+guide: /guide-main.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+

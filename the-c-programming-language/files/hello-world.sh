@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
 
-gcc -o hello hello-world.c
+set -e
+
+cd /hello-world
+gcc -Wall -Wextra -o hello hello-world.c || exit 1
 ./hello
