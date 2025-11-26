@@ -1,0 +1,2 @@
+606a5fac8c7494069bc777d549c01f57d2b4af9c5be15df172ba4a4ad76df9d1  fraglet-entrypoint-linux-amd64
+901612a7ef404b1b605a121cc924f6c0e6da9a48e05c5033108e1d03d3a96013  fraglet-entrypoint-linux-arm64

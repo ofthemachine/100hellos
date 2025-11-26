@@ -1,0 +1,12 @@
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/HelloWorld.java
+  match: "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+
