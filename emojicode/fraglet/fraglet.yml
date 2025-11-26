@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for EmojiCode container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.🍇
+  match: "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+
