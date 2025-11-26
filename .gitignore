@@ -17,3 +17,5 @@ Dockerfile.composite
 
 # A local scratch pad
 SCRATCH.md
+FRAGLET_TODO.md
+
