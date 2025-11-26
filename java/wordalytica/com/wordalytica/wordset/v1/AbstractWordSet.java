@@ -56,8 +56,26 @@ public abstract class AbstractWordSet<T extends WordSet<T>> implements WordSet<T
     }
 
     @Override
+    public T notContaining(String value) {
+        this.predicateBuilder.notContaining(value);
+        return (T)this;
+    }
+
+    @Override
     public T matching(String placeHolded) {
         this.predicateBuilder.matching(placeHolded);
+        return (T)this;
+    }
+
+    @Override
+    public T withCharAt(char c, int position) {
+        this.predicateBuilder.withCharAt(c, position);
+        return (T)this;
+    }
+
+    @Override
+    public T withoutCharAt(char c, int position) {
+        this.predicateBuilder.withoutCharAt(c, position);
         return (T)this;
     }
 }

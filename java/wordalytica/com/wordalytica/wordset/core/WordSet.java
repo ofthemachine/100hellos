@@ -17,5 +17,11 @@ public interface WordSet<T extends WordSet<T>> {
 
     T notEndingWith(String value);
 
+    T notContaining(String value);
+
     T matching(String placeHolded);
+
+    T withCharAt(char c, int position);
+
+    T withoutCharAt(char c, int position);
 }

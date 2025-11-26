@@ -44,7 +44,22 @@ public class WordSetNoop implements WordSet<WordSetNoop> {
     }
 
     @Override
+    public WordSetNoop notContaining(String value) {
+        return this;
+    }
+
+    @Override
     public WordSetNoop matching(String placeHolded) {
+        return this;
+    }
+
+    @Override
+    public WordSetNoop withCharAt(char c, int position) {
+        return this;
+    }
+
+    @Override
+    public WordSetNoop withoutCharAt(char c, int position) {
         return this;
     }
 }

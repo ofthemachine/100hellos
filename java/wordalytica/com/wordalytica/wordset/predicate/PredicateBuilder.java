@@ -32,8 +32,23 @@ public class PredicateBuilder {
         return this;
     }
 
+    public PredicateBuilder notContaining(String value) {
+        this.predicate.and(new ContainsPredicate(value).negate());
+        return this;
+    }
+
     public PredicateBuilder matching(String placeHolded) {
         this.predicate.and(new MatchingPredicate(placeHolded));
+        return this;
+    }
+
+    public PredicateBuilder withCharAt(char c, int position) {
+        this.predicate.and(new CharAtPredicate(c, position));
+        return this;
+    }
+
+    public PredicateBuilder withoutCharAt(char c, int position) {
+        this.predicate.and(new CharAtPredicate(c, position).negate());
         return this;
     }
 

@@ -84,9 +84,27 @@ public class WordSetV2 implements WordSet<WordSetV2> {
     }
 
     @Override
+    public WordSetV2 notContaining(String value) {
+        this.predicateBuilder.notContaining(value);
+        return this;
+    }
+
+    @Override
     public WordSetV2 matching(String placeHolded) {
         this.predicateBuilder.matching(placeHolded);
         this.charactersUsed += placeHolded;
+        return this;
+    }
+
+    @Override
+    public WordSetV2 withCharAt(char c, int position) {
+        this.predicateBuilder.withCharAt(c, position);
+        return this;
+    }
+
+    @Override
+    public WordSetV2 withoutCharAt(char c, int position) {
+        this.predicateBuilder.withoutCharAt(c, position);
         return this;
     }
 
