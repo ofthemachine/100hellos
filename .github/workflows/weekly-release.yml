@@ -7,12 +7,17 @@ concurrency:
 
 on:
   schedule:
-    # Friday at 00:37 UTC
+    # Run every hour at :37 to check for matching batch files
     # We avoid running directly on the hour because that is when
     # many other workloads run and github advises against it running
     # exactly on the hour.
-    - cron: "37 0 * * 5"
+    - cron: "37 * * * *"
   workflow_dispatch:
+    inputs:
+      batch_file:
+        description: 'Batch file to build (e.g., mon-00). If not specified, will be determined from current time.'
+        required: false
+        type: string
 
 jobs:
   what-to-build:
@@ -24,18 +29,52 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
 
       -
-        name: 📂 - Find All Published Languages
-        id: find-languages
+        name: 🔢 - Find Matching Batch File
+        id: find-batch
         shell: bash
         run: |
-          json_array=$(find . -maxdepth 1 -type d | sed 's|./||' | grep -vxFf .no-publish | jq -Rcs 'split("\n")[:-1]')
+          if [ -n "${{ inputs.batch_file }}" ]; then
+            # Use provided batch file from workflow_dispatch
+            BATCH_FILE=".build-batch-${{ inputs.batch_file }}"
+          else
+            # Determine batch file from current UTC time
+            # Format: day-hour (e.g., mon-00, wed-12)
+            DAY_NAME=$(date -u +%a | tr '[:upper:]' '[:lower:]' | cut -c1-3)  # mon, wed, fri
+            HOUR=$(date -u +%H)  # Already zero-padded: 00, 01, ..., 12, ...
+
+            BATCH_FILE=".build-batch-${DAY_NAME}-${HOUR}"
+          fi
+
+          if [ ! -f "$BATCH_FILE" ]; then
+            echo "No batch file found for current time: $BATCH_FILE"
+            echo "Skipping build (this is expected for most hours)"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "batch_file=$BATCH_FILE" >> $GITHUB_OUTPUT
+          echo "should_build=true" >> $GITHUB_OUTPUT
+          echo "Found batch file: $BATCH_FILE"
+
+      -
+        name: 📂 - Read Batch Languages
+        id: find-languages
+        if: steps.find-batch.outputs.should_build == 'true'
+        shell: bash
+        run: |
+          BATCH_FILE="${{ steps.find-batch.outputs.batch_file }}"
+          # Read batch file, filter out comments and empty lines, validate against .no-publish
+          json_array=$(grep -v '^#' "$BATCH_FILE" | grep -v '^$' | grep -vxFf .no-publish | jq -Rcs 'split("\n")[:-1]')
           echo "languages=$json_array" >> $GITHUB_OUTPUT
+          echo "Found $(echo "$json_array" | jq 'length') languages in $BATCH_FILE"
 
     outputs:
-      languages: ${{ steps.find-languages.outputs.languages }}
+      should_build: ${{ steps.find-batch.outputs.should_build }}
+      languages: ${{ steps.find-languages.outputs.languages || '[]' }}
 
   build-test-publish:
     name: 🚀 - Build, Run and Publish
+    if: needs.what-to-build.outputs.should_build == 'true'
     uses: ./.github/workflows/build-test-publish.yml
     needs: what-to-build
     secrets: inherit
