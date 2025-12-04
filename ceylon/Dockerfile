@@ -1,15 +1,7 @@
 # syntax=docker/dockerfile:1
 # escape=\
-FROM 100hellos/000-base:local
+FROM 100hellos/080-java8:local
 
-RUN sudo \
-  apk add --no-cache \
-    # Ceylon uses Java 8 features that are deprecated in Java 11 \
-    openjdk8 \
-    # sdkman requires bash and zip \
-    bash zip
-
-RUN curl -s "https://get.sdkman.io" | bash
 RUN bash -c "source /home/human/.sdkman/bin/sdkman-init.sh && sdk install ant"
 
 COPY --chown=human:human ./artifacts /artifacts

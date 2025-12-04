@@ -1,12 +1,6 @@
 # syntax=docker/dockerfile:1
 # escape=\
-FROM 100hellos/000-base:local
-
-RUN sudo \
-  apk add --no-cache \
-    bash zip openjdk8
-
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+FROM 100hellos/080-java8:local
 
 COPY --chown=human:human ./artifacts /artifacts
 RUN cd /artifacts && make install
