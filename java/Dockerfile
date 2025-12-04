@@ -18,4 +18,4 @@ RUN cd /tmp/wordalytica && \
 COPY --chown=human:human ./files /hello-world
 COPY --chown=human:human ./fraglet /
 
-# ENTRYPOINT inherited from 100-java11 (fraglet-entrypoint)
+ENTRYPOINT [ "/fraglet-entrypoint" ]
