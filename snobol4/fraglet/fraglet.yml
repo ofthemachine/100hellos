@@ -1,0 +1,15 @@
+# fraglet-entrypoint configuration for SNOBOL4 container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.sno
+  match_start: "*       BEGIN_FRAGLET"
+  match_end: "*       END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+

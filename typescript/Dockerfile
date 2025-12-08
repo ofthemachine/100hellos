@@ -5,3 +5,6 @@ FROM 100hellos/300-node:local
 RUN sudo npm install -g typescript
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]

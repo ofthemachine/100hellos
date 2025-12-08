@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for JavaScript container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.js
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.js
+  makeExecutable: true
+
