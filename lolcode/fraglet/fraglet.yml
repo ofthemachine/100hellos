@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for LOLCODE container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.lang
+  match: VISIBLE "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.lang
+  makeExecutable: true
+
