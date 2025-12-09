@@ -1,0 +1,15 @@
+# fraglet-entrypoint configuration for NASM x86_64 container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.asm
+  match_start: "          ; BEGIN_FRAGLET"
+  match_end: "          ; END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+

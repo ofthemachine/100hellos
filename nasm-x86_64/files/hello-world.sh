@@ -6,6 +6,7 @@
 # Otherwise, the default behavior is to run the first file in the
 # directory that matches the pattern `hello-world.*``.
 
+cd /hello-world
 nasm -felf64 hello-world.asm
 ld hello-world.o -o hello-world
 ./hello-world
