@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Octave container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.m
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
+

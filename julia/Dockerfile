@@ -11,3 +11,6 @@ RUN wget https://julialang-s3.julialang.org/bin/musl/x64/1.10/julia-1.10.9-musl-
 # NO CMD HERE! The entrypoint expects to find `hello-world.sh` or a shebang.
 # The `hello-world.jl` file will use a shebang to find the julia executable.
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
