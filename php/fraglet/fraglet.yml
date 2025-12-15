@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for PHP container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.php
+  match: "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: php /hello-world/hello-world.php
+  makeExecutable: false
+

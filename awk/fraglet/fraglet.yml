@@ -1,0 +1,15 @@
+# fraglet-entrypoint configuration for AWK container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.awk
+  match_start: "# BEGIN_FRAGLET"
+  match_end: "# END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: awk -f /hello-world/hello-world.awk
+  makeExecutable: false
+
