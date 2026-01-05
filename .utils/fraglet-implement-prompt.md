@@ -64,6 +64,21 @@ Reference existing guides (e.g., `python/fraglet/guide.md`, `ruby/fraglet/guide.
 
 Add injection markers to the hello-world source file:
 
+**CRITICAL: Preserve existing file structure - DO NOT modify shebangs or code structure**
+
+- **DO NOT change shebangs** - Keep the original shebang exactly as it is
+  - If file has `#!/usr/bin/env ash`, keep it as `#!/usr/bin/env ash` (explicit is better)
+  - If file has `#!/bin/sh`, keep it as `#!/bin/sh`
+  - **Never change from explicit to implicit/default** - explicit shebangs are preferred
+  - Shebangs are often specific to the container/environment (e.g., Alpine/busybox needs explicit paths)
+
+- **DO NOT modify code structure** - Only add the minimal match marker needed
+  - Preserve existing formatting, indentation, and code style
+  - Do NOT reformat or "improve" the code
+  - Do NOT add unnecessary comments
+
+- **Only add match markers** where fragments should be injected
+
 **For single-line replacement:**
 - Add a unique match string (e.g., `Hello World`, `print("Hello World")`)
 - Ensure the match string is exactly as it appears in the source

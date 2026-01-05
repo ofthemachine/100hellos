@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for ash container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.ash
+  match: echo "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.ash
+  makeExecutable: true
