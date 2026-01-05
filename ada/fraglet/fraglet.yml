@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Ada container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello.adb
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
