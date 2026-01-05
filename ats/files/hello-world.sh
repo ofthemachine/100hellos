@@ -9,6 +9,7 @@
 # Build it
 # Run it
 
-patscc -o hello_world /hello-world/hello-world.dats
+cd /hello-world
+patscc -o hello_world hello-world.dats
 ./hello_world
 

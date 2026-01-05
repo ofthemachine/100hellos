@@ -16,3 +16,6 @@ RUN sudo apk add --no-cache gcc ncurses-dev gmp-dev musl-dev && \
     sudo rm -rf /tmp/*
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]

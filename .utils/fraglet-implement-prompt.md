@@ -15,6 +15,12 @@ Implement complete fraglet support for {LANGUAGE} by:
 5. Updating the Dockerfile to use fraglet-entrypoint
 6. Creating `fraglet/verify.sh` that tests all examples from guide.md
 7. Ensuring the container runs correctly without a fraglet (default "Hello World!" output)
+8. **Rebuilding the image and running verify.sh until it passes** (required for completion)
+
+**Important**:
+- Rebuild the image between steps using `make {LANGUAGE}` (especially after Dockerfile changes or file modifications)
+- The implementation is **only complete** when `verify.sh` passes all tests
+- If verify.sh fails, fix issues, rebuild, and test again until it passes
 
 ## Reference Guidance
 
@@ -94,6 +100,11 @@ Ensure the Dockerfile:
 - Copies fraglet directory: `COPY --chown=human:human ./fraglet /`
 - Sets entrypoint: `ENTRYPOINT [ "/fraglet-entrypoint" ]`
 
+**After updating Dockerfile, rebuild the image:**
+```bash
+make {LANGUAGE}
+```
+
 ### 5. Handle Working Directory
 
 **IMPORTANT**: When fraglet-entrypoint runs, the working directory may change. Ensure execution scripts (like `hello-world.sh`) explicitly change to the correct directory if needed:
@@ -166,6 +177,15 @@ echo "✓ All tests passed"
 - Priority: test all guide.md examples, not deep output validation
 - Some languages may need syntax adjustments (e.g., Ada declare blocks)
 
+**After creating verify.sh, rebuild and test:**
+```bash
+make {LANGUAGE}
+chmod +x {LANGUAGE}/fraglet/verify.sh
+{LANGUAGE}/fraglet/verify.sh
+```
+
+If verify.sh fails, fix issues, rebuild (`make {LANGUAGE}`), and test again. Repeat until it passes.
+
 ## Reference Examples
 
 - **Simple interpreted**: `python/`, `ruby/`, `lua/` - Direct execution
@@ -181,22 +201,39 @@ echo "✓ All tests passed"
 
 ## Verification
 
-After implementation:
-1. Verify `{LANGUAGE}/fraglet/` directory exists with `fraglet.yml`, `guide.md`, and `verify.sh`
-2. Verify Dockerfile includes fraglet copy and entrypoint
-3. Verify hello-world source has injection markers
-4. Verify execution scripts handle working directory (add `cd /hello-world` if needed)
-5. **Run verify.sh and ensure it passes**:
+**CRITICAL: verify.sh must pass before implementation is complete**
+
+The implementation is NOT complete until `verify.sh` runs successfully. You may need to rebuild the image between steps:
+
+1. After creating/modifying files, rebuild the image:
+   ```bash
+   make {LANGUAGE}
+   ```
+
+2. After updating Dockerfile, rebuild:
+   ```bash
+   make {LANGUAGE}
+   ```
+
+3. After modifying hello-world source files, rebuild:
+   ```bash
+   make {LANGUAGE}
+   ```
+
+4. **Run verify.sh and ensure it passes** (this is required):
    ```bash
    chmod +x {LANGUAGE}/fraglet/verify.sh
    {LANGUAGE}/fraglet/verify.sh
    ```
-6. Test default execution manually:
+   - If verify.sh fails, fix the issues and rebuild: `make {LANGUAGE}`
+   - Repeat until verify.sh passes completely
+
+5. Verify detection:
    ```bash
-   make {LANGUAGE} R=1
-   # Should output "Hello World!" (and any other expected output)
+   .utils/fraglet-status.sh enabled | grep {LANGUAGE}
    ```
-7. Run `.utils/fraglet-status.sh enabled | grep {LANGUAGE}` to confirm detection
+
+**The implementation is only complete when verify.sh passes all tests.**
 
 ## Notes
 

@@ -11,6 +11,7 @@ fun conditions_are_met (): bool = is_human () && is_on_earth ()
 // produces the contractually obligated greeting.
 fun produce_utterance (): string = "Hello World!\n"
 
+// BEGIN_FRAGLET
 implement main0 () =
   if conditions_are_met () then
     print (produce_utterance ())
@@ -18,3 +19,4 @@ implement main0 () =
     // A state of affairs so unlikely as to be considered impossible.
     // In such a case, silence is the only option.
     ()
+// END_FRAGLET
