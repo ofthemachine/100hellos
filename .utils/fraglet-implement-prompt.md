@@ -17,9 +17,13 @@ Implement complete fraglet support for {LANGUAGE} by:
 7. Ensuring the container runs correctly without a fraglet (default "Hello World!" output)
 8. **Rebuilding the image and running verify.sh until it passes** (required for completion)
 
-**Important**:
+**CRITICAL reminders**:
+- **DO NOT change the base image** unless you verify it doesn't already have fraglet-entrypoint in its DAG
+- **After Dockerfile changes, ALWAYS test that the image builds:** `make {LANGUAGE}` - if it fails, STOP and fix it
 - Rebuild the image between steps using `make {LANGUAGE}` (especially after Dockerfile changes or file modifications)
-- The implementation is **only complete** when `verify.sh` passes all tests
+- The implementation is **only complete** when:
+  - ✅ The image builds successfully
+  - ✅ `verify.sh` passes all tests
 - If verify.sh fails, fix issues, rebuild, and test again until it passes
 
 ## Reference Guidance
@@ -29,9 +33,10 @@ Consult the gydnc guidance: `fraglet-enable-100hellos` for detailed implementati
 ## Current Container Structure
 
 The {LANGUAGE} container is located at `{LANGUAGE}/` and currently:
-- Uses base image: `FROM 100hellos/000-base:local` (which includes fraglet-entrypoint)
+- Has a Dockerfile with a base image (check if it already has fraglet-entrypoint in its DAG)
 - Has hello-world files in `files/` directory
 - May need Dockerfile updates to copy fraglet directory and set entrypoint
+- **IMPORTANT**: Check the existing Dockerfile's FROM line - if the base image chain already includes `000-base:local`, it already has fraglet-entrypoint and you should NOT change the FROM line
 
 ## Implementation Requirements
 
@@ -85,25 +90,67 @@ Add injection markers to the hello-world source file:
 
 - **Only add match markers** where fragments should be injected
 
-**For single-line replacement:**
-- Add a unique match string (e.g., `Hello World`, `print("Hello World")`)
-- Ensure the match string is exactly as it appears in the source
+**CRITICAL: Choosing Injection Scope**
 
-**For multi-line replacement:**
-- Add `BEGIN_FRAGLET` and `END_FRAGLET` markers (with appropriate comment syntax)
-- Use `match_start` and `match_end` in fraglet.yml
+The injection scope determines what's possible. The guide.md and injection strategy work together to maximize the fraglet container's usefulness for:
+- Teaching developers the language
+- Demonstrating language capabilities
+- Providing inspiration for other fraglet containers
+
+**Core principle**: The injection scope should enable the most useful capabilities with reasonable simplicity.
+
+**Step 1: Understand the language's scoping rules**
+- Where can functions/methods be defined?
+- Where can types/classes be defined?
+- Does the language allow nested definitions (functions inside functions)?
+
+**Step 2: Choose injection scope to maximize capability**
+
+| Language Characteristic | Recommended Scope | Rationale |
+|------------------------|-------------------|-----------|
+| Allows nested definitions (Python, JavaScript, Lua, Ruby) | Single-line inside function | Simple AND capable - user can define functions inline |
+| Doesn't allow nested definitions (C, Java, Ballerina) | Range-based at module/file level | Expand scope so user CAN define functions, types, etc. |
+| Minimal structure (shell scripts, awk) | Range-based if functions are common patterns | Enable function definitions without complex boilerplate |
+
+**Step 3: Design guide.md to showcase the scope's capabilities**
+- Examples should demonstrate what the chosen injection scope enables
+- Include function definitions if the scope supports them
+- Show the language's idioms and patterns
+
+**Single-line replacement** (`match: "string"`):
+- Best when the injection point already allows all desired capabilities
+- Use minimal unique match string (e.g., `"Hello World!"` not the whole line)
+- Injected code works within the existing structure
+
+**Range-based replacement** (`match_start`/`match_end`):
+- Best when you need a LARGER scope to enable more capabilities
+- Place markers to encompass a region where functions/types can be defined
+- User's fragment replaces the entire region, giving them full control
+- May require user to include some boilerplate (e.g., main() definition) - this is acceptable if it enables significantly more capability
+
+**Example decision for a language like C:**
+- Injecting inside main() → user can't define helper functions
+- Range-based from after #includes to end of file → user CAN define functions, then call them from main()
+- The extra boilerplate is worth it for the capability gain
 
 ### 4. Update Dockerfile
 
-Ensure the Dockerfile:
-- Uses `FROM 100hellos/000-base:local` (provides fraglet-entrypoint)
-- Copies fraglet directory: `COPY --chown=human:human ./fraglet /`
-- Sets entrypoint: `ENTRYPOINT [ "/fraglet-entrypoint" ]`
+**CRITICAL: DO NOT change the base image unless absolutely necessary**
 
-**After updating Dockerfile, rebuild the image:**
+- **Check if the existing base image already has fraglet-entrypoint in its DAG:**
+  - If the base image (or any image in its chain) already includes `fraglet-entrypoint`, **DO NOT change the FROM line**
+  - Most intermediate base images (like `100hellos/100-java11:local`, `100hellos/080-java8:local`) already inherit fraglet-entrypoint from `000-base:local`
+  - Only use `FROM 100hellos/000-base:local` if the language has no intermediate base image requirements
+- **Preserve the existing FROM line** unless you're certain it doesn't have fraglet-entrypoint
+- Add fraglet directory copy: `COPY --chown=human:human ./fraglet /`
+- Set entrypoint: `ENTRYPOINT [ "/fraglet-entrypoint" ]`
+
+**CRITICAL: After updating Dockerfile, you MUST test that the image builds:**
 ```bash
 make {LANGUAGE}
 ```
+- If the build fails, fix the Dockerfile and rebuild
+- **DO NOT proceed until the image builds successfully**
 
 ### 5. Handle Working Directory
 
@@ -200,16 +247,19 @@ If verify.sh fails, fix issues, rebuild (`make {LANGUAGE}`), and test again. Rep
 
 ## Verification
 
-**CRITICAL: verify.sh must pass before implementation is complete**
+**CRITICAL: verify.sh must pass AND image must build successfully before implementation is complete**
 
-The implementation is NOT complete until `verify.sh` runs successfully. You may need to rebuild the image between steps:
+The implementation is NOT complete until both the image builds AND `verify.sh` runs successfully. You MUST test at each step:
 
-1. After creating/modifying files, rebuild the image:
+1. **After updating Dockerfile, rebuild and verify it builds:**
    ```bash
    make {LANGUAGE}
    ```
+   - **If the build fails, STOP and fix the Dockerfile**
+   - **DO NOT proceed until the image builds successfully**
+   - Common issues: wrong base image, missing dependencies, syntax errors
 
-2. After updating Dockerfile, rebuild:
+2. After creating/modifying files, rebuild the image:
    ```bash
    make {LANGUAGE}
    ```
@@ -219,20 +269,26 @@ The implementation is NOT complete until `verify.sh` runs successfully. You may 
    make {LANGUAGE}
    ```
 
-4. **Run verify.sh and ensure it passes** (this is required):
+4. **After creating verify.sh, rebuild and test:**
    ```bash
+   make {LANGUAGE}
    chmod +x {LANGUAGE}/fraglet/verify.sh
    {LANGUAGE}/fraglet/verify.sh
    ```
-   - If verify.sh fails, fix the issues and rebuild: `make {LANGUAGE}`
-   - Repeat until verify.sh passes completely
+   - **If verify.sh fails, fix the issues and rebuild: `make {LANGUAGE}`**
+   - **Repeat until verify.sh passes completely**
+   - **DO NOT mark implementation as complete until verify.sh passes**
 
 5. Verify detection:
    ```bash
    .utils/fraglet-status.sh enabled | grep {LANGUAGE}
    ```
 
-**The implementation is only complete when verify.sh passes all tests.**
+**The implementation is only complete when:**
+- ✅ The image builds successfully (`make {LANGUAGE}` completes without errors)
+- ✅ verify.sh passes all tests
+- ✅ Default execution works (no fraglet injection)
+- ✅ All guide.md examples work via fraglet injection
 
 ## Notes
 

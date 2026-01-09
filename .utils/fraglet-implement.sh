@@ -74,7 +74,10 @@ echo "Prompt file: $TEMP_PROMPT"
 echo ""
 
 cd "$REPO_ROOT"
-cursor-agent < "$TEMP_PROMPT"
+
+# This is horribly dangerous, allow agents to run autonomously without human intervention
+# Ensure output is visible (no buffering) - both stdout and stderr
+stdbuf -oL -eL cursor-agent --approve-mcps --force --print < "$TEMP_PROMPT"
 EXIT_CODE=$?
 
 if [[ $EXIT_CODE -eq 0 ]]; then
