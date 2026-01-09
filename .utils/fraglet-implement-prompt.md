@@ -141,8 +141,7 @@ IMAGE="${1:-100hellos/{LANGUAGE}:local}"
 # Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    shift
-    fragletc --image "$IMAGE" - "$@" 2>&1 | grep -q "$expected"
+    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."

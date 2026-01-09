@@ -18,4 +18,4 @@ Dockerfile.composite
 # A local scratch pad
 SCRATCH.md
 FRAGLET_TODO.md
-**/fraglet/verify.sh
+# **/fraglet/verify.sh
