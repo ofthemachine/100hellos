@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for BQN container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.bqn
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.bqn
+  makeExecutable: true
