@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Clojure container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.clj
+  match: "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.clj
+  makeExecutable: true
