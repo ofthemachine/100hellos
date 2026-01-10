@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /hello-world
+
 # Compile the Chapel program
 chpl hello-world.chpl -o hello-world
 
