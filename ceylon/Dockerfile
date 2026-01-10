@@ -10,3 +10,6 @@ RUN cd /artifacts && make install
 ENV PATH="/home/human/.ceylon/bin:${PATH}"
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
