@@ -6,7 +6,6 @@ Ada (GNAT compiler, Alpine Linux)
 ## Execution Model
 - Compiled language using GNAT (GNU Ada Translator)
 - Code is compiled to a binary using `gnatmake`, then executed
-- Build script compiles `hello.adb` to `hello` binary, then runs it
 - Standard Ada execution model with a main procedure
 
 ## Key Characteristics

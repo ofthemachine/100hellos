@@ -6,7 +6,6 @@ Chapel 2.5.0 (compiled from source with system LLVM)
 ## Execution Model
 - Compiled language using `chpl` (Chapel compiler)
 - Code is compiled to a binary, then executed
-- Build script compiles `hello-world.chpl` to `hello-world` binary, then runs it
 - Standard Chapel execution model with `proc main()` procedure
 
 ## Key Characteristics

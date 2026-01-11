@@ -6,7 +6,6 @@ D (GDC compiler, musl libc)
 ## Execution Model
 - Compiled language using GDC (GNU D Compiler)
 - Code is compiled to a binary, then executed
-- Build script compiles `hello-world.d` to `hello` binary, then runs it
 - Standard D execution model with `main()` function
 
 ## Key Characteristics

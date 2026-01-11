@@ -6,7 +6,6 @@ C++ (G++ compiler, musl libc)
 ## Execution Model
 - Compiled language using G++
 - Code is compiled to a binary, then executed
-- Build script compiles `hello-world.cpp` to `hello` binary, then runs it
 - Standard C++ execution model with `main()` function
 
 ## Key Characteristics
