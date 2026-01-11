@@ -16,3 +16,6 @@ RUN sudo ln -sf /usr/bin/lua5.4 /usr/local/bin/lua && \
     sudo ln -sf $(find /usr/local/lib/luarocks/rocks-5.4/fennel -name fennel -type f) /usr/local/bin/fennel
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]

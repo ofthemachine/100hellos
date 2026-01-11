@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Fennel container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.fnl
+  match: "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.fnl
+  makeExecutable: true
