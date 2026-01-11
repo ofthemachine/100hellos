@@ -6,7 +6,6 @@ C# (.NET 7.0 SDK)
 ## Execution Model
 - Compiled language using the .NET SDK
 - Code is compiled and executed via `dotnet run`
-- Standard C# execution model with `Program.cs` containing top-level statements or a `Main` method
 - Uses .NET 7.0 runtime
 
 ## Key Characteristics
@@ -16,7 +15,6 @@ C# (.NET 7.0 SDK)
 - Supports generics (type parameters)
 - Rich standard library (BCL - Base Class Library)
 - Modern features: top-level statements, pattern matching, nullable reference types
-- Requires explicit compilation step (handled by `dotnet run`)
 
 ## Fragment Authoring
 Write valid C# code. You can use top-level statements (C# 9.0+) for simple code, or define classes and a `Main` method for more complex code. **Important**: If you define classes or methods, you must use a `Main` method - top-level statements cannot appear after class declarations. Your fragment will be compiled and executed.

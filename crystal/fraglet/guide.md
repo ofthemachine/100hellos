@@ -5,7 +5,6 @@ Crystal 1.x
 
 ## Execution Model
 - Compiled language with ahead-of-time compilation
-- Can also run directly: `crystal run file.cr` (compiles and executes)
 - Statically typed with type inference
 - No explicit main function required - top-level code executes
 
