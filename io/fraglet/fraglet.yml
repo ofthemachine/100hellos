@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Io container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.io
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: io /hello-world/hello-world.io
+  makeExecutable: true
