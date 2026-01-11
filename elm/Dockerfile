@@ -10,8 +10,3 @@ RUN sudo npm install -g elm
 
 # Copy the hello-world files
 COPY --chown=human:human ./files /hello-world
-
-# Copy fraglet directory
-COPY --chown=human:human ./fraglet /
-
-ENTRYPOINT [ "/fraglet-entrypoint" ]
