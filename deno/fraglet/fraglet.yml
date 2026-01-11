@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Deno container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.ts
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: deno run /hello-world/hello-world.ts
+  makeExecutable: false
