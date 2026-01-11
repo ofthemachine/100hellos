@@ -24,5 +24,5 @@ cp /hello-world/hello-world.gleam /hello-world/src/hello_world.gleam
 
 # Build the project and run it
 cd /hello-world
-gleam run
+gleam run --no-print-progress
 
