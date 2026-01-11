@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Janet container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.janet
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.janet
+  makeExecutable: true
