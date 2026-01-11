@@ -51,7 +51,7 @@ IO.puts("Sum of squares: #{sum}")
 |> Enum.sum()
 |> IO.puts()
 
-# Module example (now possible with range-based injection)
+# Module example
 defmodule Math do
   def sum(numbers) do
     Enum.sum(numbers)
