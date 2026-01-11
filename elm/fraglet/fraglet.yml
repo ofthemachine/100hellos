@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Elm container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/src/Main.elm
+  match_start: "    Html.text \"Hello World!\""
+  match_end: "    Html.text \"Hello World!\""
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
