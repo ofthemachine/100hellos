@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Factor container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.factor
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: factor /hello-world/hello-world.factor
+  makeExecutable: false

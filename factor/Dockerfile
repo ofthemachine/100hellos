@@ -18,3 +18,6 @@ RUN cd /tmp && \
 ENV PATH="/opt/factor:$PATH"
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
