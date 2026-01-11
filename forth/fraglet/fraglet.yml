@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Forth container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.fth
+  match: .( Hello World!) CR
+
+guide: /guide.md
+
+execution:
+  path: gforth /hello-world/hello-world.fth
+  makeExecutable: false
