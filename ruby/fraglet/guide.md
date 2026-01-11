@@ -12,10 +12,9 @@ Ruby 3.3.x
 - Everything is an object
 - Dynamic typing
 - Case-sensitive
-- Indentation mirrors the placeholder line (no indentation by default)
 
 ## Fragment Authoring
-Fragments should be valid Ruby statements or expressions. Code executes at the top level, so expressions run immediately in order.
+Write valid Ruby statements or expressions. Your fragment becomes the script body. Code executes at the top level, so expressions run immediately in order.
 
 ## Available Packages
 Standard Ruby library is available. No additional gems are pre-installed.

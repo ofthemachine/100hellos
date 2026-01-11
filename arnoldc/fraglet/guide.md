@@ -1,23 +1,20 @@
 # ArnoldC Fraglet Guide
 
 ## Language Version
-ArnoldC (compiles to Java bytecode)
+ArnoldC
 
 ## Execution Model
 - Compiled language where all keywords are Arnold Schwarzenegger quotes
-- Code is compiled to Java bytecode, then executed on the JVM
+- Code is compiled and then executed
 - Uses Arnold's movie quotes for all programming constructs
-- Execution happens through compilation to Java
 
 ## Key Characteristics
 - **ARNOLD QUOTES AS KEYWORDS**: Every construct is a Schwarzenegger quote
 - Case-sensitive
 - Statically typed (like Java)
-- Compiles to Java bytecode
-- Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid ArnoldC statements. They are injected into the main execution block, replacing the match marker. The code is compiled to Java bytecode and then executed.
+Write valid ArnoldC statements. Your fragment becomes the script body. Your fragment will be compiled and executed.
 
 ## Key ArnoldC Concepts
 - **IT'S SHOWTIME** / **YOU HAVE BEEN TERMINATED**: Program start/end (already in template)
@@ -61,7 +58,7 @@ TALK TO THE HAND "Hasta la vista, baby!"
 - Variables must be declared before use (`I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE`)
 - Assignment requires the full `GET TO THE CHOPPER ... ENOUGH TALK` pattern
 - Use `TALK TO THE HAND` for output (not `print` or `System.out.println`)
-- Remember: This compiles to Java, so it's a REAL language (just with Arnold quotes!)
+- Remember: This is a REAL language (just with Arnold quotes!)
 - Make fragments idempotent—repeated runs should succeed without manual cleanup
 - **GET TO THE CHOPPER** - Always end assignments with `ENOUGH TALK`
 

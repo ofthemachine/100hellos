@@ -6,7 +6,6 @@ C (GCC compiler, musl libc)
 ## Execution Model
 - Compiled language using GCC
 - Code is compiled to a binary, then executed
-- Build script compiles `hello-world.c` to `hello` binary, then runs it
 - Standard C execution model with `main()` function
 
 ## Key Characteristics
@@ -16,7 +15,7 @@ C (GCC compiler, musl libc)
 - Uses musl libc (Alpine's C library)
 
 ## Fragment Authoring
-Fragments should be valid C statements or expressions. They are injected into the `main()` function, replacing the match marker. The fragment code will be compiled and executed.
+Write valid C statements or expressions. Your fragment becomes the `main()` function body. Your fragment will be compiled and executed.
 
 ## Available Headers
 The template includes these standard headers:

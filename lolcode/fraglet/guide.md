@@ -17,7 +17,7 @@ LOLCODE (lci interpreter)
 - Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid LOLCODE statements. They are injected into the main execution block, replacing the match marker. Code runs at the top level of the script.
+Write valid LOLCODE statements. Your fragment becomes the script body. Code runs at the top level of the script.
 
 ## Key LOLCODE Concepts
 - **HAI** / **KTHXBYE**: Program start/end (already in template)

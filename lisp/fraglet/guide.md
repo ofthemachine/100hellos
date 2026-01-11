@@ -16,7 +16,7 @@ SBCL (Steel Bank Common Lisp)
 - Functions are first-class values
 
 ## Fragment Authoring
-Paste straight Common Lisp expressions. They execute in order, exactly as written. Define functions before using them.
+Write valid Common Lisp expressions. Your fragment becomes the script body. They execute in order, exactly as written. Define functions before using them.
 
 ## Available Packages
 Standard Common Lisp functions are available. No additional ASDF systems are pre-installed.

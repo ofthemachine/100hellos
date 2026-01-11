@@ -16,7 +16,7 @@ Lua 5.4
 - Prefer `local` variables to avoid leaking globals
 
 ## Fragment Authoring
-Fragments should be valid Lua statements. Code runs inside the main function, then the interpreter exits. Define helper functions before using them.
+Write valid Lua statements. Your fragment becomes the main function body. Code runs inside the main function, then the interpreter exits. Define helper functions before using them.
 
 ## Available Packages
 Standard libraries are available:

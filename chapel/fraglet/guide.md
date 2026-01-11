@@ -18,7 +18,7 @@ Chapel 2.5.0 (compiled from source with system LLVM)
 - Uses domains and arrays for data structures
 
 ## Fragment Authoring
-Fragments replace the entire module body. This means:
+Write valid Chapel code. Your fragment becomes the module body. This means:
 - You must include `proc main() { ... }` in your fragment
 - You CAN define procedures, functions, and other module-level constructs
 - Procedures and functions are defined at module level, then called from main()
@@ -29,7 +29,7 @@ This approach enables teaching the full range of Chapel features, including proc
 Standard Chapel modules are available:
 - `IO` - Input/output operations (writeln, read, etc.)
 - `Math` - Mathematical operations (sin, cos, sqrt, etc.)
-- `Random` - Random number generation
+- `Random` - Random number generationa
 - `Time` - Time operations
 - `List` - List data structures
 - `Map` - Map/dictionary data structures

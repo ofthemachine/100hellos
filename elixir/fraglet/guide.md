@@ -14,10 +14,9 @@ Elixir 1.x (runs on Erlang/OTP)
 - Pattern matching
 - Pipe operator (`|>`)
 - Case-sensitive
-- Indentation is preserved based on the injection point
 
 ## Fragment Authoring
-Write normal Elixir code; your fraglet becomes the script body. The file already imports `IO.puts`, so add modules, functions, or expressions as you normally would.
+Write normal Elixir code; your fragment becomes the script body. The file already imports `IO.puts`, so add modules, functions, or expressions as you normally would.
 
 ## Available Packages
 Standard Elixir library is available. No additional packages are pre-installed.

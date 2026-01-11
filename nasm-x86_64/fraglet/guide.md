@@ -15,10 +15,9 @@ NASM 2.x (x86_64 assembly)
 - Linux system call interface
 - Manual memory management
 - Case-sensitive
-- Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid x86_64 NASM assembly instructions. They are injected into the `_start` section, replacing the code between the BEGIN_FRAGLET and END_FRAGLET markers. The fragment code will be assembled, linked, and executed.
+Write valid x86_64 NASM assembly instructions. Your fragment becomes the `_start` section code. Your fragment will be assembled, linked, and executed.
 
 ## System Calls
 Common Linux x86_64 system calls:

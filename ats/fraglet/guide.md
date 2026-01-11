@@ -6,7 +6,6 @@ ATS2-Postiats 0.4.2
 ## Execution Model
 - Compiled language using patscc (ATS compiler)
 - Code is compiled to a binary, then executed
-- Build script compiles `hello-world.dats` to `hello_world` binary, then runs it
 - Standard ATS execution model with `main0()` function
 
 ## Key Characteristics
@@ -18,7 +17,7 @@ ATS2-Postiats 0.4.2
 - Seamless C interoperation (compiles to C)
 
 ## Fragment Authoring
-Fragments should be valid ATS code that implements `main0()`. They are injected into the source file, replacing the match markers. The fragment code will be compiled and executed.
+Write valid ATS code that implements `main0()`. Your fragment will be compiled and executed.
 
 Fragments can include:
 - Function definitions

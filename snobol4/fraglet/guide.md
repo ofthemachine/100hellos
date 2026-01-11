@@ -15,10 +15,9 @@ CSNOBOL4 2.3.3
 - Labels are used for control flow (goto-like behavior)
 - Case-sensitive
 - Whitespace is significant in some contexts
-- Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid SNOBOL4 statements. They are injected into the main execution block, replacing the match marker. Code runs sequentially from the injection point.
+Write valid SNOBOL4 statements. Your fragment becomes the script body. Code runs sequentially.
 
 ## Key SNOBOL4 Concepts
 - **Assignment**: `VARIABLE = "value"`

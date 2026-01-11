@@ -19,7 +19,7 @@ C++ (G++ compiler, musl libc)
 - Uses musl libc (Alpine's C library)
 
 ## Fragment Authoring
-Fragments should be valid C++ code. They are injected into the file after the includes, replacing the code between BEGIN_FRAGLET and END_FRAGLET markers. You can define classes, functions, and the `main()` function. The fragment code will be compiled and executed.
+Write valid C++ code. Your fragment can define classes, functions, and the `main()` function. Standard library includes are already in place. Your fragment will be compiled and executed.
 
 ## Available Headers
 The template includes these standard headers:

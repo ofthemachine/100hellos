@@ -14,10 +14,9 @@ GNU Octave 8.x (MATLAB-compatible)
 - Case-sensitive
 - Dynamic typing
 - MATLAB-compatible syntax
-- Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid Octave/MATLAB statements or expressions. They are injected into the main execution block, replacing the match marker. Code runs at the top level of the script.
+Write valid Octave/MATLAB statements or expressions. Your fragment becomes the script body. Code runs at the top level of the script.
 
 ## Available Packages
 Standard Octave library is available. No additional packages are pre-installed. Package installation is possible but not typical for fraglet contexts (installs are ephemeral and add latency).

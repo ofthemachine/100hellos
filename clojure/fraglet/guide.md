@@ -17,7 +17,7 @@ Clojure (running on Java 11)
 - Code is data (homoiconic)
 
 ## Fragment Authoring
-Fragments should be valid Clojure expressions. They are injected into the script at the top level, so code runs directly. You can define functions, use expressions, and leverage Clojure's rich standard library.
+Write valid Clojure expressions. Your fragment becomes the script body, so code runs directly. You can define functions, use expressions, and leverage Clojure's rich standard library.
 
 ## Available Libraries
 Standard Clojure libraries are available:

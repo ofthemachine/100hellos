@@ -17,7 +17,7 @@ Brainfuck (custom C interpreter)
 - All other characters are ignored (comments)
 
 ## Fragment Authoring
-Fragments should be valid Brainfuck code. They are injected into the hello-world.bf file, replacing the match marker. The fragment code will be executed by the Brainfuck interpreter.
+Write valid Brainfuck code. Your fragment becomes the script body. The fragment code will be executed by the Brainfuck interpreter.
 
 ## Instructions
 - `>` - Move pointer right

@@ -17,7 +17,7 @@ TypeScript 5.x (compiled to JavaScript, runs on Node.js 20.x)
 - Type annotations are optional but recommended
 
 ## Fragment Authoring
-Fragments should be valid TypeScript statements or expressions. They are injected into the main execution block, replacing the match marker. The code is compiled to JavaScript and then executed.
+Write valid TypeScript statements or expressions. Your fragment becomes the script body. Your fragment will be compiled and executed.
 
 ## Available Packages
 Standard Node.js built-in modules are available (same as JavaScript):

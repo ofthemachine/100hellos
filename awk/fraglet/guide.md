@@ -14,10 +14,9 @@ GNU AWK (gawk)
 - Built-in variables: `$0` (entire line), `$1`, `$2`, etc. (fields)
 - Automatic field splitting on whitespace
 - Case-sensitive
-- Indentation is preserved based on the injection point
 
 ## Fragment Authoring
-Write normal AWK code: define any functions first, then put runtime logic in `BEGIN { ... }`. Your fraglet becomes the script body; you don’t need to know how it’s wired into the container.
+Write normal AWK code: define any functions first, then put runtime logic in `BEGIN { ... }`. Your fragment becomes the script body; you don’t need to know how it’s wired into the container.
 
 ## Available Packages
 Standard AWK (gawk) is available. No additional packages are pre-installed.

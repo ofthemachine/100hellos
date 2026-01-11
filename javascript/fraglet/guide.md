@@ -16,7 +16,7 @@ Node.js 20.x
 - Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid JavaScript statements or expressions. They are injected into the main execution block, replacing the match marker. Code runs at the top level of the script.
+Write valid JavaScript statements or expressions. Your fragment becomes the script body. Code runs at the top level of the script.
 
 ## Available Packages
 Standard Node.js built-in modules are available:

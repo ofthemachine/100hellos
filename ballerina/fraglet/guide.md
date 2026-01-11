@@ -16,7 +16,7 @@ Ballerina (latest via SDKMAN)
 - Built-in support for network services, data structures, and concurrency
 
 ## Fragment Authoring
-Fragments replace the entire module body (after imports). This means:
+Write valid Ballerina code. Your fragment becomes the module body. This means:
 - You must include `public function main() { ... }` in your fragment
 - You CAN define functions, types, and other module-level constructs
 - Functions are defined at module level, then called from main()

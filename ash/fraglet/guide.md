@@ -19,7 +19,7 @@ ash (Almquist Shell) - POSIX-compliant shell
 - Limited built-in features compared to bash
 
 ## Fragment Authoring
-Fragments should be valid ash shell commands. They are injected into the script, replacing the match marker. The fragment code will execute as part of the shell script.
+Write valid ash shell commands. Your fragment becomes the script body. The fragment code will execute as part of the shell script.
 
 Fragments are injected at the point where `Hello World!` appears in the echo statement, so you can replace the echo argument or add additional commands.
 

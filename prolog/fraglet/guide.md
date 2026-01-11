@@ -17,7 +17,7 @@ SWI-Prolog
 - Queries: `?- goal.` (asks Prolog to find solutions)
 
 ## Fragment Authoring
-Fragments should be valid Prolog goals or statements. Code runs as if typed at the Prolog toplevel. Each statement executes as a goal.
+Write valid Prolog goals or statements. Your fragment becomes the script body. Code runs as if typed at the Prolog toplevel. Each statement executes as a goal.
 
 ## Working with State
 - Use `assertz/1` (or `asserta/1`) to add facts and rules before querying them

@@ -17,7 +17,7 @@ EmojiCode (compiled language)
 - Comments use `#` (hash symbol)
 
 ## Fragment Authoring
-Fragments should be valid EmojiCode code. They are injected into the hello-world.🍇 file, replacing the region between `# BEGIN_FRAGLET` and `# END_FRAGLET` markers. The fragment code will be compiled and executed.
+Write valid EmojiCode code. Your fragment will be compiled and executed.
 
 ## Basic Syntax
 - `🏁` - Main function entry point

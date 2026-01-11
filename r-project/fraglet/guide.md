@@ -7,7 +7,6 @@ R 4.x
 - Interpreted, runs via Rscript
 - Top-level R code runs as written
 - Code runs sequentially from top to bottom
-- Indentation is preserved from the injection point (no indentation by default)
 
 ## Key Characteristics
 - Vectorized operations
@@ -16,7 +15,7 @@ R 4.x
 - Use `cat()` / `print()` to emit output
 
 ## Fragment Authoring
-Fragments should be valid R expressions, assignments, and function definitions. They run sequentially. Define helper functions before you call them.
+Write valid R expressions, assignments, and function definitions. Your fragment becomes the script body. They run sequentially. Define helper functions before you call them.
 
 ## Available Packages
 Standard R libraries are available. No additional packages are pre-installed. To install packages, set a CRAN mirror first:

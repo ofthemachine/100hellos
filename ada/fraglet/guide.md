@@ -17,9 +17,7 @@ Ada (GNAT compiler, Alpine Linux)
 - Uses GNAT compiler (GCC-based Ada compiler)
 
 ## Fragment Authoring
-Fragments should be valid Ada statements. They are injected into the main procedure, replacing the match marker. The fragment code will be compiled and executed.
-
-Fragments are injected into the `Put_Line` call, so you can replace the string argument or add additional statements before/after the Put_Line call.
+Write valid Ada statements. Your fragment becomes the main procedure body. Your fragment will be compiled and executed.
 
 ## Available Packages
 The template includes:

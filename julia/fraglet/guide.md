@@ -14,10 +14,9 @@ Julia 1.10.x
 - Case-sensitive
 - Multiple dispatch (functions can have multiple methods)
 - High-performance numerical computing
-- Indentation is preserved from the injection point
 
 ## Fragment Authoring
-Fragments should be valid Julia statements or expressions. They are injected into the main execution block, replacing the match marker. Code runs at the top level of the script.
+Write valid Julia statements or expressions. Your fragment becomes the script body. Code runs at the top level of the script.
 
 ## Available Packages
 Standard Julia library is available. No additional packages are pre-installed. To install packages:

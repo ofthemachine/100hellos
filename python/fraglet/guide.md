@@ -12,10 +12,9 @@ Python 3.x
 - Indentation-sensitive (4 spaces standard)
 - Dynamic typing
 - Case-sensitive
-- Indentation is automatically preserved based on the injection point
 
 ## Fragment Authoring
-Fragments should be valid Python statements or expressions. They are injected into the main execution block, so code runs at the top level of the script.
+Write valid Python statements or expressions. Your fragment becomes the script body, so code runs at the top level of the script.
 
 ## Available Packages
 Standard Python library is available. No additional packages are pre-installed.

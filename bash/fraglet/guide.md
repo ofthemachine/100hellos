@@ -21,9 +21,7 @@ bash (GNU Bash) - Full-featured shell
 - Pattern matching: `[[ string =~ pattern ]]`
 
 ## Fragment Authoring
-Fragments should be valid bash shell commands. They are injected into the script, replacing the match marker. The fragment code will execute as part of the shell script.
-
-Fragments are injected at the point where `echo "Hello World!"` appears, so you can replace the echo statement or add additional commands.
+Write valid bash shell commands. Your fragment becomes the script body. The fragment code will execute as part of the shell script.
 
 ## Available Commands
 Standard Unix utilities and bash built-ins are available:

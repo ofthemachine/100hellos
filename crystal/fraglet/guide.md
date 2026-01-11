@@ -13,12 +13,11 @@ Crystal 1.x
 - Ruby-like syntax with static typing
 - Type inference (explicit types optional)
 - Case-sensitive
-- Indentation is preserved based on injection point
 - Object-oriented with classes and methods
 - Supports modules, structs, enums, and unions
 
 ## Fragment Authoring
-Fragments replace the entire class definition and instantiation section. You can define:
+Write valid Crystal code. Your fragment can define:
 - Classes with methods
 - Structs
 - Modules
@@ -26,7 +25,7 @@ Fragments replace the entire class definition and instantiation section. You can
 - Variable declarations and assignments
 - Method calls
 
-The fragment should be complete, valid Crystal code that can be compiled and executed.
+Your fragment should be complete, valid Crystal code that can be compiled and executed.
 
 ## Available Packages
 Standard Crystal library (stdlib) is available. No additional shards are pre-installed.

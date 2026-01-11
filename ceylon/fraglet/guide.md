@@ -18,7 +18,7 @@ Ceylon (latest via SDKMAN)
 - Entry point is `shared void run()` function
 
 ## Fragment Authoring
-Fragments replace the code after the `hello()` function. This means:
+Write valid Ceylon code. Your fragment should include:
 - You must include `shared void run() { ... }` in your fragment
 - You CAN define functions, classes, and other module-level constructs
 - Functions are defined at module level, then called from `run()`

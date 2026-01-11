@@ -18,7 +18,7 @@ BQN (CBQN implementation)
 - Mathematical notation makes code read like expressions
 
 ## Fragment Authoring
-Fragments should be valid BQN statements or expressions. They are injected into the main execution block, replacing the match marker. Code runs at the top level of the script.
+Write valid BQN statements or expressions. Your fragment becomes the script body. Code runs at the top level of the script.
 
 ## Available Libraries
 Standard BQN library is available. System functions (prefixed with •) provide built-in functionality:
