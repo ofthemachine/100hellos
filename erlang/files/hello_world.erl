@@ -2,6 +2,8 @@
 % are not supported -- which is why this one has a different
 % filename.
 -module(hello_world).
--export([hello_world/0]).
+% BEGIN_FRAGLET
+-export([main/0]).
 
-hello_world() -> io:fwrite("Hello World!\n").
+main() -> io:fwrite("Hello World!\n").
+% END_FRAGLET
