@@ -9,3 +9,6 @@ RUN sudo apk add --no-cache hare
 
 # Copy "Hello World!" source and helper script into the container
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
