@@ -6,8 +6,10 @@
 # Otherwise, the default behavior is to run the first file in the
 # directory that matches the pattern `hello-world.*``.
 
+cd /hello-world
+
 # Compile the Idris2 program
-idris2 --output-dir /tmp/build -o hello /hello-world/hello-world.idr
+idris2 --output-dir /tmp/build -o hello hello-world.idr
 
 # Run it
 /tmp/build/hello
