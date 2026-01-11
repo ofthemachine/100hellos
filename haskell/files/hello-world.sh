@@ -9,5 +9,6 @@
 # Build it
 # Run it
 
+cd /hello-world
 ghc -o hello-world hello-world.hs
 ./hello-world
