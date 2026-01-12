@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+cd /hello-world
+
 # This uses the vlang REPL to build the program
 chmod +x hello-world.v
 

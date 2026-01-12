@@ -13,3 +13,6 @@ RUN sudo \
     vlang
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
