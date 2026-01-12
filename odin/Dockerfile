@@ -24,3 +24,6 @@ ENV ODIN_ROOT=/opt/odin
 
 # NO CMD HERE! The entrypoint will find and run hello-world.sh
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
