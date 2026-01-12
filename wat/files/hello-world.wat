@@ -9,6 +9,7 @@
   (memory 1)
   (export "memory" (memory 0))
 
+  ;; BEGIN_FRAGLET
   ;; String data: "Hello World!"
   (data (i32.const 0) "Hello World!\n")
 
@@ -28,4 +29,5 @@
     ;; Exit with status 0
     (call $proc_exit (i32.const 0))
   )
+  ;; END_FRAGLET
 )
