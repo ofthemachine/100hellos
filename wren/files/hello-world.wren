@@ -1,3 +1,4 @@
+// BEGIN_FRAGLET
 // In a world where every character is secretly a quantum particle...
 class QuantumLetter {
   construct new(char, spin) {
@@ -34,3 +35,4 @@ class QuantumMessage {
 
 // The quantum measurement that changes everything... or does it?
 System.print(QuantumMessage.new().observe)
+// END_FRAGLET

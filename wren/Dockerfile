@@ -15,3 +15,6 @@ RUN git clone --depth 1 https://github.com/wren-lang/wren-cli.git /tmp/wren-cli 
 
 # Copy hello world files
 COPY --chown=human:human ./files /hello-world/
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
