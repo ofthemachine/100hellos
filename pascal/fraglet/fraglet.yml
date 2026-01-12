@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Pascal container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.pas
+  match_start: begin
+  match_end: end.
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
