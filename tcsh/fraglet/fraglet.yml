@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for tcsh container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.tcsh
+  match: echo "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.tcsh
+  makeExecutable: true
