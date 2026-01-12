@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for zsh container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.zsh
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.zsh
+  makeExecutable: true
