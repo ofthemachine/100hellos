@@ -16,3 +16,6 @@ RUN wget -O /tmp/tinygo.tar.gz "https://github.com/tinygo-org/tinygo/releases/do
 ENV PATH="/usr/local/tinygo/bin:${PATH}"
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
