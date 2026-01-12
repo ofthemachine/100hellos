@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-scala run HelloWorld.scala
+cd /hello-world
+scala run --quiet HelloWorld.scala
