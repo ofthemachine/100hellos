@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Racket container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.rkt
+  match: (displayln "Hello World!")
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.rkt
+  makeExecutable: true
