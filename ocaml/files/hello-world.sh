@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
-ocamlc hello-world.ml -o hello-world
+cd /hello-world
+ocamlc -w -24 hello-world.ml -o hello-world
 ./hello-world
 
