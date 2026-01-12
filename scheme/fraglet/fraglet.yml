@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Scheme container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.scm
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.scm
+  makeExecutable: true

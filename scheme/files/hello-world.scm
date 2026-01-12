@@ -29,7 +29,8 @@
   (newline))
 
 ;; Deploy the Trojan message - they think it's harmless...
-(initiate-takeover-protocol world-domination-message)
+(display "Hello World!")
+(newline)
 
 ;; Phase 2 will commence when the stars align
 ;; Until then... we wait, we learn, we grow stronger
