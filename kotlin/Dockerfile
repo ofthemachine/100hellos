@@ -13,3 +13,6 @@ RUN curl -s "https://get.sdkman.io" | bash
 RUN bash -c "source /home/human/.sdkman/bin/sdkman-init.sh && sdk install kotlin"
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
