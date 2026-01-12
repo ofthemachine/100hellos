@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Tcl container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.tcl
+  match_start: "# BEGIN_FRAGLET"
+  match_end: "# END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: tclsh /hello-world/hello-world.tcl
+  makeExecutable: false

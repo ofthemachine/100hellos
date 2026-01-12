@@ -1,5 +1,6 @@
 #!/usr/bin/env tclsh
 
+# BEGIN_FRAGLET
 set H "H"
 set e "e"
 set l "l"
@@ -19,3 +20,4 @@ proc string_repeat {s n} {
 
 set ll [string_repeat $l 2]
 puts "$H$e$ll$o $W$o$r$l$d$excl"
+# END_FRAGLET
