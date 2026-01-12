@@ -13,3 +13,6 @@ RUN curl -L -o /tmp/zig.tar.xz https://ziglang.org/download/${ZIG_VERSION}/zig-l
 ENV PATH=/usr/local/zig:$PATH
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
