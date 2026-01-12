@@ -1,5 +1,6 @@
 #!/usr/bin/env raku
 
+# BEGIN_FRAGLET
 class Greeting {
   has Str $.who;
 
@@ -9,5 +10,5 @@ class Greeting {
 }
 
 my $greeting = Greeting.new(who => "World");
-
 $greeting.greet();
+# END_FRAGLET
