@@ -18,3 +18,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/ponyl
     sudo ln -s /home/human/.local/share/ponyup/bin/ponyc /usr/local/bin/ponyc
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
