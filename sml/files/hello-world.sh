@@ -9,6 +9,5 @@
 # Build it
 # Run it
 
-# Compile and run the Standard ML program using Poly/ML, suppressing startup messages
-poly --quiet < /hello-world/hello-world.sml 2>/dev/null
+poly -q --use /hello-world/hello-world.sml
 
