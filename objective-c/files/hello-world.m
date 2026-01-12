@@ -2,6 +2,7 @@
 
 #import <stdio.h>
 
+// BEGIN_FRAGLET
 @interface Greeting : NSObject {
 }
 
@@ -23,3 +24,4 @@ int main(int argv, char* argc[])
     
     return 0;
 }
+// END_FRAGLET
