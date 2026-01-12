@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for REBOL container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.r
+  match: Hello World
+
+guide: /guide.md
+
+execution:
+  path: rebol3 /hello-world/hello-world.r
+  makeExecutable: false

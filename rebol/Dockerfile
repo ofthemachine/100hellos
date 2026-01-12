@@ -8,3 +8,6 @@ RUN curl -o rebol3.gz -L https://github.com/Oldes/Rebol3/releases/download/3.18.
     sudo mv rebol3 /usr/local/bin/rebol3
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
