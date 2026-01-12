@@ -5,11 +5,11 @@
 #
 # You can do a simple "Hello World!" in Perl with:
 # perl -e 'print "Hello World!\n"'
-
+# BEGIN_FRAGLET
                   package Earth;sub Greet{
                 %_=('Y','~');$_='$;=!(Middle
               Earth.age~~~<Eart~~~~~~~~~~~~~h
-           .age)?!(defined$ti~~~~~~~~~~~mez~~~On 
+           .age)?!(defined$ti~~~~~~~~~~~mez~~~On
          e[2])?!(push@time~~~~~~~~~~~~~~~~Zone,loc
        ~altime())?rotation?~~~~~~~~~~~~~q~~?The Worl
       ~~d?:q:[\w]::q=[\~~~~~~~~~~~~~~~~~d~a-f]=:q?..~~
@@ -39,3 +39,4 @@
               ~~~~~~~~~"~~~~~~~~~~~~~~~~~~~';;
                 s,(~|\r|\n|\s),,g;s.Y.\x7e.g;
                   eval};Greet;'the world';
+# END_FRAGLET
