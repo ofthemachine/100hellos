@@ -11,6 +11,6 @@
 
 # Compile and run the Mercury program
 cd /hello-world
-mmc --make hello_world
+mmc --make --no-verbose-make -w hello_world
 ./hello_world
 

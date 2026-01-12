@@ -4,5 +4,6 @@ FROM 100hellos/000-base:local
 RUN sudo apk add --no-cache mercury gcc musl-dev
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
 
-WORKDIR /home/human
+ENTRYPOINT [ "/fraglet-entrypoint" ]
