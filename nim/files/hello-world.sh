@@ -9,6 +9,7 @@
 # Build it
 # Run it
 
-nim c -o:/tmp/hello /hello-world/helloworld.nim
+cd /hello-world
+nim c --hints:off --verbosity:0 -o:/tmp/hello /hello-world/helloworld.nim
 /tmp/hello
 
