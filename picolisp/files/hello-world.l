@@ -19,7 +19,7 @@
       (prinl Message) ) )
 
 # Execute with style - showing off PicoLisp's elegant simplicity
-(celebrate-minimalism)
+(prinl "Hello World!")
 
 # PicoLisp philosophy: Less is more!
 (bye)
