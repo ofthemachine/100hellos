@@ -17,3 +17,6 @@ RUN sudo ln -sf /home/human/.nix-profile/bin/nix-shell /usr/local/bin/nix-shell
 RUN sudo ln -sf /home/human/.nix-profile/bin/nix-instantiate /usr/local/bin/nix-instantiate
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+
+ENTRYPOINT [ "/fraglet-entrypoint" ]
