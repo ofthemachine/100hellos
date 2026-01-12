@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for mksh container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.ksh
+  match: print "Hello World!"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.ksh
+  makeExecutable: true
