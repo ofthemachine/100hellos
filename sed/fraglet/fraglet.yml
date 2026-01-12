@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for sed container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.sed
+  match: Hello World!
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
