@@ -6,15 +6,25 @@
 #   ./fraglet-status.sh next       - Return the next language to implement
 #   ./fraglet-status.sh enabled    - List all enabled languages
 #   ./fraglet-status.sh pending    - List all pending languages
+#   ./fraglet-status.sh skipped    - List all intentionally skipped languages
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 LANGUAGES_FILE="$REPO_ROOT/FRAGLET_LANGUAGES.txt"
+FUNCTIONS_FILE="$SCRIPT_DIR/functions.sh"
 
 if [[ ! -f "$LANGUAGES_FILE" ]]; then
     echo "Error: FRAGLET_LANGUAGES.txt not found at $LANGUAGES_FILE" >&2
+    exit 1
+fi
+
+# Source functions to get published_languages
+if [[ -f "$FUNCTIONS_FILE" ]]; then
+    source "$FUNCTIONS_FILE"
+else
+    echo "Error: functions.sh not found at $FUNCTIONS_FILE" >&2
     exit 1
 fi
 
@@ -41,6 +51,15 @@ get_pending() {
 # Get next language (first pending)
 get_next() {
     get_pending | head -1
+}
+
+# Get skipped languages (published languages that are not in targets and not enabled)
+get_skipped() {
+    (
+        cd "$REPO_ROOT"
+        comm -23 <(published_languages | sort) <(get_targets) | \
+        comm -23 - <(get_enabled)
+    )
 }
 
 case "${1:-status}" in
@@ -77,8 +96,11 @@ case "${1:-status}" in
     pending)
         get_pending
         ;;
+    skipped)
+        get_skipped
+        ;;
     *)
-        echo "Usage: $0 {status|next|enabled|pending}" >&2
+        echo "Usage: $0 {status|next|enabled|pending|skipped}" >&2
         exit 1
         ;;
 esac
