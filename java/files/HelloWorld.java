@@ -4,6 +4,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class HelloWorld {
+    // BEGIN_FRAGLET
     public static void main(String[] args) throws Exception {
         System.out.println("Hello World!");
     }
@@ -32,4 +33,5 @@ public class HelloWorld {
         }
         return score;
     }
+    // END_FRAGLET
 }

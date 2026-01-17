@@ -2,14 +2,10 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/HelloWorld.java
-  match_start: "// BEGIN_FRAGLET"
-  match_end: "// END_FRAGLET"
+  match: "Hello World!"
 
-guide: /guide.md
+guide: /guide-wordalytica.md
 
 execution:
   path: /hello-world/hello-world.sh
   makeExecutable: true
-
-
-

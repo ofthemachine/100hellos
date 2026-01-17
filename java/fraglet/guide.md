@@ -1,94 +1,127 @@
 # Java Fraglet Guide
 
-Your code runs inside `main()`. Imports are handled—just write statements.
+## Language Version
+Java (OpenJDK)
 
-## Load Words
+## Execution Model
+- Compiled language
+- Requires explicit `main()` method
+- Code runs inside `main(String[] args)`
+- Can define classes, methods, and fields outside `main()`
 
-```java
-WordSet<?> words = HelloWorld.loadWords();
-```
+## Key Characteristics
+- Statically typed
+- Case-sensitive
+- Object-oriented programming
+- Platform-independent (JVM)
+- Rich standard library
 
-Call once and reuse. All words are lowercase.
+## Fragment Authoring
+Write valid Java code. Your fragment replaces the entire class body between `// BEGIN_FRAGLET` and `// END_FRAGLET`. You must include the `main()` method. You can also define helper methods, fields, and nested classes within your fragment.
 
-## Fluent Methods (Chainable)
+## Available Libraries
+- Java standard library (java.lang, java.util, java.io, etc.)
+- No additional dependencies pre-installed
 
-| Method | Description |
-|--------|-------------|
-| `.matching("c_t")` | Pattern with `_` or `?` wildcards; fixes length |
-| `.containing("s")` | Has substring |
-| `.notContaining("xyz")` | Excludes all chars in string |
-| `.startingWith("s")` | Prefix match |
-| `.endingWith("s")` | Suffix match |
-| `.notEndingWith("s")` | Excludes suffix |
-| `.longerThan(n)` | Length > n |
-| `.withCharAt('a', 2)` | Letter at position (0-indexed) |
-| `.withoutCharAt('a', 2)` | Letter NOT at position |
+## Common Patterns
+- Print: `System.out.println("message");`
+- Variables: `int x = 5;` or `var x = 5;` (Java 10+)
+- Arrays: `int[] arr = {1, 2, 3};`
+- Lists: `List<Integer> list = Arrays.asList(1, 2, 3);`
+- String concatenation: `"Hello " + name`
+- Classes: `class MyClass { }`
+- Methods: `public static int method() { return 0; }`
 
-## Terminal Operations
-
-| Method | Returns |
-|--------|---------|
-| `.count()` | `int` — number of matches |
-| `.iterator()` | `Iterator<String>` — iterate results |
-
-## Wordle Constraints
-
-| Clue | Method |
-|------|--------|
-| Gray `x` | `.notContaining("x")` |
-| Green `a` at slot 2 | `.withCharAt('a', 1)` |
-| Yellow `l` not slot 4 | `.containing("l").withoutCharAt('l', 3)` |
+## Examples
 
 ```java
-WordSet<?> words = HelloWorld.loadWords();
-
-// 5-letter, ends 'd', has 'a' (not slot 0), has 'l' (not slot 2), no x/z/q
-words.matching("____d")
-     .containing("a").withoutCharAt('a', 0)
-     .containing("l").withoutCharAt('l', 2)
-     .notContaining("xzq")
-     .iterator().forEachRemaining(System.out::println);
+// Simple output
+public static void main(String[] args) throws Exception {
+    System.out.println("Hello, World!");
+}
 ```
-
-## Crossword Patterns
 
 ```java
-// 5 letters, 'a' in slot 2, 'e' in slot 4
-words.matching("_a_e_").iterator().forEachRemaining(System.out::println);
+// Variables and calculations
+public static void main(String[] args) throws Exception {
+    int a = 5;
+    int b = 10;
+    int sum = a + b;
+    System.out.println("Sum: " + sum);
+}
 ```
-
-## Scrabble Scoring
 
 ```java
-int score = HelloWorld.wordScore("quartz");  // 24
-System.out.println(score);
-
-// Find highest-scoring 5-letter words containing 'q'
-words.matching("_____").containing("q")
-     .iterator().forEachRemaining(w ->
-         System.out.println(w + " = " + HelloWorld.wordScore(w)));
+// Arrays and loops
+public static void main(String[] args) throws Exception {
+    int[] numbers = {1, 2, 3, 4, 5};
+    int sum = 0;
+    for (int num : numbers) {
+        sum += num;
+    }
+    System.out.println("Array sum: " + sum);
+}
 ```
-
-## Quick Reference
 
 ```java
-WordSet<?> words = HelloWorld.loadWords();
+// Method definition
+public static int add(int a, int b) {
+    return a + b;
+}
 
-// Count
-int n = words.endingWith("ing").count();
-
-// Print all
-words.startingWith("un").iterator().forEachRemaining(System.out::println);
-
-// Chain
-words.matching("_____")
-     .containing("a")
-     .notContaining("eiou")
-     .iterator().forEachRemaining(System.out::println);
+public static void main(String[] args) throws Exception {
+    int result = add(5, 10);
+    System.out.println("5 + 10 = " + result);
+}
 ```
 
-## Notes
+```java
+// Nested class definition
+public static void main(String[] args) throws Exception {
+    class Calculator {
+        public int multiply(int a, int b) {
+            return a * b;
+        }
+    }
+    
+    Calculator calc = new Calculator();
+    System.out.println("5 * 3 = " + calc.multiply(5, 3));
+}
+```
 
-- Positions are 0-indexed
-- `matching()` sets word length implicitly
-- Words are lowercase; matches are case-sensitive
+```java
+// List operations
+import java.util.*;
+
+public static void main(String[] args) throws Exception {
+    List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+    int sum = numbers.stream().mapToInt(Integer::intValue).sum();
+    System.out.println("Sum: " + sum);
+}
+```
+
+```java
+// String operations
+public static void main(String[] args) throws Exception {
+    String greeting = "Hello";
+    String name = "World";
+    String message = greeting + ", " + name + "!";
+    System.out.println(message);
+}
+```
+
+```java
+// Command-line arguments
+public static void main(String[] args) throws Exception {
+    if (args.length > 0) {
+        System.out.println("First argument: " + args[0]);
+    }
+}
+```
+
+## Caveats
+- Must include `public static void main(String[] args)` method
+- Semicolons are required
+- Case-sensitive
+- Primitive types vs. wrapper classes (int vs Integer)
+- Array indexing starts at 0
