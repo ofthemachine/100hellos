@@ -85,4 +85,15 @@ int main() {
 }
 EOF
 
+# Example 7: Argument passing
+echo "Testing argument passing..."
+fragletc --image "$IMAGE" - arg1 arg2 <<'EOF' 2>&1 | grep -q "First: arg1"
+#include <iostream>
+int main(int argc, char *argv[]) {
+    if (argc > 1) std::cout << "First: " << argv[1] << std::endl;
+    if (argc > 2) std::cout << "Second: " << argv[2] << std::endl;
+    return 0;
+}
+EOF
+
 echo "✓ All tests passed"
