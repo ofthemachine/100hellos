@@ -65,7 +65,7 @@ public class Program {
     public static T Maximum<T>(T a, T b) where T : IComparable<T> {
         return a.CompareTo(b) > 0 ? a : b;
     }
-    
+
     public static void Main() {
         Console.WriteLine($"Max(5, 10) = {Maximum(5, 10)}");
         Console.WriteLine($"Max(3.14, 2.71) = {Maximum(3.14, 2.71)}");
@@ -78,6 +78,13 @@ verify_fraglet "Even numbers:" <<'EOF'
 var numbers = new[] { 1, 2, 3, 4, 5 };
 var evens = numbers.Where(n => n % 2 == 0);
 Console.WriteLine($"Even numbers: {string.Join(", ", evens)}");
+EOF
+
+# Example 8: Argument passing
+echo "Testing argument passing..."
+fragletc --image "$IMAGE" - arg1 arg2 <<'EOF' 2>&1 | grep -q "arg1 arg2"
+string message = args.Length > 0 ? string.Join(" ", args) : "Hello World!";
+Console.WriteLine(message);
 EOF
 
 echo "✓ All tests passed"
