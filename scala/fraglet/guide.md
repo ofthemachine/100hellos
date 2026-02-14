@@ -1,143 +1,156 @@
 # Scala Fraglet Guide
 
 ## Language Version
-Scala (installed via Coursier)
+Scala 3 (Dotty), JVM-based
 
 ## Execution Model
-- Compiled, then executed
-- Uses `scala run` to compile and execute in one step
-- Requires an object with a `main` method
-- Code executes when `main()` is called
-- Can define functions, classes, traits, and objects outside `main()`
-
-## Key Characteristics
-- JVM-based language (runs on Java)
-- Statically typed with type inference
-- Case-sensitive
-- Semicolons optional
-- Supports both object-oriented and functional programming
-- Immutable by default (val vs var)
-- Pattern matching
+- The container runs your fraglet as a Scala script: `scala Main.scala [args...]`
+- Your fraglet is the **entire runnable object**: it replaces the whole `object Main { ... }` between the injection markers
+- Use **`object Main`** with **`def main(args: Array[String]): Unit`** — conventional, and you get `args` for free
+- Stdin is available via **`scala.io.Source.stdin`**; arguments are in **`args`**
 
 ## Fragment Authoring
-Write valid Scala statements or expressions. Code executes inside `main()`, so you can write statements directly. You can also define functions, classes, traits, and objects outside `main()` and call them from within.
+Write a **complete** `object Main` with a `main` method. The fraglet is not “snippet inside main” — it is the full object. That gives you:
+- **Arguments**: `args: Array[String]` in `main(args: Array[String])` — same as any JVM main
+- **Stdin**: `scala.io.Source.stdin.getLines()` or `scala.io.Source.stdin.mkString`
+- Full freedom to define classes, traits, functions, and top-level logic inside the object
 
-## Available Libraries
-- Standard Scala library
-- Java standard library (via JVM)
-- No additional dependencies pre-installed
+You can name the object something else (e.g. `object App`) if you prefer; **`Main`** is recommended so examples and tooling stay consistent.
+
+## Stdin and Args (for AI / scripts)
+- **Read stdin**: `scala.io.Source.stdin.getLines().foreach(println)` or process lines as needed
+- **Use args**: `args.foreach(println)` or `args.mkString(" ")` — they are passed through from the fraglet invocation
+
+## Key Characteristics
+- JVM-based, statically typed, type inference
+- Case-sensitive; semicolons optional
+- Immutable by default (`val` vs `var`)
+- Pattern matching, case classes, for comprehensions
 
 ## Common Patterns
 - Print: `println("message")`
 - String interpolation: `s"Total: $count"` or `s"Total: ${expression}"`
+- Args: `args.mkString(" ")` or `args.toList`
+- Stdin: `scala.io.Source.stdin.getLines().toList`
 - Lists: `List(1, 2, 3).sum`
-- Functions: `def methodName(): Unit = { }`
-- Classes: `class MyClass { }`
-- Objects: `object MyObject { }`
-- Traits: `trait MyTrait { }`
 - Pattern matching: `x match { case 1 => ... }`
-- Immutable variables: `val x = 5`
-- Mutable variables: `var x = 5`
-- Higher-order functions: `list.map(x => x * 2)`
-- For comprehensions: `for (i <- 1 to 10) println(i)`
 
 ## Examples
 
-```scala
-// Simple output
-println("Hello, World!")
-```
+Each example below is a **full object** you can use as the fraglet as-is.
 
 ```scala
-// Function definition
-def greet(name: String): String = {
-    s"Hello, $name!"
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("Hello, World!")
+  }
 }
-
-println(greet("Alice"))
 ```
 
 ```scala
-// List processing
-val numbers = List(1, 2, 3, 4, 5)
-val squared = numbers.map(x => x * x)
-println(s"Sum of squares: ${squared.sum}")
+object Main {
+  def main(args: Array[String]): Unit = {
+    def greet(name: String): String = s"Hello, $name!"
+    println(greet("Alice"))
+  }
+}
 ```
 
 ```scala
-// Higher-order function
-val multiply = (a: Int, b: Int) => a * b
-println(s"5 * 3 = ${multiply(5, 3)}")
+object Main {
+  def main(args: Array[String]): Unit = {
+    val numbers = List(1, 2, 3, 4, 5)
+    val squared = numbers.map(x => x * x)
+    println(s"Sum of squares: ${squared.sum}")
+  }
+}
 ```
 
 ```scala
-// Class definition
-class Calculator {
-    def add(a: Int, b: Int): Int = {
-        a + b
+object Main {
+  def main(args: Array[String]): Unit = {
+    val multiply = (a: Int, b: Int) => a * b
+    println(s"5 * 3 = ${multiply(5, 3)}")
+  }
+}
+```
+
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    class Calculator {
+      def add(a: Int, b: Int): Int = a + b
     }
+    val calc = new Calculator()
+    println(s"10 + 20 = ${calc.add(10, 20)}")
+  }
 }
-
-val calc = new Calculator()
-println(s"10 + 20 = ${calc.add(10, 20)}")
 ```
 
 ```scala
-// String interpolation
-val name = "Scala"
-val version = 3
-println(s"Welcome to $name $version!")
-```
-
-```scala
-// Case class
-case class Person(name: String, age: Int)
-
-val person = Person("Bob", 30)
-println(s"${person.name} is ${person.age} years old")
-```
-
-```scala
-// Pattern matching
-val x = 5
-val result = x match {
-    case n if n < 0 => "negative"
-    case 0 => "zero"
-    case _ => "positive"
+object Main {
+  def main(args: Array[String]): Unit = {
+    // Command-line arguments
+    println("Args: " + args.mkString(" "))
+  }
 }
-println(s"x is $result")
 ```
 
 ```scala
-// For comprehension
-val numbers = List(1, 2, 3, 4, 5)
-val doubled = for (n <- numbers) yield n * 2
-println(s"Doubled: ${doubled.mkString(", ")}")
-```
-
-```scala
-// Option handling
-val name: Option[String] = Some("Scala")
-name.foreach(n => println(s"Name: $n"))
-
-val empty: Option[String] = None
-println(empty.getOrElse("Default value"))
-```
-
-```scala
-// Extension methods (Scala 3) or implicit classes (Scala 2)
-implicit class StringOps(s: String) {
-    def double(): String = s + s
+object Main {
+  def main(args: Array[String]): Unit = {
+    // Stdin (e.g. echo "hello" | fragletc --vein=scala script.scala)
+    scala.io.Source.stdin.getLines().foreach(line => println(line.toUpperCase))
+  }
 }
+```
 
-val text = "Hello"
-println(text.double())
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    val name = "Scala"
+    val version = 3
+    println(s"Welcome to $name $version!")
+  }
+}
+```
+
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    case class Person(name: String, age: Int)
+    val person = Person("Bob", 30)
+    println(s"${person.name} is ${person.age} years old")
+  }
+}
+```
+
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    val x = 5
+    val result = x match {
+      case n if n < 0 => "negative"
+      case 0 => "zero"
+      case _ => "positive"
+    }
+    println(s"x is $result")
+  }
+}
+```
+
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    val numbers = List(1, 2, 3, 4, 5)
+    val doubled = for (n <- numbers) yield n * 2
+    println(s"Doubled: ${doubled.mkString(", ")}")
+  }
+}
 ```
 
 ## Notes
-- Use `val` for immutable variables, `var` for mutable
-- Type inference works well, but explicit types can improve clarity
-- Pattern matching is powerful for control flow
-- Case classes provide convenient data structures
-- For comprehensions are syntactic sugar for map/flatMap/filter
-- Scala 2 and Scala 3 syntax may differ slightly
+- Use `object Main` and `def main(args: Array[String]): Unit` for a standard entry point
+- `args` and stdin are available; no extra setup needed
+- Use `val` for immutables, `var` only when needed
+- Scala 3 syntax; some Scala 2 constructs (e.g. implicit class) still work

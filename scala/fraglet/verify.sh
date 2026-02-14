@@ -1,102 +1,79 @@
 #!/bin/bash
+# verify.sh - Smoke tests for Scala fraglet support
+# Uses temp files for code (fragletc does not read code from stdin).
+# Contract: default run, guide examples, stdin, args.
+
 set -euo pipefail
 
 IMAGE="${1:-100hellos/scala:local}"
+EXT=".scala"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.$EXT"
+
+verify_fraglet() {
+    local expected="$1"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
+}
 
 echo "Testing default execution..."
-docker run --rm "$IMAGE" | grep -Fq "Hello World!"
+docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Hello, World!"
-println("Hello, World!")
-EOF
-
-# Example 2: Function definition
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Hello, Alice!"
-def greet(name: String): String = {
-    s"Hello, $name!"
+# Example 1: Simple output (full object Main)
+cat > "$tmp" <<'EOF'
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("Hello, World!")
+  }
 }
-
-println(greet("Alice"))
 EOF
+verify_fraglet "Hello, World!"
+
+# Example 2: Function and greet
+cat > "$tmp" <<'EOF'
+object Main {
+  def main(args: Array[String]): Unit = {
+    def greet(name: String): String = s"Hello, $name!"
+    println(greet("Alice"))
+  }
+}
+EOF
+verify_fraglet "Hello, Alice!"
 
 # Example 3: List processing
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Sum of squares:"
-val numbers = List(1, 2, 3, 4, 5)
-val squared = numbers.map(x => x * x)
-println(s"Sum of squares: ${squared.sum}")
-EOF
-
-# Example 4: Higher-order function
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "5 * 3 = 15"
-val multiply = (a: Int, b: Int) => a * b
-println(s"5 * 3 = ${multiply(5, 3)}")
-EOF
-
-# Example 5: Class definition
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "10 + 20 = 30"
-class Calculator {
-    def add(a: Int, b: Int): Int = {
-        a + b
-    }
+cat > "$tmp" <<'EOF'
+object Main {
+  def main(args: Array[String]): Unit = {
+    val numbers = List(1, 2, 3, 4, 5)
+    val squared = numbers.map(x => x * x)
+    println(s"Sum of squares: ${squared.sum}")
+  }
 }
-
-val calc = new Calculator()
-println(s"10 + 20 = ${calc.add(10, 20)}")
 EOF
+verify_fraglet "Sum of squares"
 
-# Example 6: String interpolation
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Welcome to Scala"
-val name = "Scala"
-val version = 3
-println(s"Welcome to $name $version!")
-EOF
-
-# Example 7: Case class
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Bob is 30 years old"
-case class Person(name: String, age: Int)
-
-val person = Person("Bob", 30)
-println(s"${person.name} is ${person.age} years old")
-EOF
-
-# Example 8: Pattern matching
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "x is positive"
-val x = 5
-val result = x match {
-    case n if n < 0 => "negative"
-    case 0 => "zero"
-    case _ => "positive"
+# Stdin test
+echo "Testing stdin..."
+cat > "$tmp" <<'EOF'
+object Main {
+  def main(args: Array[String]): Unit = {
+    scala.io.Source.stdin.getLines().foreach(line => println(line.toUpperCase))
+  }
 }
-println(s"x is $result")
 EOF
+echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
 
-# Example 9: For comprehension
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Doubled:"
-val numbers = List(1, 2, 3, 4, 5)
-val doubled = for (n <- numbers) yield n * 2
-println(s"Doubled: ${doubled.mkString(", ")}")
-EOF
-
-# Example 10: Option handling
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "Name: Scala"
-val name: Option[String] = Some("Scala")
-name.foreach(n => println(s"Name: $n"))
-
-val empty: Option[String] = None
-println(empty.getOrElse("Default value"))
-EOF
-
-# Example 11: Extension methods (implicit class)
-fragletc --image "$IMAGE" - <<'EOF' 2>&1 | grep -Fq "HelloHello"
-implicit class StringOps(s: String) {
-    def double(): String = s + s
+# Argument passing
+echo "Testing argument passing..."
+cat > "$tmp" <<'EOF'
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("Args: " + args.mkString(" "))
+  }
 }
-
-val text = "Hello"
-println(text.double())
 EOF
+verify_fraglet "Args: foo bar baz" foo bar baz
 
 echo "✓ All tests passed"

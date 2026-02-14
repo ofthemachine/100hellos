@@ -1,8 +1,9 @@
 fragletTempPath: /FRAGLET
 
 injection:
-  codePath: /hello-world/HelloWorld.scala
-  match: "Hello World!"
+  codePath: /hello-world/Main.scala
+  match_start: "// BEGIN_FRAGLET"
+  match_end: "// END_FRAGLET"
 
 guide: /guide.md
 
