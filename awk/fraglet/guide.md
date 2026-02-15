@@ -21,6 +21,24 @@ Write normal AWK code: define any functions first, then put runtime logic in `BE
 ## Available Packages
 Standard AWK (gawk) is available. No additional packages are pre-installed.
 
+## Command-line arguments
+Arguments passed to your script are available in AWK as `ARGC` (count) and `ARGV` (with `ARGV[0]` as the program name; your arguments in `ARGV[1]`, `ARGV[2]`, …). Use them in a `BEGIN` block and then set `ARGC = 1` so AWK does not try to open those strings as input files:
+
+```awk
+BEGIN {
+  for (i = 1; i < ARGC; i++)
+    print ARGV[i]
+  ARGC = 1
+}
+```
+
+## Stdin
+When there are no input files (or after you set `ARGC = 1`), AWK reads from stdin. Use a pattern–action rule to process each line. To echo lines use `{ print }` or `{ print $0 }`. For uppercase output (gawk), use `toupper()`:
+
+```awk
+{ print toupper($0) }
+```
+
 ## Common Patterns
 - Print: `print "message"` or `print("message")`
 - String concatenation: `"Hello" " " "World"` or `"Hello" " " name`
@@ -70,9 +88,10 @@ BEGIN {
 
 ## Caveats
 - AWK is primarily designed for text processing with input streams
-- For fraglets without input, use BEGIN blocks (already in the file)
+- For fraglets without input, use `BEGIN` blocks (already in the file)
+- When using `ARGV` for arguments, set `ARGC = 1` in `BEGIN` so extra args are not treated as input files
 - String concatenation is done by placing strings next to each other
 - Arrays are associative (can use strings as indices)
 - Variables don't need declaration
-- Field variables (`$1`, `$2`, etc.) are only meaningful when processing input
+- Field variables (`$0`, `$1`, `$2`, etc.) are only meaningful when processing input lines
 
