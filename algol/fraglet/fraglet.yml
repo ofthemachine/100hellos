@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for ALGOL 60 (jff-algol) container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.alg
+  match_start: begin
+  match_end: end
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
