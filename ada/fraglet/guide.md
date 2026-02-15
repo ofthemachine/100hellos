@@ -20,7 +20,9 @@ Write valid Ada statements. Your fragment becomes the main procedure body. Your 
 
 ## Available Packages
 The template includes:
-- `Ada.Text_IO` - Text input/output operations (Put_Line, Get_Line, etc.)
+- `Ada.Text_IO` - Text input/output operations (Put_Line, Get_Line, End_Of_File, etc.)
+- `Ada.Characters.Handling` - Character/string case (e.g. `To_Upper`) for stdin processing
+- `Ada.Command_Line` - Command-line arguments (`Argument_Count`, `Argument (I)`)
 
 Standard Ada library packages are available:
 - `Ada.Text_IO` - Text I/O
@@ -37,6 +39,8 @@ Standard Ada library packages are available:
 - Arrays: `Arr : array (1..10) of Integer;`
 - Loops: `for I in 1..10 loop ... end loop;`
 - Conditionals: `if X > 0 then ... end if;`
+- Stdin: `Get_Line (Line, Last)` in a `while not End_Of_File loop`; use `Ada.Characters.Handling.To_Upper` for uppercase.
+- Command-line args: `Ada.Command_Line.Argument_Count`, `Ada.Command_Line.Argument (I)` (I from 1 to Argument_Count).
 
 ## Examples
 ```ada
