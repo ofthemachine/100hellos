@@ -4,7 +4,8 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/hello-world.arnoldc
-  match: Hello World!
+  match_start: "IT'S SHOWTIME"
+  match_end: "YOU HAVE BEEN TERMINATED"
 
 guide: /guide.md
 

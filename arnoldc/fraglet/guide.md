@@ -13,11 +13,20 @@ ArnoldC
 - Case-sensitive
 - Statically typed (like Java)
 
-## Fragment Authoring
-Write valid ArnoldC statements. Your fragment becomes the script body. Your fragment will be compiled and executed.
+## Code format
+
+- **Full program.** Your fragment is a complete program: `IT'S SHOWTIME`, then your statements, then `YOU HAVE BEEN TERMINATED`.
+
+## Minimal fragment (copy and adapt)
+
+```arnoldc
+IT'S SHOWTIME
+  TALK TO THE HAND "Hello from fragment!"
+YOU HAVE BEEN TERMINATED
+```
 
 ## Key ArnoldC Concepts
-- **IT'S SHOWTIME** / **YOU HAVE BEEN TERMINATED**: Program start/end (already in template)
+- **IT'S SHOWTIME** / **YOU HAVE BEEN TERMINATED**: Program start/end
 - **TALK TO THE HAND**: Print output (`TALK TO THE HAND "message"`)
 - **HEY CHRISTMAS TREE** / **YOU SET US UP**: Declare integer variable (`HEY CHRISTMAS TREE varname` then `YOU SET US UP value`). **I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE** is for method arguments only.
 - **GET TO THE CHOPPER**: Assignment (`GET TO THE CHOPPER VAR`)
@@ -45,18 +54,33 @@ Write valid ArnoldC statements. Your fragment becomes the script body. Your frag
 
 ## Examples
 ```arnoldc
-TALK TO THE HAND "Hello, World!"
+IT'S SHOWTIME
+  TALK TO THE HAND "Hello, World!"
+YOU HAVE BEEN TERMINATED
+```
 
-TALK TO THE HAND "Math is easy!"
-TALK TO THE HAND "5 + 10 = 15"
+```arnoldc
+IT'S SHOWTIME
+  TALK TO THE HAND "Math is easy!"
+  TALK TO THE HAND "5 + 10 = 15"
+YOU HAVE BEEN TERMINATED
+```
 
-TALK TO THE HAND "Arnold says hello!"
-TALK TO THE HAND "Hasta la vista, baby!"
+```arnoldc
+IT'S SHOWTIME
+  HEY CHRISTMAS TREE sum
+  YOU SET US UP 0
+  GET TO THE CHOPPER sum
+  HERE IS MY INVITATION 5
+  GET UP 10
+  ENOUGH TALK
+  TALK TO THE HAND sum
+YOU HAVE BEEN TERMINATED
 ```
 
 ## Caveats
 - **Stdin**: Integer only. Use `GET YOUR ASS TO MARS var`, `DO IT NOW`, then `I WANT TO ASK YOU A BUNCH OF QUESTIONS AND I WANT TO HAVE THEM ANSWERED IMMEDIATELY` to read one integer into `var`. No string/line stdin.
-- **Args**: N/A (ArnoldC has no documented argv; use stdin or hardcoded values).
+- ArnoldC has no documented argv; use stdin or hardcoded values for input.
 - Fragments must be valid ArnoldC that compiles without errors
 - Variables must be declared before use (`HEY CHRISTMAS TREE varname` then `YOU SET US UP value`)
 - Assignment requires the full `GET TO THE CHOPPER ... ENOUGH TALK` pattern
@@ -66,11 +90,11 @@ TALK TO THE HAND "Hasta la vista, baby!"
 - **GET TO THE CHOPPER** - Always end assignments with `ENOUGH TALK`
 
 ## Pro Tips
-- **IT'S SHOWTIME** - Your program starts here (already in template)
+- **IT'S SHOWTIME** - Program start
 - **TALK TO THE HAND** - The only way to output (because Arnold said so)
 - **GET TO THE CHOPPER** - For all assignments (because helicopters are cool)
 - **STICK AROUND** - For loops (because Arnold wants you to stay)
-- **YOU HAVE BEEN TERMINATED** - Your program ends here (already in template)
+- **YOU HAVE BEEN TERMINATED** - Program end
 
 **Hasta la vista, baby!** (That's Spanish for "see you later" - Arnold's favorite phrase)
 

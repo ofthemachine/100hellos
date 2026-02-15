@@ -20,27 +20,33 @@ echo "Testing fraglet examples from guide.md..."
 
 # Example 1: Simple output
 cat > "$tmp" <<'EOF'
-TALK TO THE HAND "Hello from fragment!"
+IT'S SHOWTIME
+  TALK TO THE HAND "Hello from fragment!"
+YOU HAVE BEEN TERMINATED
 EOF
 verify_fraglet "Hello from fragment!"
 
 # Example 2: Multiple lines
 cat > "$tmp" <<'EOF'
-TALK TO THE HAND "Arnold says hello!"
-TALK TO THE HAND "Hasta la vista, baby!"
+IT'S SHOWTIME
+  TALK TO THE HAND "Arnold says hello!"
+  TALK TO THE HAND "Hasta la vista, baby!"
+YOU HAVE BEEN TERMINATED
 EOF
 verify_fraglet "Arnold says hello!"
 verify_fraglet "Hasta la vista"
 
 # Example 3: Math (5 + 10)
 cat > "$tmp" <<'EOF'
-HEY CHRISTMAS TREE sum
-YOU SET US UP 0
-GET TO THE CHOPPER sum
-HERE IS MY INVITATION 5
-GET UP 10
-ENOUGH TALK
-TALK TO THE HAND sum
+IT'S SHOWTIME
+  HEY CHRISTMAS TREE sum
+  YOU SET US UP 0
+  GET TO THE CHOPPER sum
+  HERE IS MY INVITATION 5
+  GET UP 10
+  ENOUGH TALK
+  TALK TO THE HAND sum
+YOU HAVE BEEN TERMINATED
 EOF
 verify_fraglet "15"
 
