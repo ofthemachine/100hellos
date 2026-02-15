@@ -1,9 +1,8 @@
 # ash Fraglet Guide
 
-## Code format (what you send to run)
+## Code format
 
-- **Fragment only.** Your code replaces the template line that contains `Hello World!` and can be one or more lines of valid ash.
-- **MCP run tool:** code-only; no stdin, no args. `$1`, `$*`, and `read` are empty/unavailable. Use literals and variables. For CLI with stdin/args, see Caveats.
+- **Fragment.** One or more lines of valid ash.
 
 ## Minimal fragment (copy and adapt)
 
@@ -24,7 +23,7 @@ ash (Almquist Shell) - POSIX-compliant shell
 - No arrays (unlike bash); limited built-ins
 
 ## Fragment Authoring
-Write valid ash commands. Your fragment is injected at the point where `Hello World!` appears (replace the echo or add more commands).
+Write valid ash commands.
 
 ## Available Commands
 Standard POSIX utilities are available:
@@ -76,7 +75,7 @@ echo "Current date: $DATE"
 ```
 
 ## Caveats
-- **MCP:** No stdin or args; use literals/variables. CLI: stdin and `$*` work when running via fragletc with a pipe or args.
+- Stdin and `$*` work when the script is run with a pipe or arguments.
 - ash is a minimal shell - fewer features than bash
 - No arrays (use space-separated strings instead)
 - Limited arithmetic expansion (may need `expr`)
