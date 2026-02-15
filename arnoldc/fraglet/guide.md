@@ -19,7 +19,7 @@ Write valid ArnoldC statements. Your fragment becomes the script body. Your frag
 ## Key ArnoldC Concepts
 - **IT'S SHOWTIME** / **YOU HAVE BEEN TERMINATED**: Program start/end (already in template)
 - **TALK TO THE HAND**: Print output (`TALK TO THE HAND "message"`)
-- **I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE**: Variable declaration
+- **HEY CHRISTMAS TREE** / **YOU SET US UP**: Declare integer variable (`HEY CHRISTMAS TREE varname` then `YOU SET US UP value`). **I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE** is for method arguments only.
 - **GET TO THE CHOPPER**: Assignment (`GET TO THE CHOPPER VAR`)
 - **HERE IS MY INVITATION**: Set value (`HERE IS MY INVITATION "value"`)
 - **ENOUGH TALK**: End assignment
@@ -30,17 +30,18 @@ Write valid ArnoldC statements. Your fragment becomes the script body. Your frag
 - **CONSIDER THAT A DIVORCE**: Modulo (`CONSIDER THAT A DIVORCE 3`)
 - **YOU ARE NOT YOU YOU ARE ME**: Equality comparison
 - **LET OFF SOME STEAM BENNET**: Greater than
-- **KNOCK KNOCK**: If statement (`KNOCK KNOCK ... WHO IS THERE? ...`)
-- **BULLSHIT**: Else (`BULLSHIT ... YOU HAVE NO RESPECT FOR LOGIC`)
+- **BECAUSE I'M GOING TO SAY PLEASE**: If (`BECAUSE I'M GOING TO SAY PLEASE value` then statements then `YOU HAVE NO RESPECT FOR LOGIC`)
+- **BULLSHIT**: Else (between if and YOU HAVE NO RESPECT FOR LOGIC)
 - **STICK AROUND**: While loop (`STICK AROUND ... CHILL`)
 
 ## Common Patterns
 - Print: `TALK TO THE HAND "message"`
-- Variable: `I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE VAR`
-- Assignment: `GET TO THE CHOPPER VAR\nHERE IS MY INVITATION 42\nENOUGH TALK`
-- Math: `GET TO THE CHOPPER RESULT\nHERE IS MY INVITATION 5\nGET UP 10\nENOUGH TALK`
-- If/else: `KNOCK KNOCK ... WHO IS THERE? ... BULLSHIT ... YOU HAVE NO RESPECT FOR LOGIC`
-- Loop: `STICK AROUND ... CHILL`
+- Variable: `HEY CHRISTMAS TREE var` then `YOU SET US UP initialValue`
+- Assignment: `GET TO THE CHOPPER var` then `HERE IS MY INVITATION value` (and optional ops) then `ENOUGH TALK`
+- Math: `GET TO THE CHOPPER result` then `HERE IS MY INVITATION 5` then `GET UP 10` then `ENOUGH TALK`
+- Stdin (integer): declare var, then `GET YOUR ASS TO MARS var`, `DO IT NOW`, `I WANT TO ASK YOU A BUNCH OF QUESTIONS AND I WANT TO HAVE THEM ANSWERED IMMEDIATELY`, then use var.
+- If/else: `BECAUSE I'M GOING TO SAY PLEASE value` then statements, optional `BULLSHIT` and else block, then `YOU HAVE NO RESPECT FOR LOGIC`
+- Loop: `STICK AROUND value` then statements then `CHILL`
 
 ## Examples
 ```arnoldc
@@ -54,8 +55,10 @@ TALK TO THE HAND "Hasta la vista, baby!"
 ```
 
 ## Caveats
+- **Stdin**: Integer only. Use `GET YOUR ASS TO MARS var`, `DO IT NOW`, then `I WANT TO ASK YOU A BUNCH OF QUESTIONS AND I WANT TO HAVE THEM ANSWERED IMMEDIATELY` to read one integer into `var`. No string/line stdin.
+- **Args**: N/A (ArnoldC has no documented argv; use stdin or hardcoded values).
 - Fragments must be valid ArnoldC that compiles without errors
-- Variables must be declared before use (`I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE`)
+- Variables must be declared before use (`HEY CHRISTMAS TREE varname` then `YOU SET US UP value`)
 - Assignment requires the full `GET TO THE CHOPPER ... ENOUGH TALK` pattern
 - Use `TALK TO THE HAND` for output (not `print` or `System.out.println`)
 - Remember: This is a REAL language (just with Arnold quotes!)
