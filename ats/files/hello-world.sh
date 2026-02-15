@@ -10,6 +10,6 @@
 # Run it
 
 cd /hello-world
-patscc -o hello_world hello-world.dats
-./hello_world
+patscc -o hello_world hello-world.dats ats_runtime_memalloc.c -latslib
+./hello_world "$@"
 

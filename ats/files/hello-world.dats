@@ -1,3 +1,6 @@
+#include "share/atspre_staload.hats"
+#include "share/atspre_staload_libats_ML.hats"
+
 // A perfunctory check of species. Assumed to be true for the operator.
 fun is_human (): bool = true
 
