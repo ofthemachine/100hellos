@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-apl --OFF -s -f hello-world.apl
+cd /hello-world
+apl --OFF -s -f hello-world.apl -- "$@"
