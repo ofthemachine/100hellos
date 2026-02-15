@@ -1,27 +1,30 @@
 # ash Fraglet Guide
 
+## Code format (what you send to run)
+
+- **Fragment only.** Your code replaces the template line that contains `Hello World!` and can be one or more lines of valid ash.
+- **MCP run tool:** code-only; no stdin, no args. `$1`, `$*`, and `read` are empty/unavailable. Use literals and variables. For CLI with stdin/args, see Caveats.
+
+## Minimal fragment (copy and adapt)
+
+```ash
+echo "Hello from fragment!"
+```
+
 ## Language Version
 ash (Almquist Shell) - POSIX-compliant shell
 
 ## Execution Model
-- Interpreted shell script
-- Code executes directly from source
-- Scripts run line-by-line from top to bottom
-- Uses shebang `#!/usr/bin/env ash` for execution (explicit - Alpine uses busybox)
+- Interpreted shell script; runs line-by-line. Uses shebang `#!/usr/bin/env ash` (Alpine/busybox).
 
 ## Key Characteristics
 - POSIX-compliant shell (subset of sh)
-- Case-sensitive
-- Variables: `VAR=value` (no spaces around `=`)
-- Command substitution: `` `command` `` or `$(command)`
-- String interpolation: `"$VAR"` or `"${VAR}"`
-- No arrays (unlike bash)
-- Limited built-in features compared to bash
+- Case-sensitive; variables: `VAR=value` (no spaces around `=`)
+- Command substitution: `` `command` `` or `$(command)`; interpolation: `"$VAR"`
+- No arrays (unlike bash); limited built-ins
 
 ## Fragment Authoring
-Write valid ash shell commands. Your fragment becomes the script body. The fragment code will execute as part of the shell script.
-
-Fragments are injected at the point where `Hello World!` appears in the echo statement, so you can replace the echo argument or add additional commands.
+Write valid ash commands. Your fragment is injected at the point where `Hello World!` appears (replace the echo or add more commands).
 
 ## Available Commands
 Standard POSIX utilities are available:
@@ -73,6 +76,7 @@ echo "Current date: $DATE"
 ```
 
 ## Caveats
+- **MCP:** No stdin or args; use literals/variables. CLI: stdin and `$*` work when running via fragletc with a pipe or args.
 - ash is a minimal shell - fewer features than bash
 - No arrays (use space-separated strings instead)
 - Limited arithmetic expansion (may need `expr`)
