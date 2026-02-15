@@ -4,7 +4,8 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/hello.adb
-  match: Hello World!
+  match_start: with
+  match_end: end
 
 guide: /guide.md
 
