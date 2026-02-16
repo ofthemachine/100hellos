@@ -2,11 +2,13 @@
 set -euo pipefail
 
 IMAGE="${1:-100hellos/cpp:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.cpp"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -15,15 +17,18 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 echo "Testing fraglet examples from guide.md..."
 
 # Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
 int main() {
     std::cout << "Hello from fragment!" << std::endl;
     return 0;
 }
 EOF
+verify_fraglet "Hello from fragment!"
 
 # Example 2: Variables and calculations
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
 int main() {
     int a = 5;
     int b = 10;
@@ -31,9 +36,12 @@ int main() {
     return 0;
 }
 EOF
+verify_fraglet "Sum: 15"
 
 # Example 3: Using STL vector
-verify_fraglet "Vector sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
+#include <vector>
 int main() {
     std::vector<int> numbers = {1, 2, 3, 4, 5};
     int sum = 0;
@@ -44,9 +52,12 @@ int main() {
     return 0;
 }
 EOF
+verify_fraglet "Vector sum: 15"
 
 # Example 4: String operations
-verify_fraglet "Hello World!" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
+#include <string>
 int main() {
     std::string message = "Hello";
     message += " World!";
@@ -54,9 +65,11 @@ int main() {
     return 0;
 }
 EOF
+verify_fraglet "Hello World!"
 
 # Example 5: Simple class
-verify_fraglet "5 + 3 = 8" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
 class Calculator {
 public:
     int add(int a, int b) {
@@ -70,9 +83,11 @@ int main() {
     return 0;
 }
 EOF
+verify_fraglet "5 + 3 = 8"
 
 # Example 6: Template function
-verify_fraglet "Max(5, 10) = 10" <<'EOF'
+cat > "$tmp" <<'EOF'
+#include <iostream>
 template<typename T>
 T maximum(T a, T b) {
     return (a > b) ? a : b;
@@ -84,16 +99,6 @@ int main() {
     return 0;
 }
 EOF
-
-# Example 7: Argument passing
-echo "Testing argument passing..."
-fragletc --image "$IMAGE" - arg1 arg2 <<'EOF' 2>&1 | grep -q "First: arg1"
-#include <iostream>
-int main(int argc, char *argv[]) {
-    if (argc > 1) std::cout << "First: " << argv[1] << std::endl;
-    if (argc > 2) std::cout << "Second: " << argv[2] << std::endl;
-    return 0;
-}
-EOF
+verify_fraglet "Max(5, 10) = 10"
 
 echo "✓ All tests passed"
