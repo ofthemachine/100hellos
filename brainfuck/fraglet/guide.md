@@ -25,12 +25,18 @@ Write valid Brainfuck code. Your fragment becomes the script body. The fragment 
 - `+` - Increment current cell
 - `-` - Decrement current cell
 - `.` - Output current cell as ASCII character
-- `,` - Input character to current cell
+- `,` - Input character to current cell (reads one byte from stdin)
 - `[` - Start loop (if current cell is 0, jump past matching `]`)
 - `]` - End loop (if current cell is not 0, jump back to matching `[`)
 
+## Stdin and arguments
+- **Stdin**: Use `,` to read one byte at a time. Echo one character: `,.` (read, then output). Echo until EOF: `,[.,]` (loop: read, output while non-zero; EOF typically gives 0).
+- **Arguments**: Not supported. Standard Brainfuck has no concept of command-line arguments; the language only has the tape, stdin, and stdout.
+
 ## Common Patterns
-- Output: `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.` (prints 'A')
+- Output: `++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.` (prints 'A' = 65)
+- Stdin echo (one char): `,.`
+- Stdin echo (until EOF): `,[.,]`
 - Loop: `[>+<-]` (move value from current cell to next)
 - Clear cell: `[-]` (decrement until zero)
 - Copy: `[>+>+<<-]>>[<<+>>-]` (copy current cell to next two cells)

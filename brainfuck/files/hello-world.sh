@@ -4,9 +4,5 @@ set -e
 
 cd /hello-world
 
-# If fraglet exists, execute it directly; otherwise use default
-if [ -s /FRAGLET ]; then
-    bf /FRAGLET
-else
-    bf hello-world.bf
-fi
+# Entrypoint has already injected fraglet into hello-world.bf when mounted; just run it.
+exec bf hello-world.bf
