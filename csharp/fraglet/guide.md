@@ -28,6 +28,10 @@ The template includes common using directives. You can use:
 - `System.Text` - Text encoding
 - `System.Threading.Tasks` - Async/await support
 
+## Command-line arguments and stdin
+- **Arguments**: In top-level statements, `args` (string[]) is in scope. With a `Main` method, use `Main(string[] args)`. Example: `Console.WriteLine("Args: " + string.Join(" ", args));`
+- **Stdin**: Use `Console.In`, `Console.ReadLine()` (one line), or `Console.In.ReadToEnd()` (entire input).
+
 ## Common Patterns
 - Print: `Console.WriteLine("message");`
 - Variables: `int x = 10;` or `var x = 10;`
@@ -95,6 +99,7 @@ Console.WriteLine($"Even numbers: {string.Join(", ", evens)}");
 ```
 
 ## Caveats
+- When using top-level statements, `args` is only in scope when the fragment is run as the main program (e.g. via fraglet); it may be empty if no arguments are passed.
 - Fragments must be valid C# code that compiles
 - Top-level statements are available (C# 9.0+), so you don't need a `Main` method for simple code
 - **Important**: Top-level statements must precede class declarations. If you define classes, you must use a `Main` method instead of top-level statements
