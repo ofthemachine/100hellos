@@ -1,7 +1,6 @@
 #!/bin/bash
-# verify.sh - Smoke tests for Scala fraglet support
-# Uses temp files for code (fragletc does not read code from stdin).
-# Contract: default run, guide examples, stdin, args.
+# verify.sh - Smoke tests for Scala fraglet support (base + guide examples).
+# Contract: default run, guide examples. Stdin/args in verify_stdin.sh / verify_args.sh.
 
 set -euo pipefail
 
@@ -53,27 +52,5 @@ object Main {
 }
 EOF
 verify_fraglet "Sum of squares"
-
-# Stdin test
-echo "Testing stdin..."
-cat > "$tmp" <<'EOF'
-object Main {
-  def main(args: Array[String]): Unit = {
-    scala.io.Source.stdin.getLines().foreach(line => println(line.toUpperCase))
-  }
-}
-EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
-
-# Argument passing
-echo "Testing argument passing..."
-cat > "$tmp" <<'EOF'
-object Main {
-  def main(args: Array[String]): Unit = {
-    println("Args: " + args.mkString(" "))
-  }
-}
-EOF
-verify_fraglet "Args: foo bar baz" foo bar baz
 
 echo "✓ All tests passed"
