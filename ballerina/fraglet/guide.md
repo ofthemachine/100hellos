@@ -27,6 +27,31 @@ This approach enables teaching the full range of Ballerina features.
 - `ballerina/io` - Input/output operations (already imported)
 - Standard library modules available via `import ballerina/<module>;`
 
+## Command-line arguments
+Arguments passed to your script are available as rest parameters in `main`. Use `public function main(string... args)` and iterate with `foreach`:
+
+```ballerina
+public function main(string... args) {
+    foreach string arg in args {
+        io:println(arg);
+    }
+}
+```
+
+## Stdin
+Use `io:readln()` from the `ballerina/io` module to read a line from stdin. Some versions require a prompt string (use `io:readln("")` for none). It returns `string?` (nil at EOF). For line-by-line processing, loop until `readln()` returns nil:
+
+```ballerina
+public function main() {
+    string? line = io:readln("");
+    if line is string {
+        io:println(line);
+    }
+}
+```
+
+For uppercase output, use `string:toUpperAscii()` from the `ballerina/lang.string` module where available.
+
 ## Common Patterns
 - Print: `io:println("message");`
 - Variables: `int x = 5;` or `var x = 5;`
@@ -85,9 +110,10 @@ public function main() {
 ```
 
 ## Caveats
-- Fragment must include `public function main() { ... }`
+- Fragment must include `public function main()` or `public function main(string... args)`
 - Code must be valid Ballerina syntax
 - Statements end with semicolons
 - Type annotations are optional but recommended
 - String concatenation uses `+` operator
 - Numbers must be converted to strings for output: `value.toString()`
+- `io:readln()` returns `string?`; check for nil when reading multiple lines or at EOF

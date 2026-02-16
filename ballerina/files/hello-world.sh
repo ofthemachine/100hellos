@@ -2,5 +2,5 @@
 
 cd /hello-world
 source /home/human/.sdkman/bin/sdkman-init.sh
-ballerina build hello-world.bal
-ballerina run hello-world.jar
+ballerina build hello-world.bal >/dev/null
+ballerina run hello-world.jar "$@"
