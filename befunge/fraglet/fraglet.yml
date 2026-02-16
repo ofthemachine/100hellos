@@ -1,0 +1,13 @@
+# fraglet-entrypoint configuration for Befunge-93 container
+# Whole-file replacement: fragment is the entire program (no match markers).
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.bf
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
