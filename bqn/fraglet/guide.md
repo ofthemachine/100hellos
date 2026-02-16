@@ -22,17 +22,22 @@ Write valid BQN statements or expressions. Your fragment becomes the script body
 
 ## Available Libraries
 Standard BQN library is available. System functions (prefixed with •) provide built-in functionality:
-- `•Out` - Output to stdout
-- `•Show` - Show value representation
+- `•Out` - Print a **string** to stdout (with trailing newline). Argument must be a string; use `•Repr` or `•Fmt` for numbers/arrays.
+- `•Show` - Display a value (any type) in a readable form.
+- `•Repr` - Convert a value to a string representation (for use with `•Out`).
 - `•Type` - Get type of value
 - And many more system functions
 
+## Command-line arguments and stdin
+- **Arguments**: `•args` is a list of strings passed to the script (e.g. from `fragletc ... script.bqn foo bar`). Join for display (when non-empty): `1↓∾{" "∾𝕩}¨•args`. Safe for any `•args`: `•Repr •args`.
+- **Stdin**: Read via `•file.Lines "/dev/stdin"` (returns list of lines). First line: `⊑•file.Lines "/dev/stdin"`. Entire stdin as one string: `∾´•file.Lines "/dev/stdin"` (fails on empty input).
+
 ## Common Patterns
-- Output: `•Out "message"` or `•Out value`
+- Output: `•Out "message"` for strings; for numbers or arrays use `•Out (•Repr value)` (or `•Show value` for display).
 - Strings: `"Hello, World!"`
 - Numbers: `42` or `3.14`
-- Arrays: `⟨1, 2, 3⟩` or `1‿2‿3` (list notation)
-- Arithmetic: `+`, `-`, `×`, `÷`
+- Arrays: `⟨1, 2, 3⟩` or `1‿2‿3` (list notation); range 0..n-1: `↕n`
+- Arithmetic: `+`, `-`, `×`, `÷` (use `÷` not `/` for division)
 - Functions: `{𝕩 + 1}` (explicit) or `+⟜1` (tacit)
 - Modifiers: `´` (fold), `⌜` (table), `¨` (each)
 
@@ -69,9 +74,11 @@ fib ← {𝕩∾+´¯2↑𝕩}⍟9 ⟨0,1⟩
 ```
 
 ## Caveats
+- `•args` is empty when the script is run with no arguments; joining (e.g. `" "⊸∾´•args`) on empty list causes an error—guard with `0<≠•args` if needed.
+- Stdin via `•file.Lines "/dev/stdin"` is empty when nothing is piped; `⊑` on empty list errors—only read when input is guaranteed.
 - Fragments must be valid BQN that executes without errors
+- **•Out accepts only strings.** Passing a number or array (e.g. `•Out 42`) errors. Always use `•Out (•Repr value)` or `•Show value` for non-strings.
 - Use `•Out` for output (not `print` or similar)
-- Use `•Repr` to convert values to strings for output
 - BQN does not use semicolons for statement separation - each statement on its own line
 - Array notation uses `⟨⟩` for lists or `‿` for linking
 - System functions require the bullet prefix (•)
