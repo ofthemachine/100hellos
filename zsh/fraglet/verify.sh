@@ -1,14 +1,16 @@
 #!/bin/bash
-# verify.sh - Smoke tests for zsh fraglet support
+# verify.sh - Smoke tests for zsh fraglet support (base + guide examples).
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/zsh:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.zsh"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -16,83 +18,83 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'END'
 echo "Hello from fragment!"
-EOF
+END
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'END'
 NAME="Alice"
 echo "Hello, $NAME!"
-EOF
+END
+verify_fraglet "Hello, Alice"
 
-# Example 3: Arithmetic
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'END'
 A=5
 B=10
 SUM=$((A + B))
 echo "Sum: $SUM"
-EOF
+END
+verify_fraglet "Sum: 15"
 
-# Example 4: Arrays
-verify_fraglet "Fruit: apple" <<'EOF'
+cat > "$tmp" <<'END'
 FRUITS=("apple" "banana" "cherry")
 for fruit in "${FRUITS[@]}"; do
     echo "Fruit: $fruit"
 done
-EOF
+END
+verify_fraglet "Fruit: apple"
 
-# Example 5: Conditionals
-verify_fraglet "Testing mode" <<'EOF'
+cat > "$tmp" <<'END'
 if [[ "test" == "test" ]]; then
     echo "Testing mode"
 else
     echo "Normal mode"
 fi
-EOF
+END
+verify_fraglet "Testing mode"
 
-# Example 6: Functions
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'END'
 greet() {
     local name="$1"
     echo "Hello, $name!"
 }
 
 greet "World"
-EOF
+END
+verify_fraglet "Hello, World!"
 
-# Example 7: Command substitution
-verify_fraglet "Current date:" <<'EOF'
+cat > "$tmp" <<'END'
 DATE=$(date)
 echo "Current date: $DATE"
-EOF
+END
+verify_fraglet "Current date:"
 
-# Example 8: Arithmetic loops
-verify_fraglet "Count: 1" <<'EOF'
+cat > "$tmp" <<'END'
 for i in {1..5}; do
     echo "Count: $i"
 done
-EOF
+END
+verify_fraglet "Count: 1"
 
-# Example 9: Associative arrays
-verify_fraglet "Red: #FF0000" <<'EOF'
+cat > "$tmp" <<'END'
 typeset -A colors
 colors[red]="#FF0000"
 colors[green]="#00FF00"
 echo "Red: ${colors[red]}"
-EOF
+END
+verify_fraglet "Red: #FF0000"
 
-# Example 10: Parameter expansion
-verify_fraglet "Value: default" <<'EOF'
+cat > "$tmp" <<'END'
 VAR=""
 echo "Value: ${VAR:-default}"
-EOF
+END
+verify_fraglet "Value: default"
 
-# Example 11: String manipulation
-verify_fraglet "World" <<'EOF'
+cat > "$tmp" <<'END'
 TEXT="Hello World"
 echo "${TEXT#Hello }"
-EOF
+END
+verify_fraglet "World"
 
 echo "✓ All tests passed"
