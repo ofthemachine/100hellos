@@ -4,7 +4,8 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/hello-world.dart
-  match: Hello World!
+  match_start: BEGIN_FRAGLET
+  match_end: END_FRAGLET
 
 guide: /guide.md
 
