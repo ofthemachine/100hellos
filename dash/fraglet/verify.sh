@@ -1,14 +1,16 @@
 #!/bin/bash
-# verify.sh - Smoke tests for dash fraglet support
+# verify.sh - Smoke tests for dash fraglet support (base + guide examples).
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/dash:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.dash"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -16,43 +18,42 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 echo "Hello from fragment!"
 EOF
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
 NAME="Alice"
 echo "Hello, $NAME!"
 EOF
+verify_fraglet "Hello, Alice"
 
-# Example 3: Arithmetic
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 A=5
 B=10
 SUM=$((A + B))
 echo "Sum: $SUM"
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 4: Loops
-verify_fraglet "Count: 1" <<'EOF'
+cat > "$tmp" <<'EOF'
 for i in 1 2 3 4 5; do
     echo "Count: $i"
 done
 EOF
+verify_fraglet "Count: 1"
 
-# Example 5: Conditionals
-verify_fraglet "Testing mode" <<'EOF'
+cat > "$tmp" <<'EOF'
 if [ "test" = "test" ]; then
     echo "Testing mode"
 else
     echo "Normal mode"
 fi
 EOF
+verify_fraglet "Testing mode"
 
-# Example 6: Functions
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 greet() {
     local name="$1"
     echo "Hello, $name!"
@@ -60,29 +61,29 @@ greet() {
 
 greet "World"
 EOF
+verify_fraglet "Hello, World!"
 
-# Example 7: Command substitution
-verify_fraglet "Current date:" <<'EOF'
+cat > "$tmp" <<'EOF'
 DATE=$(date)
 echo "Current date: $DATE"
 EOF
+verify_fraglet "Current date:"
 
-# Example 8: Multiple statements
-verify_fraglet "First line" <<'EOF'
+cat > "$tmp" <<'EOF'
 echo "First line"
 echo "Second line"
 echo "Third line"
 EOF
+verify_fraglet "First line"
 
-# Example 9: Arithmetic in loops (using seq)
-verify_fraglet "Number: 1" <<'EOF'
+cat > "$tmp" <<'EOF'
 for i in $(seq 1 5); do
     echo "Number: $i"
 done
 EOF
+verify_fraglet "Number: 1"
 
-# Example 10: Nested conditionals
-verify_fraglet "Greeting received" <<'EOF'
+cat > "$tmp" <<'EOF'
 if [ -n "hello" ]; then
     if [ "hello" = "hello" ]; then
         echo "Greeting received"
@@ -93,5 +94,6 @@ else
     echo "No argument provided"
 fi
 EOF
+verify_fraglet "Greeting received"
 
 echo "✓ All tests passed"

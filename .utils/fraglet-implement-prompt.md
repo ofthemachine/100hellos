@@ -4,6 +4,8 @@
 
 You are implementing fraglet support for the **{LANGUAGE}** language container in the 100hellos project. Fraglets enable code fragment execution within language containers.
 
+**Capabilities**: Determined by script presence. `verify.sh` = base injectable, `verify_stdin.sh` = stdin support, `verify_args.sh` = arg support. Create only the scripts the language supports; no lists to maintain. `.utils/fraglet-status.sh capabilities` shows the derived table.
+
 ## Task
 
 Implement complete fraglet support for {LANGUAGE} by:
@@ -13,9 +15,9 @@ Implement complete fraglet support for {LANGUAGE} by:
 3. Creating `fraglet/guide.md` documentation
 4. Modifying the hello-world source file to include injection markers
 5. Updating the Dockerfile to use fraglet-entrypoint
-6. Creating `fraglet/verify.sh` that tests all examples from guide.md
+6. Creating verification scripts per capability (see below)
 7. Ensuring the container runs correctly without a fraglet (default "Hello World!" output)
-8. **Rebuilding the image and running verify.sh until it passes** (required for completion)
+8. **Rebuilding the image and running all applicable verify scripts until they pass** (required for completion)
 
 **CRITICAL reminders**:
 - **DO NOT change the base image** unless you verify it doesn't already have fraglet-entrypoint in its DAG
@@ -23,8 +25,22 @@ Implement complete fraglet support for {LANGUAGE} by:
 - Rebuild the image between steps using `make {LANGUAGE}` (especially after Dockerfile changes or file modifications)
 - The implementation is **only complete** when:
   - ✅ The image builds successfully
-  - ✅ `verify.sh` passes all tests
-- If verify.sh fails, fix issues, rebuild, and test again until it passes
+  - ✅ `verify.sh` passes (base + guide examples)
+  - ✅ `verify_stdin.sh` passes if the language supports stdin (otherwise do not create it)
+  - ✅ `verify_args.sh` passes if the language supports args (otherwise do not create it)
+- If any verify script fails, fix issues, rebuild, and test again until it passes
+
+## Verification contract (split by capability)
+
+Verification is split into three scripts. Presence of a script = that capability is claimed; running it verifies it. Omit a script when the language/injection model cannot support that capability; capabilities are derived from the filesystem, no lists to update.
+
+1. **verify.sh** (base): **Default execution** — `docker run --rm "$IMAGE"` outputs expected hello (e.g. "Hello World!"). **Guide examples** — Every example from guide.md runs as a fraglet and produces expected output. Use a single temp file (e.g. `tmpdir=$(mktemp -d); tmp="$tmpdir/fraglet.$EXT"`); write each example to `$tmp`, run `fragletc --image "$IMAGE" "$tmp"`. No trap/rm; harness cleans up. Portable: use `mktemp -d` and a fixed filename inside it.
+
+2. **verify_stdin.sh** (optional): One test that pipes data in and checks output (e.g. `echo "hello" | fragletc --image "$IMAGE" "$tmp"` and grep for expected). Create only if the language/injection model can read stdin; if not, do **not** create this script.
+
+3. **verify_args.sh** (optional): One test that passes positional args and checks output (e.g. `fragletc --image "$IMAGE" "$tmp" foo bar baz` and grep expected). Create only if the language can receive args in the fragment; if not, do **not** create this script.
+
+Reference: `scala/fraglet/verify.sh`, `scala/fraglet/verify_stdin.sh`, `scala/fraglet/verify_args.sh`; `the-c-programming-language/fraglet/` (same pattern). See fraglet repo **TESTING.md** for the full contract.
 
 ## Reference Guidance
 
@@ -164,73 +180,38 @@ cd /hello-world
 
 This ensures scripts work correctly both with and without fraglet-entrypoint.
 
-### 6. Create verify.sh
+### 6. Create verification scripts (verify.sh + verify_stdin.sh + verify_args.sh when not N/A)
 
-Create `{LANGUAGE}/fraglet/verify.sh` that:
+Create `{LANGUAGE}/fraglet/verify.sh` for **base** (default execution + all guide.md examples). Create `verify_stdin.sh` and `verify_args.sh` only if the language supports them; if not, do **not** add the script. Capabilities are inferred from script presence.
 
-1. **Tests default execution** (no fraglet):
-   - Runs the container without providing a fraglet
-   - Verifies it outputs "Hello World!" (and any other expected output)
-   - Example: `docker run --rm <image> | grep -q "Hello World!"`
+**Important:** fragletc does not read code from stdin. Use a **temp file** for all runs: `tmpdir=$(mktemp -d); tmp="$tmpdir/fraglet.$EXT"`. Portable and no trap (harness cleans up).
 
-2. **Tests all examples from guide.md**:
-   - Test each example from the "Examples" section of guide.md
-   - Simple smoke tests: verify it compiles/runs and produces expected output
-   - Single-line assertions are sufficient (not comprehensive validation)
+**verify.sh** — Base only (no stdin/args tests here):
+- Default execution: `docker run --rm "$IMAGE" | grep -q "Hello World!"`
+- One block per guide example: `cat > "$tmp" <<'EOF' ... EOF` then `fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "$expected"`
+- Use a single `$tmp` and overwrite for each example. End with `echo "✓ All tests passed"`.
 
-**Recommended structure** (simple and readable):
-```bash
-#!/bin/bash
-set -euo pipefail
+**verify_stdin.sh** — Only if stdin is supported: write a fragment that reads stdin, then `echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"`. End with `echo "✓ stdin verified"`.
 
-IMAGE="${1:-100hellos/{LANGUAGE}:local}"
-
-# Helper: verify fraglet compiles and runs, output contains expected string
-verify_fraglet() {
-    local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
-}
-
-echo "Testing default execution..."
-docker run --rm "$IMAGE" | grep -q "Hello World!"
-
-echo "Testing fraglet examples from guide.md..."
-
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
-Put_Line ("Hello from fragment!");
-EOF
-
-# Example 2: Variables
-verify_fraglet "Sum:" <<'EOF'
-declare
-  A : Integer := 5;
-  B : Integer := 10;
-begin
-  Put_Line ("Sum: " & Integer'Image (A + B));
-end;
-EOF
-
-# ... continue for all examples from guide.md
-
-echo "✓ All tests passed"
-```
+**verify_args.sh** — Only if args are supported: write a fragment that prints args, then `fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"` (or equivalent). End with `echo "✓ args verified"`.
 
 **Key points:**
-- Use heredoc with "-" placeholder: `fragletc --image "$IMAGE" - <<'EOF' ... EOF`
-- Helper function makes tests readable and concise
-- Single-line assertions are fine (smoke tests, not comprehensive)
-- Priority: test all guide.md examples, not deep output validation
-- Some languages may need syntax adjustments (e.g., Ada declare blocks)
+- Set `EXT` to the script extension (e.g. from fraglet.yml codePath: `.py`, `.c`, `.scala`).
+- Portable temp: `tmpdir=$(mktemp -d)` and `tmp="$tmpdir/fraglet.$EXT"`. No `trap` or `rm`.
+- For multi-line code use heredocs: `cat > "$tmp" <<'EOF' ... EOF`.
+- Run scripts via `.utils/run-verify.sh {LANGUAGE}`, `.utils/run-verify.sh {LANGUAGE} stdin`, `.utils/run-verify.sh {LANGUAGE} args` (requires fragletc on PATH).
 
-**After creating verify.sh, rebuild and test:**
+**After creating scripts, rebuild and test:**
 ```bash
 make {LANGUAGE}
-chmod +x {LANGUAGE}/fraglet/verify.sh
-{LANGUAGE}/fraglet/verify.sh
+.utils/run-verify.sh {LANGUAGE}
+# If verify_stdin.sh exists:
+.utils/run-verify.sh {LANGUAGE} stdin
+# If verify_args.sh exists:
+.utils/run-verify.sh {LANGUAGE} args
 ```
 
-If verify.sh fails, fix issues, rebuild (`make {LANGUAGE}`), and test again. Repeat until it passes.
+No capability list to update—script presence is the source of truth.
 
 ## Reference Examples
 
@@ -247,9 +228,9 @@ If verify.sh fails, fix issues, rebuild (`make {LANGUAGE}`), and test again. Rep
 
 ## Verification
 
-**CRITICAL: verify.sh must pass AND image must build successfully before implementation is complete**
+**CRITICAL: Image must build AND all applicable verify scripts must pass before implementation is complete.**
 
-The implementation is NOT complete until both the image builds AND `verify.sh` runs successfully. You MUST test at each step:
+The implementation is NOT complete until the image builds and every verification script you added passes. You MUST test at each step:
 
 1. **After updating Dockerfile, rebuild and verify it builds:**
    ```bash
@@ -257,38 +238,33 @@ The implementation is NOT complete until both the image builds AND `verify.sh` r
    ```
    - **If the build fails, STOP and fix the Dockerfile**
    - **DO NOT proceed until the image builds successfully**
-   - Common issues: wrong base image, missing dependencies, syntax errors
 
 2. After creating/modifying files, rebuild the image:
    ```bash
    make {LANGUAGE}
    ```
 
-3. After modifying hello-world source files, rebuild:
+3. **After creating verification scripts, rebuild and run all applicable checks:**
    ```bash
    make {LANGUAGE}
+   .utils/run-verify.sh {LANGUAGE}
+   .utils/run-verify.sh {LANGUAGE} stdin    # only if verify_stdin.sh exists
+   .utils/run-verify.sh {LANGUAGE} args     # only if verify_args.sh exists
    ```
+   - **If any script fails, fix issues and rebuild; repeat until all pass**
+   - **DO NOT mark implementation as complete until every applicable verify script passes**
 
-4. **After creating verify.sh, rebuild and test:**
-   ```bash
-   make {LANGUAGE}
-   chmod +x {LANGUAGE}/fraglet/verify.sh
-   {LANGUAGE}/fraglet/verify.sh
-   ```
-   - **If verify.sh fails, fix the issues and rebuild: `make {LANGUAGE}`**
-   - **Repeat until verify.sh passes completely**
-   - **DO NOT mark implementation as complete until verify.sh passes**
-
-5. Verify detection:
+4. Verify detection:
    ```bash
    .utils/fraglet-status.sh enabled | grep {LANGUAGE}
+   .utils/fraglet-status.sh capabilities   # table is derived from script presence
    ```
 
 **The implementation is only complete when:**
-- ✅ The image builds successfully (`make {LANGUAGE}` completes without errors)
-- ✅ verify.sh passes all tests
-- ✅ Default execution works (no fraglet injection)
-- ✅ All guide.md examples work via fraglet injection
+- ✅ The image builds successfully
+- ✅ verify.sh passes (base + guide examples)
+- ✅ verify_stdin.sh passes if present (or omit it if the language doesn't support stdin)
+- ✅ verify_args.sh passes if present (or omit it if the language doesn't support args)
 
 ## Notes
 
