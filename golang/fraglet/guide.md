@@ -19,7 +19,7 @@ Go 1.21
 - Functions are first-class citizens
 
 ## Fragment Authoring
-Write valid Go code. Your fragment can define functions, types, and the `main()` function. Package and import declarations are already in place. Your fragment will be compiled and executed.
+Your fraglet is the full program below `package main`: include the `import` block and your code (functions, types, and `main()`). The only fixed line above the fraglet is `package main`. Your fraglet will be compiled and executed.
 
 ## Available Packages
 The template includes the standard library package:
@@ -49,69 +49,99 @@ Additional standard library packages can be imported as needed:
 - Channels: `ch := make(chan int)`
 
 ## Examples
+Each example is a complete fraglet (imports + code). `package main` sits above this content.
+
 ```go
 // Simple output
+import (
+	"fmt"
+)
+
 func main() {
-    fmt.Println("Hello from fragment!")
+	fmt.Println("Hello from fragment!")
 }
 
 // Variables and calculations
+import (
+	"fmt"
+)
+
 func main() {
-    a := 5
-    b := 10
-    fmt.Printf("Sum: %d\n", a+b)
+	a := 5
+	b := 10
+	fmt.Printf("Sum: %d\n", a+b)
 }
 
 // Functions
+import (
+	"fmt"
+)
+
 func add(a, b int) int {
-    return a + b
+	return a + b
 }
 
 func main() {
-    result := add(5, 10)
-    fmt.Printf("5 + 10 = %d\n", result)
+	result := add(5, 10)
+	fmt.Printf("5 + 10 = %d\n", result)
 }
 
 // Slices and loops
+import (
+	"fmt"
+)
+
 func main() {
-    numbers := []int{1, 2, 3, 4, 5}
-    sum := 0
-    for _, num := range numbers {
-        sum += num
-    }
-    fmt.Printf("Sum: %d\n", sum)
+	numbers := []int{1, 2, 3, 4, 5}
+	sum := 0
+	for _, num := range numbers {
+		sum += num
+	}
+	fmt.Printf("Sum: %d\n", sum)
 }
 
 // Structs and methods
+import (
+	"fmt"
+)
+
 type Person struct {
-    Name string
-    Age  int
+	Name string
+	Age  int
 }
 
 func (p Person) String() string {
-    return fmt.Sprintf("%s is %d years old", p.Name, p.Age)
+	return fmt.Sprintf("%s is %d years old", p.Name, p.Age)
 }
 
 func main() {
-    p := Person{Name: "Alice", Age: 30}
-    fmt.Println(p)
+	p := Person{Name: "Alice", Age: 30}
+	fmt.Println(p)
 }
 
 // Maps
+import (
+	"fmt"
+)
+
 func main() {
-    m := map[string]int{
-        "apple":  5,
-        "banana": 3,
-    }
-    fmt.Printf("Apples: %d\n", m["apple"])
+	m := map[string]int{
+		"apple":  5,
+		"banana": 3,
+	}
+	fmt.Printf("Apples: %d\n", m["apple"])
 }
 
 // String operations
+import (
+	"fmt"
+)
+
 func main() {
-    s := "Hello"
-    s += " World!"
-    fmt.Println(s)
-    fmt.Printf("Length: %d\n", len(s))
+	s := "Hello"
+	s += " World!"
+	fmt.Println(s)
+	fmt.Printf("Length: %d\n", len(s))
 }
 ```
 

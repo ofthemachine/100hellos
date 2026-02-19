@@ -1,9 +1,11 @@
 package main
 
-import "fmt"
-
 // BEGIN_FRAGLET
+import (
+	"fmt"
+)
+
 func main() {
-    fmt.Println("Hello World!")
+	fmt.Println("Hello World!")
 }
 // END_FRAGLET
