@@ -8,4 +8,4 @@ chmod +x hello-world.v
 # This transpiles the vlang program to C and also compiles it
 # This is the slickest transpilation + compilation combo I've seen so far
 ./hello-world.v
-./hello-world
+./hello-world "$@"

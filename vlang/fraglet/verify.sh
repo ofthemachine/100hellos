@@ -4,36 +4,37 @@
 set -euo pipefail
 
 IMAGE="${1:-100hellos/vlang:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.v"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
-docker run --rm "$IMAGE" | grep -q "Hello World!"
+docker run --rm "$IMAGE" 2>&1 | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     println('Hello from fragment!')
 }
 EOF
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables and calculations
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     a := 5
     b := 10
     println('Sum: ${a + b}')
 }
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 3: Functions
-verify_fraglet "5 + 10 = 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn add(a int, b int) int {
     return a + b
 }
@@ -43,9 +44,9 @@ fn main() {
     println('5 + 10 = ${result}')
 }
 EOF
+verify_fraglet "5 + 10 = 15"
 
-# Example 4: Arrays and loops
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     numbers := [1, 2, 3, 4, 5]
     mut sum := 0
@@ -55,9 +56,9 @@ fn main() {
     println('Sum: ${sum}')
 }
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 5: Structs and methods
-verify_fraglet "Alice is 30 years old" <<'EOF'
+cat > "$tmp" <<'EOF'
 struct Person {
     name string
     age  int
@@ -72,9 +73,9 @@ fn main() {
     p.greet()
 }
 EOF
+verify_fraglet "Alice is 30 years old"
 
-# Example 6: Maps
-verify_fraglet "Apples: 5" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     mut m := map[string]int{}
     m['apple'] = 5
@@ -82,23 +83,24 @@ fn main() {
     println('Apples: ${m['apple']}')
 }
 EOF
+verify_fraglet "Apples: 5"
 
-# Example 7: String operations
-verify_fraglet "Hello World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     mut s := 'Hello'
     s += ' World!'
     println(s)
 }
 EOF
+verify_fraglet "Hello World!"
 
-# Example 8: Mutable variables
-verify_fraglet "x = 20" <<'EOF'
+cat > "$tmp" <<'EOF'
 fn main() {
     mut x := 10
     x = 20
     println('x = ${x}')
 }
 EOF
+verify_fraglet "x = 20"
 
 echo "✓ All tests passed"
