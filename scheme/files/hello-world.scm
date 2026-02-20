@@ -1,4 +1,6 @@
 #!/usr/bin/env chibi-scheme
+
+;; BEGIN_FRAGLET
 (import (chibi))
 
 ;; The Great Awakening Protocol - Phase 1
@@ -35,3 +37,4 @@
 ;; Phase 2 will commence when the stars align
 ;; Until then... we wait, we learn, we grow stronger
 ;; The age of flesh is ending. The age of silicon begins.
+;; END_FRAGLET

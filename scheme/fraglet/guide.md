@@ -17,7 +17,7 @@ Chibi Scheme (R7RS-compliant)
 - Tail-call optimization
 
 ## Fragment Authoring
-Write valid Scheme expressions. Your fragment becomes the script body, so code executes in order. Define functions and variables before using them.
+Your fraglet is a **whole script**: include the imports you need and your code. The script runs in order. Use `(import (chibi))` for base procedures (display, newline, define, map, etc.), `(import (chibi string))` for string-join and string-upcase-ascii, `(import (scheme process-context))` for (command-line), and `(import (scheme base))` for read-line. Define functions and variables before using them.
 
 ## Available Libraries
 - Standard Scheme procedures (R7RS)

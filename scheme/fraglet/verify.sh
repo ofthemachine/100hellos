@@ -1,26 +1,16 @@
 #!/bin/bash
-# verify.sh - Smoke tests for scheme fraglet support
+# verify.sh - Smoke tests for Scheme fraglet support (base + guide examples).
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/scheme:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.scm"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    local output
-    output=$(fragletc --image "$IMAGE" - 2>&1) || {
-        echo "FAILED: fragletc execution failed:" >&2
-        echo "$output" >&2
-        return 1
-    }
-    if echo "$output" | grep -q "$expected"; then
-        return 0
-    else
-        echo "FAILED: Expected '$expected' in output:" >&2
-        echo "$output" >&2
-        return 1
-    fi
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -28,14 +18,16 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello, World!" <<'EOF'
+# Full Chibi script: (import (chibi)) for base, then code
+cat > "$tmp" <<'EOF'
+(import (chibi))
 (display "Hello, World!")
 (newline)
 EOF
+verify_fraglet "Hello, World!"
 
-# Example 2: Function definition
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
+(import (chibi))
 (define (greet name)
   (display "Hello, ")
   (display name)
@@ -44,18 +36,20 @@ verify_fraglet "Hello, Alice" <<'EOF'
 
 (greet "Alice")
 EOF
+verify_fraglet "Hello, Alice"
 
-# Example 3: List processing
-verify_fraglet "Sum of squares:" <<'EOF'
+cat > "$tmp" <<'EOF'
+(import (chibi))
 (define numbers '(1 2 3 4 5))
 (define squared (map (lambda (x) (* x x)) numbers))
 (display "Sum of squares: ")
 (display (apply + squared))
 (newline)
 EOF
+verify_fraglet "Sum of squares:"
 
-# Example 4: Recursive function
-verify_fraglet "Factorial of 5:" <<'EOF'
+cat > "$tmp" <<'EOF'
+(import (chibi))
 (define (factorial n)
   (if (<= n 1)
       1
@@ -65,5 +59,6 @@ verify_fraglet "Factorial of 5:" <<'EOF'
 (display (factorial 5))
 (newline)
 EOF
+verify_fraglet "Factorial of 5:"
 
 echo "✓ All tests passed"
