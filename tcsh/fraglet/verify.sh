@@ -1,14 +1,16 @@
 #!/bin/bash
-# verify.sh - Smoke tests for tcsh fraglet support
+# verify.sh - Smoke tests for tcsh fraglet support (base + guide examples).
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/tcsh:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.tcsh"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -16,61 +18,61 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 echo "Hello from fragment!"
 EOF
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
 set NAME="Alice"
 echo "Hello, $NAME!"
 EOF
+verify_fraglet "Hello, Alice"
 
-# Example 3: Arithmetic
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 @ A = 5
 @ B = 10
 @ SUM = $A + $B
 echo "Sum: $SUM"
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 4: Arrays
-verify_fraglet "Fruit: apple" <<'EOF'
+cat > "$tmp" <<'EOF'
 set FRUITS=(apple banana cherry)
 foreach fruit ($FRUITS)
     echo "Fruit: $fruit"
 end
 EOF
+verify_fraglet "Fruit: apple"
 
-# Example 5: Conditionals
-verify_fraglet "Testing mode" <<'EOF'
+cat > "$tmp" <<'EOF'
 if ("test" == "test") then
     echo "Testing mode"
 else
     echo "Normal mode"
 endif
 EOF
+verify_fraglet "Testing mode"
 
-# Example 6: While loops
-verify_fraglet "Count: 5" <<'EOF'
+cat > "$tmp" <<'EOF'
 @ i = 1
 while ($i <= 5)
     echo "Count: $i"
     @ i++
 end
 EOF
+verify_fraglet "Count: 5"
 
-# Example 7: Command substitution
-verify_fraglet "Current date:" <<'EOF'
+cat > "$tmp" <<'EOF'
 set DATE=`date`
 echo "Current date: $DATE"
 EOF
+verify_fraglet "Current date:"
 
-# Example 8: Array indexing
-verify_fraglet "First: one" <<'EOF'
+cat > "$tmp" <<'EOF'
 set ARRAY=(one two three)
 echo "First: $ARRAY[1]"
 EOF
+verify_fraglet "First: one"
 
 echo "✓ All tests passed"
