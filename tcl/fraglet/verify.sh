@@ -1,12 +1,16 @@
 #!/bin/bash
+# verify.sh - Smoke tests for Tcl fraglet support (base + guide examples).
+
 set -euo pipefail
 
 IMAGE="${1:-100hellos/tcl:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.tcl"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -14,30 +18,29 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 puts "Hello, World!"
 EOF
+verify_fraglet "Hello, World!"
 
-# Example 2: Variables and expressions
-verify_fraglet "Sum:" <<'EOF'
+cat > "$tmp" <<'EOF'
 set a 5
 set b 10
 set sum [expr $a + $b]
 puts "Sum: $sum"
 EOF
+verify_fraglet "Sum:"
 
-# Example 3: Procedure definition
-verify_fraglet "Hello, Alice!" <<'EOF'
+cat > "$tmp" <<'EOF'
 proc greet {name} {
     return "Hello, $name!"
 }
 
 puts [greet "Alice"]
 EOF
+verify_fraglet "Hello, Alice!"
 
-# Example 4: List processing
-verify_fraglet "Total:" <<'EOF'
+cat > "$tmp" <<'EOF'
 set numbers {1 2 3 4 5}
 set total 0
 foreach num $numbers {
@@ -45,16 +48,16 @@ foreach num $numbers {
 }
 puts "Total: $total"
 EOF
+verify_fraglet "Total:"
 
-# Example 5: String manipulation
-verify_fraglet "Uppercase:" <<'EOF'
+cat > "$tmp" <<'EOF'
 set text "hello world"
 set upper [string toupper $text]
 puts "Uppercase: $upper"
 EOF
+verify_fraglet "Uppercase:"
 
-# Example 6: Conditional logic
-verify_fraglet "Grade: B" <<'EOF'
+cat > "$tmp" <<'EOF'
 set score 85
 if {$score >= 90} {
     puts "Grade: A"
@@ -64,5 +67,6 @@ if {$score >= 90} {
     puts "Grade: C"
 }
 EOF
+verify_fraglet "Grade: B"
 
 echo "✓ All tests passed"
