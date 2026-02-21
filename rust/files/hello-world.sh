@@ -2,4 +2,4 @@
 
 cd /hello-world
 rustc hello-world.rs
-./hello-world
+./hello-world "$@"
