@@ -4,11 +4,13 @@
 set -euo pipefail
 
 IMAGE="${1:-100hellos/raku:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.raku"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -16,35 +18,34 @@ docker run --rm "$IMAGE" | grep -q "Hello World"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 say "Hello, World!";
 EOF
+verify_fraglet "Hello, World!"
 
-# Example 2: Variables and string interpolation
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
 my $name = "Alice";
 say "Hello, $name!";
 EOF
+verify_fraglet "Hello, Alice"
 
-# Example 3: Arrays and list processing
-verify_fraglet "Sum of squares:" <<'EOF'
+cat > "$tmp" <<'EOF'
 my @numbers = 1, 2, 3, 4, 5;
 my $sum = [+] @numbers.map(* ** 2);
 say "Sum of squares: $sum";
 EOF
+verify_fraglet "Sum of squares:"
 
-# Example 4: Subroutines
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 sub greet(Str $name --> Str) {
     return "Hello, $name!";
 }
 
 say greet("World");
 EOF
+verify_fraglet "Hello, World!"
 
-# Example 6: Hashes
-verify_fraglet "Red: #FF0000" <<'EOF'
+cat > "$tmp" <<'EOF'
 my %colors = (
     red => "#FF0000",
     green => "#00FF00",
@@ -52,9 +53,9 @@ my %colors = (
 );
 say "Red: %colors<red>";
 EOF
+verify_fraglet "Red: #FF0000"
 
-# Example 6: Classes
-verify_fraglet "I'm Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
 class Person {
     has Str $.name;
     has Int $.age;
@@ -67,18 +68,19 @@ class Person {
 my $person = Person.new(name => "Alice", age => 30);
 $person.introduce();
 EOF
+verify_fraglet "I'm Alice"
 
-# Example 8: Regular expressions
-verify_fraglet "Hello Raku" <<'EOF'
+cat > "$tmp" <<'EOF'
 my $text = "Hello World";
 $text ~~ s/World/Raku/;
 say $text;
 EOF
+verify_fraglet "Hello Raku"
 
-# Example 8: List processing with map and reduce
-verify_fraglet "Squares:" <<'EOF'
+cat > "$tmp" <<'EOF'
 my @squared = (1..5).map(* ** 2);
 say "Squares: @squared.join(', ')";
 EOF
+verify_fraglet "Squares:"
 
 echo "✓ All tests passed"
