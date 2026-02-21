@@ -1,6 +1,6 @@
 // HelloWorld.kt
-fun main() {
-    // BEGIN_FRAGLET
+// BEGIN_FRAGLET
+fun main(args: Array<String>) {
     println("Hello World!!")
-    // END_FRAGLET
 }
+// END_FRAGLET
