@@ -5,7 +5,7 @@ Your code runs inside `main()`. Imports are handled—just write statements.
 ## Load Words
 
 ```java
-WordSet<?> words = HelloWorld.loadWords();
+WordSet<?> words = Wordalytica.loadWords();
 ```
 
 Call once and reuse. All words are lowercase.
@@ -40,7 +40,7 @@ Call once and reuse. All words are lowercase.
 | Yellow `l` not slot 4 | `.containing("l").withoutCharAt('l', 3)` |
 
 ```java
-WordSet<?> words = HelloWorld.loadWords();
+WordSet<?> words = Wordalytica.loadWords();
 
 // 5-letter, ends 'd', has 'a' (not slot 0), has 'l' (not slot 2), no x/z/q
 words.matching("____d")
@@ -60,19 +60,19 @@ words.matching("_a_e_").iterator().forEachRemaining(System.out::println);
 ## Scrabble Scoring
 
 ```java
-int score = HelloWorld.wordScore("quartz");  // 24
+int score = Wordalytica.wordScore("quartz");  // 24
 System.out.println(score);
 
 // Find highest-scoring 5-letter words containing 'q'
 words.matching("_____").containing("q")
      .iterator().forEachRemaining(w ->
-         System.out.println(w + " = " + HelloWorld.wordScore(w))));
+         System.out.println(w + " = " + Wordalytica.wordScore(w))));
 ```
 
 ## Quick Reference
 
 ```java
-WordSet<?> words = HelloWorld.loadWords();
+WordSet<?> words = Wordalytica.loadWords();
 
 // Count
 int n = words.endingWith("ing").count();

@@ -1,11 +1,11 @@
 fragletTempPath: /FRAGLET
 
 injection:
-  codePath: /hello-world/HelloWorld.java
+  codePath: /hello-world/Wordalytica.java
   match: "Hello World!"
 
 guide: /guide-wordalytica.md
 
 execution:
-  path: /hello-world/hello-world.sh
+  path: /hello-world/wordalytica.sh
   makeExecutable: true

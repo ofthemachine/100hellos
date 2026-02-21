@@ -1,7 +1,7 @@
 fragletTempPath: /FRAGLET
 
 injection:
-  codePath: /hello-world/HelloWorld.java
+  codePath: /hello-world/Fraglet.java
   match_start: "// BEGIN_FRAGLET"
   match_end: "// END_FRAGLET"
 
