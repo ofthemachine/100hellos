@@ -2,11 +2,13 @@
 set -euo pipefail
 
 IMAGE="${1:-100hellos/haskell:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.hs"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -14,67 +16,67 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 main = putStrLn "Hello from fragment!"
 EOF
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables and calculations
-verify_fraglet "Sum:" <<'EOF'
+cat > "$tmp" <<'EOF'
 main = do
   let a = 5
       b = 10
   putStrLn $ "Sum: " ++ show (a + b)
 EOF
+verify_fraglet "Sum:"
 
-# Example 3: Functions
-verify_fraglet "5 + 10 = 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 add :: Int -> Int -> Int
 add x y = x + y
 
 main = putStrLn $ "5 + 10 = " ++ show (add 5 10)
 EOF
+verify_fraglet "5 + 10 = 15"
 
-# Example 4: Pattern matching
-verify_fraglet "Factorial of 5: 120" <<'EOF'
+cat > "$tmp" <<'EOF'
 factorial :: Int -> Int
 factorial 0 = 1
 factorial n = n * factorial (n - 1)
 
 main = putStrLn $ "Factorial of 5: " ++ show (factorial 5)
 EOF
+verify_fraglet "Factorial of 5: 120"
 
-# Example 5: Lists and higher-order functions
-verify_fraglet "Sum:" <<'EOF'
+cat > "$tmp" <<'EOF'
 main = do
   let numbers = [1, 2, 3, 4, 5]
       sum = foldl (+) 0 numbers
   putStrLn $ "Sum: " ++ show sum
 EOF
+verify_fraglet "Sum:"
 
-# Example 6: List comprehensions
-verify_fraglet "First 10 squares:" <<'EOF'
+cat > "$tmp" <<'EOF'
 main = do
   let squares = [x*x | x <- [1..10]]
   putStrLn $ "First 10 squares: " ++ show squares
 EOF
+verify_fraglet "First 10 squares:"
 
-# Example 7: String operations
-verify_fraglet "Hello World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 main = do
   let s = "Hello"
       t = s ++ " World!"
   putStrLn t
   putStrLn $ "Length: " ++ show (length t)
 EOF
+verify_fraglet "Hello World!"
 
-# Example 8: Guards and where clauses
-verify_fraglet "Absolute of -5: 5" <<'EOF'
+cat > "$tmp" <<'EOF'
 absolute :: Int -> Int
 absolute x | x >= 0 = x
            | otherwise = -x
 
 main = putStrLn $ "Absolute of -5: " ++ show (absolute (-5))
 EOF
+verify_fraglet "Absolute of -5: 5"
 
 echo "✓ All tests passed"

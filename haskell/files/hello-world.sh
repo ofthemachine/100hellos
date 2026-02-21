@@ -10,5 +10,5 @@
 # Run it
 
 cd /hello-world
-ghc -o hello-world hello-world.hs
-./hello-world
+ghc -v0 -o hello-world hello-world.hs
+./hello-world "$@"
