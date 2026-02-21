@@ -2,5 +2,5 @@
 
 cd /hello-world
 ocamlc -w -24 hello-world.ml -o hello-world
-./hello-world
+./hello-world "$@"
 
