@@ -1,6 +1,6 @@
+# BEGIN_FRAGLET
 import std/strformat
 
-# BEGIN_FRAGLET
 proc getGreeting(): string =
   let part1 = "Hello"
   let part2 = "World"

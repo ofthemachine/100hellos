@@ -1,12 +1,16 @@
 #!/bin/bash
+# verify.sh - Smoke tests for Nim fraglet support (base + guide examples).
+
 set -euo pipefail
 
 IMAGE="${1:-100hellos/nim:local}"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.nim"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
@@ -14,56 +18,60 @@ docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
-# Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 echo "Hello from fragment!"
 EOF
+verify_fraglet "Hello from fragment!"
 
-# Example 2: Variables and calculations
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
+import std/strformat
 let a = 5
 let b = 10
 echo fmt"Sum: {a + b}"
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 3: Procedures
-verify_fraglet "5 + 10 = 15" <<'EOF'
+cat > "$tmp" <<'EOF'
+import std/strformat
 proc add(a, b: int): int =
   return a + b
 
 echo fmt"{5} + {10} = {add(5, 10)}"
 EOF
+verify_fraglet "5 + 10 = 15"
 
-# Example 4: Sequences and loops
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
+import std/strformat
 let numbers = @[1, 2, 3, 4, 5]
 var sum = 0
 for num in numbers:
   sum += num
 echo fmt"Sum: {sum}"
 EOF
+verify_fraglet "Sum: 15"
 
-# Example 5: String operations
-verify_fraglet "Hello World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 let s = "Hello"
 let result = s & " World!"
 echo result
 EOF
+verify_fraglet "Hello World!"
 
-# Example 6: Conditional logic
-verify_fraglet "x is greater than 5" <<'EOF'
+cat > "$tmp" <<'EOF'
 let x = 10
 if x > 5:
   echo "x is greater than 5"
 else:
   echo "x is not greater than 5"
 EOF
+verify_fraglet "x is greater than 5"
 
-# Example 7: Mutable variables
-verify_fraglet "Counter: 1" <<'EOF'
+cat > "$tmp" <<'EOF'
+import std/strformat
 var counter = 0
 counter += 1
 echo fmt"Counter: {counter}"
 EOF
+verify_fraglet "Counter: 1"
 
 echo "✓ All tests passed"
