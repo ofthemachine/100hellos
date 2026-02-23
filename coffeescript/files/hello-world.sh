@@ -2,5 +2,5 @@
 
 cd /hello-world
 coffee --compile hello-world.coffee
-node hello-world.js
+exec node hello-world.js "$@"
 

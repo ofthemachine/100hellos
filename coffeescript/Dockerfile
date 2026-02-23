@@ -5,5 +5,6 @@ FROM 100hellos/300-node:local
 RUN sudo npm install -g coffee-script
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
 
-ENTRYPOINT [ "/hello-world/hello-world.sh" ]
+ENTRYPOINT [ "/fraglet-entrypoint" ]
