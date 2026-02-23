@@ -1,7 +1,9 @@
-*******> So... yeah, this is cobol.
-       IDENTIFICATION DIVISION.
-       PROGRAM-ID. HELLO_WORLD.
-       ENVIRONMENT DIVISION.
-       PROCEDURE DIVISION.
-           DISPLAY "Hello World!"
-       STOP RUN.
+*> So... yeah, this is cobol.
+*> BEGIN_FRAGLET
+IDENTIFICATION DIVISION.
+PROGRAM-ID. HELLO_WORLD.
+ENVIRONMENT DIVISION.
+PROCEDURE DIVISION.
+    DISPLAY "Hello World!"
+    STOP RUN.
+*> END_FRAGLET

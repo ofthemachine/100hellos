@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
-cobc -x hello-world.cob
-./hello-world
+set -e
+cd /hello-world
+cobc -free -x hello-world.cob
+exec ./hello-world "$@"
 
