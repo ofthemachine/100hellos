@@ -25,6 +25,10 @@ Write valid Ceylon code. Your fragment should include:
 
 This approach enables teaching the full range of Ceylon features.
 
+## Stdin and Args
+- **Command-line arguments**: `process.arguments` (sequence of `String`) — e.g. `print("Args: ``" ".join(process.arguments)``");`
+- **Stdin**: `process.readLine()` in a loop — returns `String?`; use `while (exists line = process.readLine()) { ... }` to read line-by-line
+
 ## Available Modules
 - Standard Ceylon modules available via `import <module>;`
 - JVM interop available via `import java.lang { ... }`
@@ -125,6 +129,22 @@ shared void run() {
     String[] fruits = ["apple", "banana", "cherry"];
     for (i -> fruit in fruits.indexed) {
         print("``i``: ``fruit``");
+    }
+}
+```
+
+```ceylon
+// Command-line arguments
+shared void run() {
+    print("Args: ``" ".join(process.arguments)``");
+}
+```
+
+```ceylon
+// Stdin (line-by-line, e.g. echo "hello" | fragletc --vein=ceylon script.ceylon)
+shared void run() {
+    while (exists line = process.readLine()) {
+        print(line.uppercased);
     }
 }
 ```

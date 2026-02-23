@@ -1,30 +1,35 @@
 #!/bin/bash
-# verify.sh - Smoke tests for Ceylon fraglet support
+# verify.sh - Smoke tests for Ceylon fraglet support (base + guide examples).
+# Contract: default run, guide examples. Stdin/args in verify_stdin.sh / verify_args.sh.
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/ceylon:local}"
+EXT=".ceylon"
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.$EXT"
 
-# Helper: verify fraglet compiles and runs, output contains expected string
 verify_fraglet() {
     local expected="$1"
-    fragletc --image "$IMAGE" - 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -Fq "$expected"
 }
 
 echo "Testing default execution..."
-docker run --rm "$IMAGE" | grep -q "Hello World!"
+docker run --rm "$IMAGE" 2>/dev/null | grep -Fq "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
 # Example 1: Simple output
-verify_fraglet "Hello, World!" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     print("Hello, World!");
 }
 EOF
+verify_fraglet "Hello, World!"
 
 # Example 2: Variables and calculations
-verify_fraglet "Sum:" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     Integer a = 5;
     Integer b = 10;
@@ -32,9 +37,10 @@ shared void run() {
     print("Sum: ``sum``");
 }
 EOF
+verify_fraglet "Sum:"
 
 # Example 3: Function definition
-verify_fraglet "Hello, Alice" <<'EOF'
+cat > "$tmp" <<'EOF'
 String greet(String name) {
     return "Hello, ``name``!";
 }
@@ -43,9 +49,10 @@ shared void run() {
     print(greet("Alice"));
 }
 EOF
+verify_fraglet "Hello, Alice"
 
 # Example 4: Arrays and loops
-verify_fraglet "Array sum:" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     Integer[] numbers = [1, 2, 3, 4, 5];
     variable Integer sum = 0;
@@ -55,9 +62,10 @@ shared void run() {
     print("Array sum: ``sum``");
 }
 EOF
+verify_fraglet "Array sum:"
 
 # Example 5: Multiple helper functions
-verify_fraglet "Result:" <<'EOF'
+cat > "$tmp" <<'EOF'
 Integer add(Integer a, Integer b) {
     return a + b;
 }
@@ -71,17 +79,19 @@ shared void run() {
     print("Result: ``result``");
 }
 EOF
+verify_fraglet "Result:"
 
 # Example 6: String operations
-verify_fraglet "Length:" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     String text = "Hello, World!";
     print("Length: ``text.size``");
 }
 EOF
+verify_fraglet "Length:"
 
 # Example 7: Conditionals
-verify_fraglet "Grade: B" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     Integer score = 85;
     if (score >= 90) {
@@ -93,9 +103,10 @@ shared void run() {
     }
 }
 EOF
+verify_fraglet "Grade: B"
 
 # Example 8: Iteration with indices
-verify_fraglet "0: apple" <<'EOF'
+cat > "$tmp" <<'EOF'
 shared void run() {
     String[] fruits = ["apple", "banana", "cherry"];
     for (i -> fruit in fruits.indexed) {
@@ -103,5 +114,6 @@ shared void run() {
     }
 }
 EOF
+verify_fraglet "0: apple"
 
 echo "✓ All tests passed"
