@@ -7,3 +7,5 @@ RUN cd /artifacts && make install
 ENV OBERON_BIN=/artifacts/oberonc/bin
 
 COPY --chown=human:human ./files /hello-world
+COPY --chown=human:human ./fraglet /
+ENTRYPOINT [ "/fraglet-entrypoint" ]

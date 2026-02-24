@@ -1,6 +1,8 @@
-MODULE HelloWorld;
+(* BEGIN_FRAGLET *)
+MODULE Fraglet;
   IMPORT Out;
 BEGIN
   Out.String("Hello World!");
   Out.Ln
-END HelloWorld.
+END Fraglet.
+(* END_FRAGLET *)
