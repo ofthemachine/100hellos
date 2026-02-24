@@ -1,9 +1,9 @@
 Imports System
 
-Module Program
+' BEGIN_FRAGLET
+Module Fraglet
     Sub Main(args As String())
-        ' BEGIN_FRAGLET
         Console.WriteLine("Hello World!")
-        ' END_FRAGLET
     End Sub
 End Module
+' END_FRAGLET

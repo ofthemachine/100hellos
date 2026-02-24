@@ -9,7 +9,11 @@ tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.$EXT"
 
 cat > "$tmp" <<'EOF'
-Console.WriteLine(Console.In.ReadToEnd())
+Module Fraglet
+    Sub Main(args As String())
+        Console.WriteLine(Console.In.ReadToEnd())
+    End Sub
+End Module
 EOF
 echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -Fq "hello"
 echo "✓ stdin verified"

@@ -6,7 +6,7 @@ Visual Basic .NET (.NET 7.0 SDK)
 ## Execution Model
 - Compiled language using the .NET SDK
 - Code is compiled and executed via `dotnet run`
-- Your fragment is the body of `Sub Main(args As String())` — you write statements only; `args` and the surrounding `Module`/`Sub Main` are provided by the template
+- Your fragment is the **entire module** between the markers — write a complete `Module Fraglet` with `Sub Main(args As String())` and any helpers you need.
 
 ## Key Characteristics
 - Statically typed, case-insensitive
@@ -16,17 +16,17 @@ Visual Basic .NET (.NET 7.0 SDK)
 - Option Strict can affect type inference
 
 ## Fragment Authoring
-Write valid VB.NET statements that would appear inside `Sub Main(args As String())`. You do not write the `Module` or `Sub Main` declaration; the template supplies them. You have access to `args` (command-line arguments) and can use `Console` for input/output.
+Write a complete VB.NET module. Use **`Module Fraglet`** (the template expects this name). Your fragment replaces the whole module between the markers, so include `Sub Main(args As String())` and `End Sub` / `End Module`. You have `args` (command-line arguments) and `Console` for I/O.
 
 ## Command-line arguments and stdin
-- **Arguments**: `args` (String()) is in scope. Example: `Console.WriteLine("Args: " & String.Join(" ", args))`
+- **Arguments**: `args` (String()) is in scope in `Sub Main`. Example: `Console.WriteLine("Args: " & String.Join(" ", args))`
 - **Stdin**: Use `Console.ReadLine()` (one line) or `Console.In.ReadToEnd()` (entire input).
 
 ## Available Namespaces
-The template has `Imports System`. You can use:
+The template has `Imports System` above the fragment. You can use:
 - `System` — Console, String, Int32, etc.
 - `System.Collections.Generic` — List, Dictionary
-- `System.Linq` — LINQ (if you add `Imports System.Linq` in your fragment)
+- `System.Linq` — LINQ (add `Imports System.Linq` inside your module if needed)
 - `System.IO` — File I/O
 
 ## Common Patterns
@@ -40,52 +40,74 @@ The template has `Imports System`. You can use:
 ## Examples
 
 ```vb
-' Simple output
-Console.WriteLine("Hello from fragment!")
+Module Fraglet
+    Sub Main(args As String())
+        Console.WriteLine("Hello from fragment!")
+    End Sub
+End Module
 ```
 
 ```vb
-' Variables and calculations
-Dim a As Integer = 5
-Dim b As Integer = 10
-Console.WriteLine($"Sum: {a + b}")
+Module Fraglet
+    Sub Main(args As String())
+        Dim a As Integer = 5
+        Dim b As Integer = 10
+        Console.WriteLine($"Sum: {a + b}")
+    End Sub
+End Module
 ```
 
 ```vb
-' Using List
-Dim numbers As New List(Of Integer) From {1, 2, 3, 4, 5}
-Dim sum As Integer = 0
-For Each num In numbers
-    sum += num
-Next
-Console.WriteLine($"List sum: {sum}")
+Module Fraglet
+    Sub Main(args As String())
+        Dim numbers As New List(Of Integer) From {1, 2, 3, 4, 5}
+        Dim sum As Integer = 0
+        For Each num In numbers
+            sum += num
+        Next
+        Console.WriteLine($"List sum: {sum}")
+    End Sub
+End Module
 ```
 
 ```vb
-' String operations
-Dim message As String = "Hello"
-message &= " World!"
-Console.WriteLine(message)
+Module Fraglet
+    Sub Main(args As String())
+        Dim message As String = "Hello"
+        message &= " World!"
+        Console.WriteLine(message)
+    End Sub
+End Module
 ```
 
 ```vb
-' Arguments
-Console.WriteLine("Args: " & String.Join(" ", args))
+Module Fraglet
+    Sub Main(args As String())
+        Console.WriteLine("Args: " & String.Join(" ", args))
+    End Sub
+End Module
 ```
 
 ```vb
-' Stdin (entire input)
-Console.WriteLine(Console.In.ReadToEnd())
+Module Fraglet
+    Sub Main(args As String())
+        Console.WriteLine(Console.In.ReadToEnd())
+    End Sub
+End Module
 ```
 
 ```vb
-' Multiply and display
-Dim multiply As Func(Of Integer, Integer, Integer) = Function(a, b) a * b
-Console.WriteLine($"5 * 3 = {multiply(5, 3)}")
+Module Fraglet
+    Sub Main(args As String())
+        Dim multiply As Func(Of Integer, Integer, Integer) = Function(a, b) a * b
+        Console.WriteLine($"5 * 3 = {multiply(5, 3)}")
+    End Sub
+End Module
 ```
 
 ## Caveats
 - Fragment must be valid VB.NET that compiles; the compiler runs each time
+- Use `Module Fraglet` so the template and entry point stay consistent
 - Use `&` for string concatenation; `+` works for numbers but `&` is preferred for strings
 - String interpolation: `$"text {expr}"`
 - Case does not matter for keywords and identifiers
