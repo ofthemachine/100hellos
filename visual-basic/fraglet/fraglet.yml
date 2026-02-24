@@ -1,0 +1,12 @@
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/Program.vb
+  match_start: "' BEGIN_FRAGLET"
+  match_end: "' END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true
