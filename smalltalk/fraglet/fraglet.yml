@@ -1,0 +1,14 @@
+# fraglet-entrypoint configuration for Smalltalk (GNU Smalltalk) container
+
+fragletTempPath: /FRAGLET
+
+injection:
+  codePath: /hello-world/hello-world.st
+  match_start: "BEGIN_FRAGLET"
+  match_end: "END_FRAGLET"
+
+guide: /guide.md
+
+execution:
+  path: /hello-world/hello-world.sh
+  makeExecutable: true

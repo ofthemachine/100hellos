@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
-gst hello-world.st
+cd /hello-world
+gst hello-world.st -a "$@"

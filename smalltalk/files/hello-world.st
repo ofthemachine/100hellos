@@ -1,3 +1,4 @@
+" BEGIN_FRAGLET "
 Object subclass: Hello [
   greet [
     'Hello World!' displayNl
@@ -6,3 +7,4 @@ Object subclass: Hello [
 
 greeting := Hello new.
 greeting greet.
+" END_FRAGLET "
