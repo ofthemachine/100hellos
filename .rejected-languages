@@ -1,0 +1,10 @@
+# Machine-readable list of languages excluded from fraglet targets.
+# One name per line. Blank lines and # lines ignored.
+# See human_verified.md # Rejected section for reasons.
+cirq
+elm
+malbolge
+oberon
+purescript
+squirrel
+tswizzle

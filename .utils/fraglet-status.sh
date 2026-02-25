@@ -14,13 +14,8 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-LANGUAGES_FILE="$REPO_ROOT/FRAGLET_LANGUAGES.txt"
+REJECTED_FILE="$REPO_ROOT/.rejected-languages"
 FUNCTIONS_FILE="$SCRIPT_DIR/functions.sh"
-
-if [[ ! -f "$LANGUAGES_FILE" ]]; then
-    echo "Error: FRAGLET_LANGUAGES.txt not found at $LANGUAGES_FILE" >&2
-    exit 1
-fi
 
 # Source functions to get published_languages
 if [[ -f "$FUNCTIONS_FILE" ]]; then
@@ -38,11 +33,15 @@ get_enabled() {
         sort
 }
 
-# Get all target languages from enumeration file
+# Get rejected languages (excluded from fraglet targets)
+get_rejected() {
+    [[ -f "$REJECTED_FILE" ]] || return 0
+    grep -v '^[[:space:]]*$' "$REJECTED_FILE" | grep -v '^#'
+}
+
+# Get all target languages: published minus rejected
 get_targets() {
-    grep -v '^[[:space:]]*$' "$LANGUAGES_FILE" | \
-        grep -v '^[[:space:]]*#' | \
-        sort
+    comm -23 <(get_published) <(get_rejected | sort -u)
 }
 
 # Get pending languages (targets minus enabled)
