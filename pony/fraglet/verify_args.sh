@@ -7,7 +7,9 @@ tmp="$tmpdir/fraglet.pony"
 cat > "$tmp" <<'EOF'
 actor Main
   new create(env: Env) =>
-    env.out.print("Args: " + " ".join(env.args.values()))
+    let args = env.args.slice(1)
+    env.out.print("Args: " + " ".join(args.values()))
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"

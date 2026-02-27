@@ -4,5 +4,5 @@
 ponyc /hello-world -o /tmp/ -V0
 
 # Run the compiled binary
-/tmp/hello-world
+/tmp/hello-world "$@"
 
