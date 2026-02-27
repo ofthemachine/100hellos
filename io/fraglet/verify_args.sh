@@ -5,7 +5,10 @@ IMAGE="${1:-100hellos/io:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.io"
 cat > "$tmp" <<'EOF'
-System args slice(1) join(" ") prepend("Args: ") println
+write("Args:")
+System args rest foreach(arg, write(" " .. arg))
+writeln
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"
