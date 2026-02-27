@@ -1,2 +1,2 @@
 #!/bin/sh
-deno run /hello-world/hello-world.ts
+deno run /hello-world/hello-world.ts "$@"
