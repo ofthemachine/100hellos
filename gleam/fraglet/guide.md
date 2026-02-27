@@ -20,18 +20,10 @@ Gleam (latest available in Alpine)
 - Types start with uppercase: `Int`, `String`, `Result`
 
 ## Fragment Authoring
-Write valid Gleam code. Your fragment can define functions, import modules, and write complete module code. You can:
-
-- Define multiple functions
-- Use pattern matching
-- Write complete function implementations
-- Use the pipe operator
-- Work with Result and Option types
-
-**Important**: The execution script calls `main()`, so your fragment must define `pub fn main()` for the code to execute. You can define additional helper functions as needed.
+Write a complete Gleam module body. Your fragment must define `pub fn main()` as the entry point. You can define additional functions, types, and use `@external` for Erlang FFI.
 
 ## Available Libraries
-Standard Gleam library (`gleam/io`, `gleam/result`, `gleam/option`, etc.) is available. The `gleam_stdlib` package is included in the project.
+The `gleam_stdlib` package is included (`gleam/io`, `gleam/string`, `gleam/list`, `gleam/result`, `gleam/option`, etc.). Erlang standard library functions are accessible via `@external` FFI.
 
 ## Common Patterns
 - Print: `io.println("message")`
@@ -39,6 +31,8 @@ Standard Gleam library (`gleam/io`, `gleam/result`, `gleam/option`, etc.) is ava
 - Pattern matching: `case x { 1 -> "one" }`
 - Pipe operator: `list |> list.map(fn(x) { x * 2 })`
 - Result handling: `case result { Ok(value) -> ... Error(e) -> ... }`
+- Stdin: `@external(erlang, "io", "get_line") fn get_line(prompt: String) -> String`
+- Args: Use `@external(erlang, "init", "get_plain_arguments")` with a `Charlist` type and `list_to_binary` conversion
 - Option handling: `case option { Some(value) -> ... None -> ... }`
 - Function definitions: `pub fn greet(name) { ... }`
 - Anonymous functions: `fn(x) { x * 2 }`
