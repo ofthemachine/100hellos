@@ -8,5 +8,6 @@ tmp="$tmpdir/fraglet.apl"
 cat > "$tmp" <<'EOF'
 (⎕ARG ⍳ ⊂'--') ↓ ⎕ARG
 EOF
-fragletc --image "$IMAGE" "$tmp" "foo" 2>&1 | grep -q "foo"
+output=$(fragletc --image "$IMAGE" "$tmp" "foo" 2>&1)
+echo "$output" | grep -q "foo"
 echo "✓ args verified"
