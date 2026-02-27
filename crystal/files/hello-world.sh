@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-crystal hello-world.cr
+crystal hello-world.cr "$@"
