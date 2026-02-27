@@ -10,5 +10,5 @@
 # Run it
 
 # Run the WebAssembly Text format file using wasmtime
-wasmtime /hello-world/hello-world.wat
+wasmtime /hello-world/hello-world.wat "$@"
 
