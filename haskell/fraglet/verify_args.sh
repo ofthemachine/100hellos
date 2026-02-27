@@ -11,5 +11,6 @@ main = do
   args <- getArgs
   putStrLn $ "Args: " ++ unwords args
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"
