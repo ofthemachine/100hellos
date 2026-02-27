@@ -4,7 +4,8 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/hello-world.fth
-  match: .( Hello World!) CR
+  match_start: "\ BEGIN_FRAGLET"
+  match_end: "\ END_FRAGLET"
 
 guide: /guide.md
 

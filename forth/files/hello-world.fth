@@ -1,4 +1,4 @@
-\ A basic Hello World program in Forth
-
+\ BEGIN_FRAGLET
 .( Hello World!) CR
+\ END_FRAGLET
 bye

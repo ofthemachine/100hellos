@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-gforth hello-world.fth
+gforth hello-world.fth "$@"
