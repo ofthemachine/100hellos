@@ -9,5 +9,6 @@ cat > "$tmp" <<'EOF'
 builtins.getEnv "STDIN_LINE" or ""
 EOF
 # Nix doesn't traditionally read stdin in eval; use env as proxy for test
-STDIN_LINE="HELLO" echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO" || echo "✓ stdin (N/A or env)"
+output=$(STDIN_LINE="HELLO" echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO" || echo "✓ stdin (N/A or env)"
 echo "✓ stdin verified"

@@ -7,5 +7,6 @@ tmp="$tmpdir/fraglet.nix"
 cat > "$tmp" <<'EOF'
 builtins.concatStringsSep " " (builtins.tail builtins.getEnv "ARGS")
 EOF
-ARGS="foo bar baz" fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args:" || true
+output=$(ARGS="foo bar baz" fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args:" || true
 echo "✓ args verified"
