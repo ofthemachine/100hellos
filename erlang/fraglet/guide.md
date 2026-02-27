@@ -20,14 +20,7 @@ Erlang/OTP (latest available in Alpine)
 - Atoms start with lowercase: `hello`, `world`
 
 ## Fragment Authoring
-Write valid Erlang code. Your fragment can define functions, export them, and write complete module code. You can:
-
-- Define multiple functions
-- Export functions using `-export([function_name/arity])`
-- Write complete function implementations
-- Use pattern matching, guards, and recursion
-
-**Important**: The execution script calls `main/0`, so your fragment must export and define `main/0` for the code to execute. You can define additional helper functions as needed.
+Your fragment is placed inside a pre-existing module. Write exports and function definitions — do not include a `-module(...)` declaration. Your fragment must export and define `main/0` as the entry point. You can define additional helper functions as needed.
 
 ## Available Libraries
 Standard Erlang/OTP library is available. No additional packages are pre-installed.
@@ -42,6 +35,8 @@ Standard Erlang/OTP library is available. No additional packages are pre-install
 - Recursion: `factorial(0) -> 1; factorial(N) -> N * factorial(N-1).`
 - List comprehensions: `[X*2 || X <- [1,2,3]]`
 - Higher-order functions: `lists:map(fun(X) -> X*2 end, [1,2,3])`
+- Command-line args: `init:get_plain_arguments()` returns a list of strings
+- Stdin: `io:get_line("")` returns a line or `eof`; use `string:uppercase/1` for uppercasing
 
 ## Examples
 ```erlang

@@ -5,7 +5,6 @@ IMAGE="${1:-100hellos/erlang:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.erl"
 cat > "$tmp" <<'EOF'
--module(fraglet).
 -export([main/0]).
 
 main() ->
@@ -14,5 +13,6 @@ main() ->
         Line -> io:format("~s", [string:uppercase(Line)]), main()
     end.
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"
