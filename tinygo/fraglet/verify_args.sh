@@ -5,8 +5,6 @@ IMAGE="${1:-100hellos/tinygo:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.go"
 cat > "$tmp" <<'EOF'
-package main
-
 import (
 	"fmt"
 	"os"
@@ -17,5 +15,6 @@ func main() {
 	fmt.Println("Args:", strings.Join(os.Args[1:], " "))
 }
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"

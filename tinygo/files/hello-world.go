@@ -1,8 +1,8 @@
 package main
 
+// BEGIN_FRAGLET
 import "fmt"
 
-// BEGIN_FRAGLET
 func main() {
 	fmt.Println("Hello World!")
 }

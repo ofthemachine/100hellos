@@ -21,7 +21,7 @@ TinyGo 0.38.0 (Go subset)
 - **Important**: TinyGo supports a subset of Go's standard library and features
 
 ## Fragment Authoring
-Write valid TinyGo code. Your fragment can define functions, types, and the `main()` function. Package and import declarations are already in place. Your fragment will be compiled and executed.
+Write valid TinyGo code. The `package main` declaration is pre-provided. Your fragment should include `import` declarations and define `func main()` as the entry point.
 
 ## Available Packages
 The template includes the standard library package:
