@@ -6,8 +6,8 @@ tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.scm"
 # Chibi Scheme: (chibi) for display/newline, (scheme base) for read-line, (chibi string) for string-upcase-ascii
 cat > "$tmp" <<'EOF'
-(import (chibi))
 (import (scheme base))
+(import (scheme write))
 (import (chibi string))
 (let loop ((line (read-line)))
   (when (not (eof-object? line))

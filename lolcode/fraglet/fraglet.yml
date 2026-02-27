@@ -4,7 +4,8 @@ fragletTempPath: /FRAGLET
 
 injection:
   codePath: /hello-world/hello-world.lang
-  match: VISIBLE "Hello World!"
+  match_start: "BTW BEGIN_FRAGLET"
+  match_end: "BTW END_FRAGLET"
 
 guide: /guide.md
 

@@ -6,133 +6,58 @@ EmojiCode (compiled language)
 ## Execution Model
 - Compiled via `emojicodec` compiler
 - Produces native binary executable
-- Standard compiled execution model
-
-## Key Characteristics
-- Emoji-based syntax (uses Unicode emoji characters)
-- Statically typed
-- Object-oriented
-- Compiled to native code
-- Case-sensitive
-- Comments use `#` (hash symbol)
 
 ## Fragment Authoring
-Write valid EmojiCode code. Your fragment will be compiled and executed.
+Write a complete EmojiCode program. Your fragment replaces the entire source file.
 
 ## Basic Syntax
 - `🏁` - Main function entry point
-- `🍇` - Block start (opening brace equivalent)
-- `🍉` - Block end (closing brace equivalent)
+- `🍇` / `🍉` - Block start / end
 - `😀` - Print statement
 - `🔤...🔤` - String literal delimiters
-- `❗️` - Statement terminator/exclamation operator
-- `#` - Comment marker
+- `❗️` - Statement terminator
+- `💭` - Comment marker
 
 ## Variables and Types
-- `🖍🆕` - Declare a mutable variable (note: `🖍` prefix is required)
+- `🖍🆕` - Declare a mutable variable
 - `🔢` - Integer type
 - `🔡` - String type
-- Variable declaration syntax: `🖍🆕 variableName 🔢 value` (no assignment operator needed)
-- Example: `🖍🆕 x 🔢 5` (declare integer x with value 5)
+- Declaration: `🖍🆕 x 🔢 5`
 
 ## Conditionals
-- `↪️` - If statement
-- `🙅` - Else statement
-- `🙅↪️` - Else-if statement
-- `👍` - True/boolean true value
-- `👎` - False/boolean false value
-- Comparison operators: `▶️` (greater than), `◀️` (less than), `🙌` (not equal), `👍` (equal)
-
-### If Statement Syntax
-```emojicode
-↪️ condition 🍇
-  # Code to execute if condition is true
-🍉
-```
-
-### If-Else Statement Syntax
-```emojicode
-↪️ condition 🍇
-  # Code to execute if condition is true
-🍉
-🙅 🍇
-  # Code to execute if condition is false
-🍉
-```
-
-### If-Else-If Statement Syntax
-```emojicode
-↪️ condition1 🍇
-  # Code for condition1
-🍉
-🙅↪️ condition2 🍇
-  # Code for condition2
-🍉
-🙅 🍇
-  # Default case
-🍉
-```
-
-## Common Patterns
-```emojicode
-# Print a string
-😀 🔤Hello World!🔤❗️
-
-# Note: Fraglets are injected inside the main function
-# You don't need to include 🏁 🍇 ... 🍉 in your fraglet
-
-# Variable declaration
-🖍🆕 name 🔡 🔤Alice🔤
-😀 name❗️
-
-# Simple conditional
-↪️ 👍 🍇
-  😀 🔤This will print🔤❗️
-🍉
-```
+- `↪️` - If
+- `🙅` - Else
+- `🙅↪️` - Else-if
+- `👍` / `👎` - True / False
 
 ## Examples
 ```emojicode
-# Simple output
-😀 🔤Hello World!🔤❗️
-
-# Multiple statements
-😀 🔤First line🔤❗️
-😀 🔤Second line🔤❗️
-
-# Variable declaration and usage
-🖍🆕 x 🔢 5
-😀 🔤Value: 🔤❗️
-😀 x❗️
-
-# Simple conditional with boolean
-↪️ 👍 🍇
-  😀 🔤True!🔤❗️
-🍉
-🙅 🍇
-  😀 🔤False!🔤❗️
-🍉
-
-# If-else statement
-↪️ 👍 🍇
-  😀 🔤Condition is true🔤❗️
-🍉
-🙅 🍇
-  😀 🔤Condition is false🔤❗️
+🏁 🍇
+  😀 🔤Hello World!🔤❗️
 🍉
 ```
 
-**Note on Variable Comparisons**: Variable comparisons in conditionals may require additional syntax or context. For complex conditionals, refer to the official Emojicode documentation. Simple boolean conditionals and variable declarations work as shown above.
+```emojicode
+🏁 🍇
+  😀 🔤First line🔤❗️
+  😀 🔤Second line🔤❗️
+🍉
+```
+
+```emojicode
+🏁 🍇
+  🖍🆕 x 🔢 5
+  ↪️ 👍 🍇
+    😀 🔤True!🔤❗️
+  🍉
+  🙅 🍇
+    😀 🔤False!🔤❗️
+  🍉
+🍉
+```
 
 ## Caveats
-- EmojiCode uses emoji characters extensively - ensure your editor supports Unicode
-- The compiler (`emojicodec`) requires the standard library path (`-S` flag)
-- Fraglets are injected inside the main function - don't include `🏁 🍇` or `🍉` in your fraglet
+- Ensure your editor supports Unicode emoji characters
 - String literals must be wrapped in `🔤` delimiters
 - Statements end with `❗️`
-- Comments use `#` and are ignored by the compiler
-- Variable declarations require `🖍🆕` prefix (not just `🆕`)
-- Variable syntax: `🖍🆕 name 🔢 value` (no assignment operator `➡️` needed)
-- Comparison operators use emoji symbols (🙌, 👍, ▶️, ◀️)
-- For complex variable comparisons in conditionals, refer to official Emojicode documentation
-
+- Variable declarations require `🖍🆕` prefix

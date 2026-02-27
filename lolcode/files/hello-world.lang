@@ -1,9 +1,8 @@
 #!/usr/bin/env lci
 HAI 1.2
 
-BTW This has a little more going on (like variable assignment) because this ...
-BTW is hilarious.
-
+BTW BEGIN_FRAGLET
 VISIBLE "Hello World!"
+BTW END_FRAGLET
 
 KTHXBYE

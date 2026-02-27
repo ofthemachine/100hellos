@@ -7,6 +7,7 @@ tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.$EXT"
 
 cat > "$tmp" <<'EOF'
+declare var require: any;
 const fs = require("fs");
 const input: string = fs.readFileSync("/dev/stdin", "utf8");
 console.log(input.trim().toUpperCase());

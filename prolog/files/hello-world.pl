@@ -1,3 +1,3 @@
 % BEGIN_FRAGLET
-write("Hello World!").
+:- write("Hello World!"), nl, halt.
 % END_FRAGLET

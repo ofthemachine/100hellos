@@ -9,7 +9,7 @@ fun loop () =
     case TextIO.inputLine TextIO.stdIn of
         NONE => ()
       | SOME s => (print (String.map Char.toUpper s); loop ());
-loop ();
+val () = loop ();
 EOF
 output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
 echo "$output" | grep -q "HELLO"

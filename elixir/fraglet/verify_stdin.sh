@@ -8,7 +8,7 @@ tmp="$tmpdir/fraglet.$EXT"
 
 cat > "$tmp" <<'EOF'
 input = IO.read(:stdio, :all)
-IO.puts(String.upcase(String.trim(input)))
+puts(String.upcase(String.trim(input)))
 EOF
 output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
 echo "$output" | grep -q "HELLO"

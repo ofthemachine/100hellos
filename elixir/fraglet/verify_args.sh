@@ -8,7 +8,7 @@ tmp="$tmpdir/fraglet.$EXT"
 
 cat > "$tmp" <<'EOF'
 args = System.argv()
-IO.puts("Args: #{Enum.join(args, " ")}")
+puts("Args: #{Enum.join(args, " ")}")
 EOF
 output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
 echo "$output" | grep -q "Args: foo bar baz"

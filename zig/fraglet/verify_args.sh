@@ -16,7 +16,8 @@ pub fn main() !void {
         if (list.items.len > 0) try list.appendSlice(" ");
         try list.appendSlice(arg);
     }
-    std.debug.print("Args: {s}\n", .{list.items});
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("Args: {s}\n", .{list.items});
 }
 EOF
 output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)

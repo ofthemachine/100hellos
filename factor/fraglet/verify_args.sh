@@ -5,7 +5,7 @@ IMAGE="${1:-100hellos/factor:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.factor"
 cat > "$tmp" <<'EOF'
-USING: command-line io kernel sequences ;
+USING: command-line io kernel namespaces sequences ;
 command-line get " " join "Args: " prepend print
 EOF
 output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
