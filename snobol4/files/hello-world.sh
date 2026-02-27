@@ -9,5 +9,5 @@
 # Build it (no compilation needed for SNOBOL4)
 # Run it
 cd /hello-world
-snobol4 hello-world.sno
+snobol4 hello-world.sno "$@"
 
