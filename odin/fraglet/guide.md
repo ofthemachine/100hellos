@@ -20,7 +20,7 @@ Odin (latest from source, built with LLVM)
 - Zero hidden allocations
 
 ## Fragment Authoring
-Write valid Odin code. Your fragment can define procedures, types, and the `main :: proc()` procedure. Package and import declarations are already in place. Your fragment will be compiled and executed.
+The `package main` declaration is pre-provided. Your fragment includes import statements and the `main :: proc()` procedure definition. You can also define additional procedures and types.
 
 ## Available Packages
 The template includes the standard library package:

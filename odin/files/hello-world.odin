@@ -1,8 +1,8 @@
 package main
 
+// BEGIN_FRAGLET
 import "core:fmt"
 
-// BEGIN_FRAGLET
 main :: proc() {
     fmt.println("Hello World!")
 }
