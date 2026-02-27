@@ -5,5 +5,6 @@ IMAGE="${1:-100hellos/tcsh:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.tcsh"
 printf '%s\n' 'set line = $<' 'echo "$line" | tr "a-z" "A-Z"' > "$tmp"
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"
