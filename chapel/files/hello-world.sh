@@ -6,4 +6,4 @@ cd /hello-world
 chpl hello-world.chpl -o hello-world
 
 # Run the compiled program
-./hello-world
+./hello-world "$@"
