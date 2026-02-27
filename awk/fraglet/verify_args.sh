@@ -12,5 +12,6 @@ BEGIN {
   ARGC = 1
 }
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar 2>&1 | grep -q "foo"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar 2>&1)
+echo "$output" | grep -q "foo"
 echo "✓ args verified"

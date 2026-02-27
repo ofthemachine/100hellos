@@ -6,5 +6,6 @@ IMAGE="${1:-100hellos/awk:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.awk"
 printf '%s\n' '{ print toupper($0) }' > "$tmp"
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"
