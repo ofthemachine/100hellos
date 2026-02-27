@@ -12,5 +12,6 @@ tmp="$tmpdir/fraglet.$EXT"
 cat > "$tmp" <<'EOF'
 Console.WriteLine(Console.In.ReadToEnd());
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "hello"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "hello"
 echo "✓ stdin verified"
