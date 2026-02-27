@@ -1,3 +1,3 @@
 #!/bin/sh
-wren /hello-world/hello-world.wren
+wren /hello-world/hello-world.wren "$@"
 

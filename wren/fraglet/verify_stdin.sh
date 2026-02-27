@@ -6,11 +6,17 @@ tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.wren"
 cat > "$tmp" <<'EOF'
 import "io" for Stdin
-while (true) {
-  var line = Stdin.readLine()
-  if (line == null) break
-  System.print(line.toUpper)
+var line = Stdin.readLine()
+var upper = ""
+for (c in line.codePoints) {
+  if (c >= 97 && c <= 122) {
+    upper = upper + String.fromCodePoint(c - 32)
+  } else {
+    upper = upper + String.fromCodePoint(c)
+  }
 }
+System.print(upper)
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"
