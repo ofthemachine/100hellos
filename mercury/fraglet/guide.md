@@ -22,12 +22,10 @@ Mercury compiler (mmc) - latest available in Alpine
 - Uses `:-` for declarations and rules
 
 ## Fragment Authoring
-Write valid Mercury code. Your fragment can define helper predicates and the `main` predicate. Your fragment will be compiled and executed.
-
-**Important**: Your fragment must include the `main(!IO) :-` predicate definition, as it replaces the entire implementation section.
+Your fragment provides the complete interface and implementation sections for a pre-existing module. Include your own `:- interface.`, `:- import_module`, `:- pred main(io::di, io::uo) is det.`, `:- implementation.`, and the `main` predicate definition.
 
 ## Available Libraries
-The template includes the following standard modules (already imported):
+Standard Mercury modules can be imported as needed:
 - `io` - I/O operations:
   - `io.write_string(String, !IO)` - Write a string
   - `io.write(Value, !IO)` - Write a value
