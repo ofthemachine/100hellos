@@ -2,4 +2,4 @@
 
 cd /hello-world
 gfortran -o hello-world hello-world.f90
-./hello-world
+./hello-world "$@"

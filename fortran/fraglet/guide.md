@@ -16,13 +16,13 @@ Fortran (GNU Fortran compiler, gfortran)
 - Uses gfortran compiler (GCC-based Fortran compiler)
 
 ## Fragment Authoring
-Write valid Fortran statements. Your fragment becomes the program body. Your fragment will be compiled and executed.
+Write valid Fortran statements. Your fragment becomes the program body, so do not include `program`/`end program`. You can include `use` statements at the top of your fragment.
 
 ## Available Modules
 Standard Fortran modules are available:
-- No explicit `use` statements required for basic I/O
 - `print *` for formatted output
 - Standard Fortran intrinsic functions
+- `iargc()` and `getarg(i, arg)` for command-line arguments
 
 ## Common Patterns
 - Output: `print *, "message"`
