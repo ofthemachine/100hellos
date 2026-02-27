@@ -5,7 +5,10 @@ IMAGE="${1:-100hellos/janet:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.janet"
 cat > "$tmp" <<'EOF'
-(print "Args:" (string/join (dyn :args) " "))
+(def args (dyn :args))
+(printf "Args: %s" (string/join (array/slice args 1) " "))
+(print)
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"
