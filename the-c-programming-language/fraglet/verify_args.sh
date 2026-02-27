@@ -17,5 +17,6 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 EOF
-fragletc --image "$IMAGE" "$tmp" arg1 arg2 2>&1 | grep -q "First: arg1"
+output=$(fragletc --image "$IMAGE" "$tmp" arg1 arg2 2>&1)
+echo "$output" | grep -q "First: arg1"
 echo "✓ args verified"
