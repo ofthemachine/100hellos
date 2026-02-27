@@ -7,5 +7,6 @@ tmp="$tmpdir/fraglet.tcl"
 cat > "$tmp" <<'EOF'
 while {[gets stdin line] >= 0} { puts [string toupper $line] }
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"
