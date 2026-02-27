@@ -1,6 +1,6 @@
+// BEGIN_FRAGLET
 use fmt;
 
-// BEGIN_FRAGLET
 export fn main() void = {
     fmt::println("Hello World!")!;
 };
