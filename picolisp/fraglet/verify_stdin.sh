@@ -5,10 +5,10 @@ IMAGE="${1:-100hellos/picolisp:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.l"
 cat > "$tmp" <<'EOF'
-(loop
-  (when (eof (rd))
-    (bye))
-  (prinl (uppc (line (rd)))) )
+(in NIL
+   (until (eof)
+      (prinl (uppc (line T)))))
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"

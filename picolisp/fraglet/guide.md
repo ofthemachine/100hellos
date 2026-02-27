@@ -19,7 +19,7 @@ PicoLisp (latest from Alpine edge repositories)
 - Symbols and atoms are core concepts
 
 ## Fragment Authoring
-Write valid PicoLisp expressions. Your fragment becomes the script body, so code runs at the top level of the script. Define functions before using them.
+Write valid PicoLisp expressions. Your fragment becomes the script body — code runs at the top level. The program exits automatically after your fragment; do not include `(bye)`.
 
 ## Available Packages
 Standard PicoLisp library is available. No additional packages are pre-installed.
@@ -34,6 +34,8 @@ Standard PicoLisp library is available. No additional packages are pre-installed
 - Conditionals: `(if Condition Then Else)`
 - Loops: `(for Var List Body)`
 - String operations: `(chop "string")` (split to list), `(pack List)` (join list to string)
+- Stdin: `(in NIL (until (eof) (prinl (uppc (line T)))))`
+- Args: `(argv)` returns the list of command-line arguments; `(glue " " (argv))` joins them
 
 ## Examples
 ```lisp
@@ -72,4 +74,4 @@ Standard PicoLisp library is available. No additional packages are pre-installed
 - Each run starts fresh—include all setup logic in the fragment itself
 - PicoLisp uses parentheses extensively—ensure proper matching
 - Functions are defined with `(de ...)` and can be called immediately after definition
-- Use `(bye)` if you need to exit explicitly, though execution ends automatically when complete
+- Do not include `(bye)` in your fragment — the program exits automatically
