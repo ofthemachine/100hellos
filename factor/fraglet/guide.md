@@ -123,6 +123,17 @@ USING: sequences prettyprint ;
 { 1 2 3 4 5 } [ 2 * ] map .    ! Doubles each: { 2 4 6 8 10 }
 ```
 
+### I/O
+```factor
+! Read a line from stdin and uppercase it
+USING: io kernel ascii ;
+readln >upper print
+
+! Command-line args
+USING: io command-line sequences ;
+command-line " " join print
+```
+
 ## Caveats
 
 - **Postfix notation**: Remember that operations come after operands
