@@ -5,4 +5,4 @@ cd /hello-world
 tsc hello-world.ts
 
 # Run it
-node hello-world.js
+node hello-world.js "$@"
