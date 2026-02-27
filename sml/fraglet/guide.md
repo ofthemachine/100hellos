@@ -110,6 +110,25 @@ fun absolute x = if x >= 0 then x else ~x;
 print ("Absolute of ~5: " ^ Int.toString (absolute (~5)) ^ "\n");
 ```
 
+## I/O Patterns
+
+### Stdin
+```sml
+fun loop () =
+    case TextIO.inputLine TextIO.stdIn of
+        NONE => ()
+      | SOME s => (print (String.map Char.toUpper s); loop ());
+loop ();
+```
+
+### Command-Line Arguments
+`CommandLine.arguments()` includes 3 internal interpreter arguments before your arguments. Use `List.drop` to skip them:
+```sml
+val allArgs = CommandLine.arguments ();
+val args = List.drop (allArgs, 3);
+print ("Args: " ^ String.concatWith " " args ^ "\n");
+```
+
 ## Caveats and Limitations
 
 - **Semicolons required**: Top-level expressions must end with semicolons
@@ -119,3 +138,4 @@ print ("Absolute of ~5: " ^ Int.toString (absolute (~5)) ^ "\n");
 - **Integer negation**: Use `~` prefix, not `-` (e.g., `~5` not `-5`)
 - **Print formatting**: Use `Int.toString`, `Real.toString`, etc. for number-to-string conversion
 - **Poly/ML specific**: Some features may be Poly/ML-specific rather than pure SML
+- **Program exits automatically** after your fragment — do not call `OS.Process.exit`

@@ -5,8 +5,10 @@ IMAGE="${1:-100hellos/sml:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.sml"
 cat > "$tmp" <<'EOF'
-val args = CommandLine.arguments ();
+val allArgs = CommandLine.arguments ();
+val args = List.drop (allArgs, 3);
 print ("Args: " ^ String.concatWith " " args ^ "\n");
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"

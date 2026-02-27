@@ -9,5 +9,5 @@
 # Build it
 # Run it
 
-poly -q --use /hello-world/hello-world.sml
+poly -q --use /hello-world/hello-world.sml "$@"
 
