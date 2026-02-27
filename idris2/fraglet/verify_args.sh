@@ -5,10 +5,14 @@ IMAGE="${1:-100hellos/idris2:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.idr"
 cat > "$tmp" <<'EOF'
+import System
+import Data.String
+
 main : IO ()
 main = do
-  args <- getArgs
-  putStrLn ("Args: " ++ unwords args)
+    args <- getArgs
+    putStrLn ("Args: " ++ joinBy " " (drop 1 args))
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"

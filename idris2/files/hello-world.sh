@@ -12,5 +12,5 @@ cd /hello-world
 idris2 --output-dir /tmp/build -o hello hello-world.idr
 
 # Run it
-/tmp/build/hello
+/tmp/build/hello "$@"
 
