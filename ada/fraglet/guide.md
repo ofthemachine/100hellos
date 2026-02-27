@@ -16,20 +16,14 @@ Ada (GNAT compiler, Alpine Linux)
 - Uses GNAT compiler (GCC-based Ada compiler)
 
 ## Fragment Authoring
-Write valid Ada statements. Your fragment becomes the main procedure body. Your fragment will be compiled and executed.
+Write a complete Ada program. Your fragment must define `procedure Fraglet` as the main entry point. Include any `with` imports you need.
 
 ## Available Packages
-The template includes:
-- `Ada.Text_IO` - Text input/output operations (Put_Line, Get_Line, End_Of_File, etc.)
-- `Ada.Characters.Handling` - Character/string case (e.g. `To_Upper`) for stdin processing
-- `Ada.Command_Line` - Command-line arguments (`Argument_Count`, `Argument (I)`)
-
 Standard Ada library packages are available:
-- `Ada.Text_IO` - Text I/O
-- `Ada.Integer_Text_IO` - Integer I/O
-- `Ada.Float_Text_IO` - Float I/O
-- `Ada.Strings` - String manipulation
-- `Ada.Numerics` - Mathematical functions
+- `Ada.Text_IO` - Text I/O (Put_Line, Get_Line, End_Of_File, etc.)
+- `Ada.Characters.Handling` - Character/string case (e.g. `To_Upper`)
+- `Ada.Command_Line` - Command-line arguments (`Argument_Count`, `Argument (I)`)
+- `Ada.Integer_Text_IO`, `Ada.Strings`, `Ada.Numerics`, etc.
 
 ## Common Patterns
 - Output: `Put_Line ("message");`
@@ -45,25 +39,43 @@ Standard Ada library packages are available:
 ## Examples
 ```ada
 -- Simple output
-Put_Line ("Hello from fragment!");
+with Ada.Text_IO; use Ada.Text_IO;
+procedure Fraglet is
+begin
+  Put_Line ("Hello from fragment!");
+end Fraglet;
 
--- Variables and calculations
-A : Integer := 5;
-B : Integer := 10;
-Put_Line ("Sum: " & Integer'Image (A + B));
+-- With local variables
+with Ada.Text_IO; use Ada.Text_IO;
+procedure Fraglet is
+  A : Integer := 5;
+  B : Integer := 10;
+begin
+  Put_Line ("Sum: " & Integer'Image (A + B));
+end Fraglet;
 
--- Loops
-for I in 1..5 loop
-    Put_Line ("Count: " & Integer'Image (I));
-end loop;
+-- Reading stdin
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Characters.Handling;
+procedure Fraglet is
+  Line : String (1 .. 1024);
+  Last : Natural;
+begin
+  while not End_Of_File loop
+    Get_Line (Line, Last);
+    Put_Line (Ada.Characters.Handling.To_Upper (Line (1 .. Last)));
+  end loop;
+end Fraglet;
 
--- Arrays
-Numbers : array (1..5) of Integer := (1, 2, 3, 4, 5);
-Sum : Integer := 0;
-for I in Numbers'Range loop
-    Sum := Sum + Numbers (I);
-end loop;
-Put_Line ("Array sum: " & Integer'Image (Sum));
+-- Command-line args
+with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Command_Line;
+procedure Fraglet is
+begin
+  for I in 1 .. Ada.Command_Line.Argument_Count loop
+    Put_Line (Ada.Command_Line.Argument (I));
+  end loop;
+end Fraglet;
 ```
 
 ## Caveats
