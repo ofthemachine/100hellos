@@ -9,4 +9,4 @@
 cd /hello-world
 nasm -felf64 hello-world.asm
 ld hello-world.o -o hello-world
-./hello-world
+./hello-world "$@"
