@@ -5,6 +5,8 @@ IMAGE="${1:-100hellos/zig:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.zig"
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     defer arena.deinit();

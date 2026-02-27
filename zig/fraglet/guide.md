@@ -22,8 +22,14 @@ Zig 0.12.0
 ## Fragment Authoring
 Write valid Zig code. Your fragment can define functions, structs, enums, and the `main()` function. Your fragment will be compiled and executed.
 
+Start your fragment by importing the standard library yourself, just like in normal Zig code:
+
+```zig
+const std = @import("std");
+```
+
 ## Available Libraries
-The template includes the standard library (std), which provides:
+After you import it with `const std = @import("std");`, the standard library (`std`) provides:
 - `std.debug.print` for output
 - `std.fmt` for string formatting
 - Collections: `ArrayList`, `HashMap`, `ArrayHashMap`
@@ -48,6 +54,8 @@ The template includes the standard library (std), which provides:
 
 ## Examples
 ```zig
+const std = @import("std");
+
 // Simple output
 pub fn main() !void {
     std.debug.print("Hello from fragment!\n", .{});

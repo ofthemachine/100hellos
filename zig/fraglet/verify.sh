@@ -19,6 +19,8 @@ docker run --rm "$IMAGE" 2>&1 | grep -q "Hello World!"
 echo "Testing fraglet examples from guide.md..."
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     std.debug.print("Hello from fragment!{c}", .{'\n'});
 }
@@ -26,6 +28,8 @@ EOF
 verify_fraglet "Hello from fragment!"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     const a: i32 = 5;
     const b: i32 = 10;
@@ -35,6 +39,8 @@ EOF
 verify_fraglet "Sum: 15"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 fn add(a: i32, b: i32) i32 {
     return a + b;
 }
@@ -47,6 +53,8 @@ EOF
 verify_fraglet "5 + 10 = 15"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     const numbers = [_]i32{ 1, 2, 3, 4, 5 };
     var sum: i32 = 0;
@@ -59,6 +67,8 @@ EOF
 verify_fraglet "Sum: 15"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 const Person = struct {
     name: []const u8,
     age: u32,
@@ -76,6 +86,8 @@ EOF
 verify_fraglet "Alice is 30 years old"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 fn divide(a: i32, b: i32) !i32 {
     if (b == 0) return error.DivideByZero;
     return @divTrunc(a, b);
@@ -92,6 +104,8 @@ EOF
 verify_fraglet "Result: 5"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 fn findIndex(arr: []const i32, value: i32) ?usize {
     for (arr, 0..) |item, i| {
         if (item == value) return i;
@@ -111,6 +125,8 @@ EOF
 verify_fraglet "Found at index: 2"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     const greeting = "Hello";
     const world = " World!";
@@ -120,6 +136,8 @@ EOF
 verify_fraglet "Hello World!"
 
 cat > "$tmp" <<'EOF'
+const std = @import("std");
+
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
