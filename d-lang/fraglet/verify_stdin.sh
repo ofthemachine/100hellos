@@ -7,6 +7,7 @@ tmp="$tmpdir/fraglet.d"
 cat > "$tmp" <<'EOF'
 import std.stdio;
 import std.string;
+import std.conv;
 
 void main() {
     foreach (line; stdin.byLine) {
@@ -14,5 +15,6 @@ void main() {
     }
 }
 EOF
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"

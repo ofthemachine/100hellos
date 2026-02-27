@@ -2,4 +2,4 @@
 
 cd /hello-world
 gdc -o hello hello-world.d
-./hello
+./hello "$@"

@@ -1,8 +1,8 @@
 module hello;
 
+// BEGIN_FRAGLET
 import std.stdio;
 
-// BEGIN_FRAGLET
 void main()
 {
     writeln("Hello World!");
