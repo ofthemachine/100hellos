@@ -6,4 +6,4 @@ cd /hello-world
 gcc -I$HOME/.local/include -L$HOME/.local/lib -o hello-world hello-world.m -lobjc -lgnustep-base
 
 # Run!
-./hello-world
+./hello-world "$@"

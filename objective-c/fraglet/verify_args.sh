@@ -8,11 +8,13 @@ cat > "$tmp" <<'EOF'
 #import <stdio.h>
 int main(int argc, char *argv[]) {
     printf("Args:");
-    for (int i = 1; i < argc; i++)
+    int i;
+    for (i = 1; i < argc; i++)
         printf(" %s", argv[i]);
     printf("\n");
     return 0;
 }
 EOF
-fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1 | grep -q "Args: foo bar baz"
+output=$(fragletc --image "$IMAGE" "$tmp" foo bar baz 2>&1)
+echo "$output" | grep -q "Args: foo bar baz"
 echo "✓ args verified"
