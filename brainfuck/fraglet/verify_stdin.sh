@@ -12,6 +12,7 @@ tmp="$tmpdir/fraglet.bf"
 cat > "$tmp" <<'EOF'
 ,.
 EOF
-printf 'h' | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q 'h'
+output=$(printf 'h' | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q 'h'
 
 echo "✓ stdin verified"
