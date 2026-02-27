@@ -13,5 +13,6 @@ implement main0{n}(argc, argv): void =
     list0_foreach(args, lam(arg) => println!(arg))
   end
 EOF
-fragletc --image "$IMAGE" "$tmp" "foo" "bar" 2>&1 | grep -q "foo"
+output=$(fragletc --image "$IMAGE" "$tmp" "foo" "bar" 2>&1)
+echo "$output" | grep -q "foo"
 echo "✓ args verified"
