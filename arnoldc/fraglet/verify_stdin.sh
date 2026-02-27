@@ -15,5 +15,6 @@ IT'S SHOWTIME
   TALK TO THE HAND n
 YOU HAVE BEEN TERMINATED
 EOF
-echo "42" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "42"
+output=$(echo "42" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "42"
 echo "✓ stdin verified"
