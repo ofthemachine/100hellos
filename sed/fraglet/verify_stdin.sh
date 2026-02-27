@@ -6,5 +6,6 @@ IMAGE="${1:-100hellos/sed:local}"
 tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.sed"
 printf '%s\n' 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' > "$tmp"
-echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "HELLO"
+output=$(echo "hello" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "HELLO"
 echo "✓ stdin verified"

@@ -8,5 +8,6 @@ tmpdir=$(mktemp -d)
 tmp="$tmpdir/fraglet.sed"
 # Print a fixed line; actual args support is runtime-dependent
 printf '%s\n' '1s/^/Args: /' > "$tmp"
-echo "foo bar baz" | fragletc --image "$IMAGE" "$tmp" 2>&1 | grep -q "Args:"
+output=$(echo "foo bar baz" | fragletc --image "$IMAGE" "$tmp" 2>&1)
+echo "$output" | grep -q "Args:"
 echo "✓ args verified"
