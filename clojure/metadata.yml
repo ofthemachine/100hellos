@@ -1,0 +1,5 @@
+displayName: Clojure
+year: 2007
+paradigm: [functional, concurrent]
+influencedBy: [lisp, erlang, haskell, java]
+category: jvm

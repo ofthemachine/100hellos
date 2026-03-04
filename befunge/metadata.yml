@@ -1,0 +1,5 @@
+displayName: Befunge
+year: 1993
+paradigm: [stack-based, two-dimensional]
+influencedBy: [forth]
+category: esoteric

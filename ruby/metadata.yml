@@ -1,0 +1,5 @@
+displayName: Ruby
+year: 1995
+paradigm: [imperative, object-oriented, functional]
+influencedBy: [perl, smalltalk, lisp, python]
+category: scripting

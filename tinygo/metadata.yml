@@ -1,0 +1,5 @@
+displayName: TinyGo
+year: 2018
+paradigm: [imperative, concurrent]
+influencedBy: [golang]
+category: systems

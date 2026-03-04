@@ -1,0 +1,5 @@
+displayName: V
+year: 2019
+paradigm: [imperative, concurrent]
+influencedBy: [golang, rust, the-c-programming-language]
+category: systems

@@ -1,0 +1,5 @@
+displayName: Crystal
+year: 2014
+paradigm: [object-oriented, concurrent]
+influencedBy: [ruby, the-c-programming-language, rust]
+category: systems

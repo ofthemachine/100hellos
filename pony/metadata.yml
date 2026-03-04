@@ -1,0 +1,5 @@
+displayName: Pony
+year: 2014
+paradigm: [object-oriented, concurrent]
+influencedBy: [erlang, the-c-programming-language]
+category: systems

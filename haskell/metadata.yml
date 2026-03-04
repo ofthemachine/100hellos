@@ -1,0 +1,5 @@
+displayName: Haskell
+year: 1990
+paradigm: [functional]
+influencedBy: [sml, lisp, scheme]
+category: functional

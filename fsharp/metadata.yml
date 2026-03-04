@@ -1,0 +1,5 @@
+displayName: F#
+year: 2005
+paradigm: [functional, imperative, object-oriented]
+influencedBy: [ocaml, csharp, haskell, sml]
+category: ml-family

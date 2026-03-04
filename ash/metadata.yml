@@ -1,0 +1,5 @@
+displayName: Ash
+year: 1989
+paradigm: [imperative, scripting]
+influencedBy: [bash]
+category: shell

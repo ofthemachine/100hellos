@@ -1,0 +1,5 @@
+displayName: Julia
+year: 2012
+paradigm: [imperative, functional, metaprogramming]
+influencedBy: [python, lisp, r-project, matlab, ruby]
+category: general-purpose

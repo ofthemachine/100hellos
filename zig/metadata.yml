@@ -1,0 +1,5 @@
+displayName: Zig
+year: 2016
+paradigm: [imperative, systems]
+influencedBy: [the-c-programming-language, rust]
+category: systems

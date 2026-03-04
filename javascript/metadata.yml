@@ -1,0 +1,5 @@
+displayName: JavaScript
+year: 1995
+paradigm: [imperative, functional, event-driven]
+influencedBy: [scheme, lisp, java]
+category: web

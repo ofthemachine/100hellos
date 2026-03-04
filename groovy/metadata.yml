@@ -1,0 +1,5 @@
+displayName: Groovy
+year: 2003
+paradigm: [object-oriented, scripting]
+influencedBy: [java, python, ruby]
+category: jvm

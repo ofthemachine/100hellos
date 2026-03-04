@@ -1,0 +1,5 @@
+displayName: Racket
+year: 1995
+paradigm: [functional, metaprogramming]
+influencedBy: [scheme, lisp]
+category: functional

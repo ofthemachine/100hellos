@@ -1,0 +1,5 @@
+displayName: Python
+year: 1991
+paradigm: [imperative, object-oriented, functional]
+influencedBy: [the-c-programming-language, lisp, perl, haskell]
+category: general-purpose

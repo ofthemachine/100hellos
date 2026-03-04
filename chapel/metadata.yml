@@ -1,0 +1,5 @@
+displayName: Chapel
+year: 2009
+paradigm: [imperative, parallel]
+influencedBy: [the-c-programming-language, fortran]
+category: systems

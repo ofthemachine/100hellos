@@ -1,0 +1,5 @@
+displayName: Idris 2
+year: 2020
+paradigm: [functional, dependent-typed]
+influencedBy: [haskell]
+category: functional

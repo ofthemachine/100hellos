@@ -1,0 +1,5 @@
+displayName: Janet
+year: 2018
+paradigm: [functional, imperative]
+influencedBy: [lua, clojure, lisp]
+category: scripting

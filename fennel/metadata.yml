@@ -1,0 +1,5 @@
+displayName: Fennel
+year: 2016
+paradigm: [functional]
+influencedBy: [lua, lisp, clojure]
+category: scripting

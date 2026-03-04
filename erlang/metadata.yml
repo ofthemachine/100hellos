@@ -1,0 +1,5 @@
+displayName: Erlang
+year: 1986
+paradigm: [functional, concurrent]
+influencedBy: [prolog, lisp, smalltalk]
+category: functional

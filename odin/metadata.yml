@@ -1,0 +1,5 @@
+displayName: Odin
+year: 2016
+paradigm: [imperative, systems]
+influencedBy: [the-c-programming-language, golang, pascal]
+category: systems

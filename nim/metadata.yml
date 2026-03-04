@@ -1,0 +1,5 @@
+displayName: Nim
+year: 2008
+paradigm: [imperative, functional, object-oriented]
+influencedBy: [python, pascal, ada]
+category: systems

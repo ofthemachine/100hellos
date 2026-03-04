@@ -1,0 +1,5 @@
+displayName: CoffeeScript
+year: 2009
+paradigm: [functional, imperative]
+influencedBy: [javascript, ruby, python, haskell]
+category: web

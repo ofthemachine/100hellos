@@ -1,0 +1,5 @@
+displayName: PureScript
+year: 2013
+paradigm: [functional]
+influencedBy: [haskell, javascript]
+category: web

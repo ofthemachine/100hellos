@@ -1,0 +1,5 @@
+displayName: R
+year: 1993
+paradigm: [functional, imperative, array]
+influencedBy: [lisp, scheme]
+category: general-purpose

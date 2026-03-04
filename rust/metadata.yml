@@ -1,0 +1,5 @@
+displayName: Rust
+year: 2010
+paradigm: [imperative, functional, concurrent]
+influencedBy: [cpp, ocaml, haskell, erlang, the-c-programming-language]
+category: systems

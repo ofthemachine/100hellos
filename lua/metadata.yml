@@ -1,0 +1,5 @@
+displayName: Lua
+year: 1993
+paradigm: [imperative, scripting]
+influencedBy: [scheme, the-c-programming-language]
+category: scripting

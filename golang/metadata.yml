@@ -1,0 +1,5 @@
+displayName: Go
+year: 2009
+paradigm: [imperative, concurrent]
+influencedBy: [the-c-programming-language, pascal, python, erlang]
+category: systems

@@ -1,0 +1,5 @@
+displayName: REBOL
+year: 1997
+paradigm: [imperative, functional, metaprogramming]
+influencedBy: [lisp, forth, logo]
+category: scripting

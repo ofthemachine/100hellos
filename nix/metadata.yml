@@ -1,0 +1,5 @@
+displayName: Nix
+year: 2003
+paradigm: [functional, declarative]
+influencedBy: [haskell]
+category: functional

@@ -1,0 +1,5 @@
+displayName: Hare
+year: 2022
+paradigm: [imperative, systems]
+influencedBy: [the-c-programming-language, zig, rust]
+category: systems

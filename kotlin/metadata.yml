@@ -1,0 +1,5 @@
+displayName: Kotlin
+year: 2011
+paradigm: [object-oriented, functional]
+influencedBy: [java, scala, csharp, groovy]
+category: jvm

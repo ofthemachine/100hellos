@@ -1,0 +1,5 @@
+displayName: Gleam
+year: 2019
+paradigm: [functional, concurrent]
+influencedBy: [erlang, rust, elixir, elm]
+category: functional

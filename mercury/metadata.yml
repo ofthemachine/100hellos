@@ -1,0 +1,5 @@
+displayName: Mercury
+year: 1995
+paradigm: [logic, functional]
+influencedBy: [prolog, haskell]
+category: functional

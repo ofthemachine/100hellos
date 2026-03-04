@@ -1,0 +1,5 @@
+displayName: Elixir
+year: 2011
+paradigm: [functional, concurrent]
+influencedBy: [erlang, ruby, clojure]
+category: functional

@@ -1,0 +1,5 @@
+displayName: AWK
+year: 1977
+paradigm: [scripting, data-driven]
+influencedBy: [the-c-programming-language]
+category: shell

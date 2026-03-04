@@ -1,0 +1,5 @@
+displayName: MirBSD Korn Shell
+year: 2002
+paradigm: [imperative, scripting]
+influencedBy: [bash]
+category: shell

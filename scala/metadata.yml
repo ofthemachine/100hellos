@@ -1,0 +1,5 @@
+displayName: Scala
+year: 2004
+paradigm: [functional, object-oriented]
+influencedBy: [java, haskell, sml, ocaml]
+category: jvm

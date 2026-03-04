@@ -1,0 +1,5 @@
+displayName: Factor
+year: 2003
+paradigm: [stack-based, concatenative]
+influencedBy: [forth, lisp, joy]
+category: functional

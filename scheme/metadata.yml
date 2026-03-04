@@ -1,0 +1,5 @@
+displayName: Scheme
+year: 1975
+paradigm: [functional]
+influencedBy: [lisp, algol]
+category: functional

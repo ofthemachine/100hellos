@@ -1,0 +1,5 @@
+displayName: OCaml
+year: 1996
+paradigm: [functional, imperative, object-oriented]
+influencedBy: [sml, haskell, lisp]
+category: ml-family

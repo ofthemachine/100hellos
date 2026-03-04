@@ -1,0 +1,5 @@
+displayName: Tcl
+year: 1988
+paradigm: [imperative, scripting]
+influencedBy: [lisp]
+category: scripting

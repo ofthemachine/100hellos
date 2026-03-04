@@ -1,0 +1,5 @@
+displayName: Verilog
+year: 1984
+paradigm: [hardware-description]
+influencedBy: [the-c-programming-language, pascal]
+category: systems

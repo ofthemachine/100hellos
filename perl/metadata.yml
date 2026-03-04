@@ -1,0 +1,5 @@
+displayName: Perl
+year: 1987
+paradigm: [imperative, functional, scripting]
+influencedBy: [the-c-programming-language, awk, sed, lisp]
+category: scripting

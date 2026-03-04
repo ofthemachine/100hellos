@@ -1,0 +1,5 @@
+displayName: Standard ML
+year: 1983
+paradigm: [functional]
+influencedBy: [lisp]
+category: ml-family

@@ -1,0 +1,5 @@
+displayName: Squirrel
+year: 2003
+paradigm: [imperative, object-oriented, scripting]
+influencedBy: [lua, the-c-programming-language]
+category: scripting

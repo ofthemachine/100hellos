@@ -1,0 +1,5 @@
+displayName: Elm
+year: 2012
+paradigm: [functional]
+influencedBy: [haskell, sml, ocaml]
+category: web

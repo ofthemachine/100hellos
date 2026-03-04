@@ -1,0 +1,5 @@
+displayName: Ballerina
+year: 2017
+paradigm: [imperative, concurrent]
+influencedBy: [java, golang]
+category: general-purpose
