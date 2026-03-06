@@ -6,10 +6,8 @@ FROM 100hellos/000-base:local
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" | sudo tee -a /etc/apk/repositories
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" | sudo tee -a /etc/apk/repositories
 
-# Install LLVM and Clang for building Odin (git and make already in base)
-RUN sudo apk update
-RUN sudo apk add --no-cache \
-    llvm-dev \
+RUN sudo apk update && sudo apk add --no-cache \
+    llvm20-dev \
     clang
 
 # Create directory and clone/build Odin from source
