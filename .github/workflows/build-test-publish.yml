@@ -40,45 +40,11 @@ jobs:
           path: Dockerfile.composite
           retention-days: 1
 
-  build-test:
+  build-test-publish:
     name:  ${{ matrix.language }} (linux/amd64)
     runs-on: ubuntu-latest
-    if: ${{ inputs.test }}
+    if: ${{ inputs.test || inputs.publish }}
     needs:
-      - generate-composite-dockerfile
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ${{ fromJSON(inputs.languages) }}
-
-    steps:
-      -
-        name: 🛒 Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
-
-      -
-        name: ⬇️ Dockerfile.composite
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
-        with:
-          name: composite-dockerfile
-
-      -
-        name: 🧪 Test
-        uses: ./.github/actions/build-test-publish
-        continue-on-error: false
-        with:
-          display-as: ${{ matrix.language }}
-          dockerfile: Dockerfile.composite
-          docker-image: 100hellos/${{ matrix.language }}
-          docker-build-target: o100hellos_${{ matrix.language }}
-          platforms: linux/amd64
-
-  publish:
-    name: 🚀 ${{ matrix.language }} (linux/amd64)
-    runs-on: ubuntu-latest
-    if: ${{ inputs.publish }}
-    needs:
-      - build-test
       - generate-composite-dockerfile
     strategy:
       fail-fast: false
@@ -98,15 +64,15 @@ jobs:
 
       -
         name: Generate Documentation
+        if: ${{ inputs.publish }}
         id: has-docs
         shell: bash
         run: |
           ./.github/bin/generate-overview-readme.sh ${{ matrix.language }}
 
       -
-        name: 🎬 Publish
+        name: 🧪 + 🚀 Build, Test, and Publish
         uses: ./.github/actions/build-test-publish
-        continue-on-error: true
         with:
           display-as: ${{ matrix.language }}
           dockerfile: Dockerfile.composite
@@ -121,3 +87,4 @@ jobs:
 
           test: ${{ inputs.test }}
           publish: ${{ inputs.publish }}
+          publish-dockerhub-description: ${{ inputs.publish }}
