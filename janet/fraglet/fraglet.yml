@@ -10,4 +10,3 @@ guide: /guide.md
 
 execution:
   path: /hello-world/hello-world.janet
-  makeExecutable: true

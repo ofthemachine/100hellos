@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: tclsh /hello-world/hello-world.tcl
-  makeExecutable: false

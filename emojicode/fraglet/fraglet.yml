@@ -11,5 +11,3 @@ guide: /guide.md
 
 execution:
   path: /hello-world/hello-world.sh
-  makeExecutable: true
-

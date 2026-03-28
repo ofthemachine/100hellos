@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: deno run /hello-world/hello-world.ts
-  makeExecutable: false

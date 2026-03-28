@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: wren /hello-world/hello-world.wren
-  makeExecutable: false

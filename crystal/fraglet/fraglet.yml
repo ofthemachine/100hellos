@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: crystal /hello-world/hello-world.cr
-  makeExecutable: false

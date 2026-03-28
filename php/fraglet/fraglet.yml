@@ -11,5 +11,3 @@ guide: /guide.md
 
 execution:
   path: php /hello-world/hello-world.php
-  makeExecutable: false
-

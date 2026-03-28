@@ -1,21 +1,22 @@
 # Hello World! From ${lang}.
 
-Check it out on Github! **[100hellos/${lang}](https://github.com/ofthemachine/100hellos/tree/main/${lang}/files)**
+**[Language page](https://100hellos.ofthemachine.com/languages/${lang}/)** — context, influences, and learning notes on the 100hellos site.
+
+**[Source on GitHub](https://github.com/ofthemachine/100hellos/tree/main/${lang}/files)** (`100hellos/${lang}`)
 
 ## Trying it
 
-`docker run --rm --platform="linux/amd64" 100hellos/${lang}:latest`
+```bash
+docker run --rm --platform="linux/amd64" 100hellos/${lang}:latest
+```
 
 ## Modifying it
 
-[Check out the README.md](https://github.com/ofthemachine/100hellos/tree/main/README.md), or [fork it](https://github.com/ofthemachine/100hellos/fork) and make it your own!
+Read the [repo README](https://github.com/ofthemachine/100hellos/tree/main/README.md), or [fork the project](https://github.com/ofthemachine/100hellos/fork) and customize it.
 
-**or**
+For an interactive shell:
 
-```
+```bash
 docker run --rm --platform="linux/amd64" --entrypoint="" -it 100hellos/${lang}:latest zsh
 ```
-
-Check out the `/entrypoint.sh` file on the image to see how it works.
-
 

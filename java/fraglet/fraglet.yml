@@ -9,7 +9,12 @@ guide: /guide.md
 
 execution:
   path: /hello-world/hello-world.sh
-  makeExecutable: true
 
-
-
+modes:
+  wordalytica:
+    injection:
+      codePath: /hello-world/Wordalytica.java
+      match: "Hello World!"
+    guide: /guide-wordalytica.md
+    execution:
+      path: /hello-world/wordalytica.sh

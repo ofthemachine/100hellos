@@ -11,5 +11,3 @@ guide: /guide.md
 
 execution:
   path: awk -f /hello-world/hello-world.awk
-  makeExecutable: false
-

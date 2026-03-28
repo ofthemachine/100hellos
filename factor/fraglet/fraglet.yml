@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: factor /hello-world/hello-world.factor
-  makeExecutable: false

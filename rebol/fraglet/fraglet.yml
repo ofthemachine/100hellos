@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: rebol3 /hello-world/hello-world.r
-  makeExecutable: false

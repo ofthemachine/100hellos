@@ -10,4 +10,3 @@ guide: /guide.md
 
 execution:
   path: Rscript /hello-world/hello-world.r
-  makeExecutable: true

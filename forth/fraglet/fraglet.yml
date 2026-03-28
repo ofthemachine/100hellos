@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: gforth /hello-world/hello-world.fth
-  makeExecutable: false

@@ -10,4 +10,3 @@ guide: /guide.md
 
 execution:
   path: ruby /hello-world/hello-world.rb
-  makeExecutable: false

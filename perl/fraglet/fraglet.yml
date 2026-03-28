@@ -11,4 +11,3 @@ guide: /guide.md
 
 execution:
   path: perl /hello-world/hello-world.pl
-  makeExecutable: false
