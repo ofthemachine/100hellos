@@ -1,41 +1,43 @@
 #!/bin/bash
-# verify.sh - Smoke tests for sol fraglet support
+# verify.sh - Smoke tests for Sol fraglet support (base + guide examples).
 
 set -euo pipefail
 
 IMAGE="${1:-100hellos/sol:local}"
-TMPFILE=$(mktemp /tmp/verify-sol-XXXXXX.sl)
-trap "rm -f $TMPFILE" EXIT
+tmpdir=$(mktemp -d)
+tmp="$tmpdir/fraglet.sl"
 
 verify_fraglet() {
     local expected="$1"
-    cat > "$TMPFILE"
-    fragletc --image "$IMAGE" "$TMPFILE" 2>&1 | grep -q "$expected"
+    shift
+    fragletc --image "$IMAGE" "$tmp" "$@" 2>&1 | grep -q "$expected"
 }
 
 echo "Testing default execution..."
-docker run --rm --platform linux/amd64 "$IMAGE" | grep -q "Hello World!"
+docker run --rm "$IMAGE" | grep -q "Hello World!"
 
 echo "Testing fraglet examples from guide.md..."
 
 # Example 1: Simple output
-verify_fraglet "Hello from fragment!" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    print("Hello from fragment!")
 end
 EOF
+verify_fraglet "Hello from fragment!"
 
 # Example 2: Variables and string interpolation
-verify_fraglet "Sol version 1" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    name = "Sol"
    version = 1
    print("#{name} version #{version}")
 end
 EOF
+verify_fraglet "Sol version 1"
 
 # Example 3: Functions
-verify_fraglet "5 + 10 = 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 def add(a Int, b Int) -> Int
    -> a + b
 end
@@ -45,18 +47,20 @@ def main
    print("5 + 10 = #{result}")
 end
 EOF
+verify_fraglet "5 + 10 = 15"
 
 # Example 4: If-else expression
-verify_fraglet "42 is positive" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    x = 42
    label = if x > 0 { "positive" } else { "negative" }
    print("#{x} is #{label}")
 end
 EOF
+verify_fraglet "42 is positive"
 
 # Example 5: While loop
-verify_fraglet "Sum: 10" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    i = 0
    total = 0
@@ -67,9 +71,10 @@ def main
    print("Sum: #{total}")
 end
 EOF
+verify_fraglet "Sum: 10"
 
 # Example 6: Enums and pattern matching
-verify_fraglet "Color: red" <<'EOF'
+cat > "$tmp" <<'EOF'
 enum Color
    Red
    Green
@@ -86,9 +91,10 @@ def main
    print("Color: #{name}")
 end
 EOF
+verify_fraglet "Color: red"
 
 # Example 7: Hash maps
-verify_fraglet "Alice: 95" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    scores = Hash.new()
    scores["alice"] = 95
@@ -96,9 +102,10 @@ def main
    print("Alice: #{scores.get_or("alice", 0)}")
 end
 EOF
+verify_fraglet "Alice: 95"
 
 # Example 8: Array iterators
-verify_fraglet "Sum: 15" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    numbers = [1, 2, 3, 4, 5]
    doubled = numbers.map({|x| x * 2})
@@ -107,18 +114,20 @@ def main
    print("Sum: #{total}")
 end
 EOF
+verify_fraglet "Sum: 15"
 
 # Example 9: String operations
-verify_fraglet "Upper: HELLO, WORLD" <<'EOF'
+cat > "$tmp" <<'EOF'
 def main
    text = "hello, world"
    print("Upper: #{text.to_uppercase()}")
    print("Replace: #{text.replace("world", "Sol")}")
 end
 EOF
+verify_fraglet "Upper: HELLO, WORLD"
 
 # Example 10: Recursion
-verify_fraglet "10! = 3628800" <<'EOF'
+cat > "$tmp" <<'EOF'
 def factorial(n Int) -> Int
    if n <= 1 { -> 1 }
    -> n * factorial(n - 1)
@@ -128,5 +137,6 @@ def main
    print("10! = #{factorial(10)}")
 end
 EOF
+verify_fraglet "10! = 3628800"
 
 echo "✓ All tests passed"
