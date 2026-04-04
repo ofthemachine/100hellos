@@ -1,0 +1,5 @@
+displayName: Sol
+year: 2025
+paradigm: [imperative, object-oriented]
+influencedBy: [ruby, rust, mojo, swift, koka]
+category: general-purpose
