@@ -16,7 +16,7 @@ ENV HOME=/home/human
 ENV PATH=/usr/local/bin:${PATH}
 
 ARG FRAGLET_VERSION=entrypoint-v0.5.0
-COPY --chown=human:human checksums.txt /checksums.txt
+COPY --chown=human:human ./checksums.txt /checksums.txt
 RUN ARCH=$(uname -m) && \
     if [ "$ARCH" = "x86_64" ]; then \
         BINARY="fraglet-entrypoint-linux-amd64"; \
